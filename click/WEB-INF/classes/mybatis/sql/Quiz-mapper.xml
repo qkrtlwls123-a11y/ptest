@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="quiz" >
+	
+	<insert id="insertQuiz" parameterType="QuizVO">
+		INSERT INTO TB_QUIZ (
+				quiz_name,
+				company_id,
+				quiz_text_1,
+				quiz_text_2,
+				quiz_text_3,
+				quiz_text_4,
+				quiz_text_5,
+				quiz_answer_1,
+				quiz_answer_2,
+				quiz_answer_3,
+				quiz_answer_4,
+				quiz_answer_5,
+				quiz_count,
+				quiz_answer_count,
+				quiz_type,
+				updt_date,
+				reg_date
+			)
+			VALUES
+			(
+				#{quiz_name},
+				#{company_id},
+				#{quiz_text_1},
+				#{quiz_text_2},
+				#{quiz_text_3},
+				#{quiz_text_4},
+				#{quiz_text_5},
+				#{quiz_answer_1},
+				#{quiz_answer_2},
+				#{quiz_answer_3},
+				#{quiz_answer_4},
+				#{quiz_answer_5},
+				#{quiz_count},
+				#{quiz_answer_count},
+				#{quiz_type},
+				NOW(),
+				NOW()
+			 )
+	</insert>
+	
+	<update id="updateQuiz" parameterType="QuizVO">
+		 UPDATE TB_QUIZ
+		    SET quiz_name = #{quiz_name},
+				quiz_text_1 = #{quiz_text_1},
+				quiz_text_2 = #{quiz_text_2},
+				quiz_text_3 = #{quiz_text_3},
+				quiz_text_4 = #{quiz_text_4},
+				quiz_text_5 = #{quiz_text_5},
+				quiz_answer_1 = #{quiz_answer_1},
+				quiz_answer_2 = #{quiz_answer_2},
+				quiz_answer_3 = #{quiz_answer_3},
+				quiz_answer_4 = #{quiz_answer_4},
+				quiz_answer_5 = #{quiz_answer_5},
+				quiz_count = #{quiz_count},
+				quiz_answer_count = #{quiz_answer_count},
+				quiz_type = #{quiz_type},
+		   	    updt_date = NOW()
+		 WHERE quiz_id = #{quiz_id}
+	</update>
+	
+	<delete id="deleteQuiz" parameterType="QuizVO">
+		 DELETE FROM TB_QUIZ 
+			WHERE quiz_id = #{quiz_id}
+	</delete>
+	
+	<select id="selectQuizList" parameterType="QuizVO" resultType="QuizVO">
+		SELECT *
+		  FROM TB_QUIZ
+		WHERE company_id = #{company_id}
+	</select>
+	
+	<select id="selectQuizDetail" parameterType="QuizVO" resultType="QuizVO">
+		SELECT *
+		  FROM TB_QUIZ
+		 WHERE quiz_id = #{quiz_id}
+	</select>
+</mapper>
+

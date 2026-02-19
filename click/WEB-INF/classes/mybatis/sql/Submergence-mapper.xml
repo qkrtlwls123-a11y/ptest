@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="submergence" >
+	
+	<select id="selectSubmergenceSensorList" parameterType="SubmergenceVO" resultType="SubmergenceVO">
+		SELECT A.*
+			 , (SELECT WORKER_NAME FROM TBL_WORKER B WHERE A.WORKER_ID = B.WORKER_ID AND B.company_id = #{company_id} LIMIT 1) AS WORKER_NAME
+			 , (SELECT WORKER_NAME FROM TBL_WORKER B WHERE A.WORKER_ID2 = B.WORKER_ID AND B.company_id = #{company_id} LIMIT 1) AS WORKER_NAME2
+			 , (SELECT scene_id FROM TBL_ZONE B WHERE A.ZONE_ID = B.ZONE_ID AND B.COMPANY_ID = #{company_id} LIMIT 1) AS scene_id
+			 , (SELECT poi_id FROM TBL_CELL B WHERE A.CELL_ID = B.CELL_ID AND B.COMPANY_ID = #{company_id} LIMIT 1) AS poi_id
+			 , (SELECT value FROM TBL_COLLECT_SUBMERGENCE B WHERE A.mac_addr = B.sensor_id AND B.company_id = #{company_id} ORDER BY reg_dt DESC LIMIT 1) AS value
+			<if test="locale == 'en'">
+			 , (SELECT DEVICE_NAME_ENG FROM TBL_DEVICE_TYPE B WHERE A.DEVICE_TYPE = B.DEVICE_CODE LIMIT 1) AS DEVICE_NAME
+			 , (SELECT BUILDING_NAME_ENG FROM TBL_BUILDING B WHERE A.BUILDING_ID = B.BUILDING_ID AND B.COMPANY_ID = #{company_id} LIMIT 1) AS BUILDING_NAME
+			 , (SELECT FLOOR_ENG FROM TBL_ZONE B WHERE A.ZONE_ID = B.ZONE_ID AND B.COMPANY_ID = #{company_id} LIMIT 1) AS FLOOR
+			 , (SELECT CELL_NAME_ENG FROM TBL_CELL B WHERE A.CELL_ID = B.CELL_ID AND B.COMPANY_ID = #{company_id} LIMIT 1) AS CELL_NAME
+			</if>
+			<if test="locale != 'en'">
+			 , (SELECT DEVICE_NAME FROM TBL_DEVICE_TYPE B WHERE A.DEVICE_TYPE = B.DEVICE_CODE LIMIT 1) AS DEVICE_NAME
+			 , (SELECT BUILDING_NAME FROM TBL_BUILDING B WHERE A.BUILDING_ID = B.BUILDING_ID AND B.COMPANY_ID = #{company_id} LIMIT 1) AS BUILDING_NAME
+			 , (SELECT FLOOR FROM TBL_ZONE B WHERE A.ZONE_ID = B.ZONE_ID AND B.COMPANY_ID = #{company_id} LIMIT 1) AS FLOOR
+			 , (SELECT CELL_NAME FROM TBL_CELL B WHERE A.CELL_ID = B.CELL_ID AND B.COMPANY_ID = #{company_id} LIMIT 1) AS CELL_NAME
+			</if>
+			 
+		  FROM TBL_MAPPING_DEVICE A
+		 WHERE 1=1
+		   AND company_id = #{company_id}
+		   <if test="building_id != null and building_id != ''">
+		   AND building_id = #{building_id}
+		   </if>
+		   <if test="zone_id != null and zone_id != ''">
+		   AND zone_id = #{zone_id}
+		   </if>
+		   <if test="cell_id != null and cell_id != ''">
+		   AND cell_id = #{cell_id}
+		   </if>
+		   <if test="device_type != null and device_type != ''">
+		   AND device_type = #{device_type}
+		   </if>
+		   <if test="notUsePage == null or notUsePage == ''">
+		   ORDER BY map_dt DESC
+		   </if>
+		   <if test="notUsePage != null and notUsePage != ''">
+			 <if test="order_type != null and order_type != ''">
+	           ORDER BY device_no ASC, map_dt ${order_type}
+	         </if>
+	         <if test="order_type == null or order_type == ''">
+	           ORDER BY device_no ASC, map_dt DESC
+	         </if>
+		   </if>
+		   <if test="notUsePage == null or notUsePage == ''">
+			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		</if>
+	</select>
+	
+	<select id="selectSubmergenceSensorListTotal" parameterType="SubmergenceVO" resultType="Integer">
+		SELECT COUNT(A.device_id)
+		  FROM TBL_MAPPING_DEVICE A
+		 WHERE 1=1
+		   AND company_id = #{company_id}
+		   <if test="building_id != null and building_id != ''">
+		   AND building_id = #{building_id}
+		   </if>
+		   <if test="zone_id != null and zone_id != ''">
+		   AND zone_id = #{zone_id}
+		   </if>
+		   <if test="cell_id != null and cell_id != ''">
+		   AND cell_id = #{cell_id}
+		   </if>
+		   <if test="device_type != null and device_type != ''">
+		   AND device_type = #{device_type}
+		   </if>
+		   <if test="notUsePage == null or notUsePage == ''">
+		   ORDER BY map_dt DESC
+		   </if>
+		   <if test="notUsePage != null and notUsePage != ''">
+			 <if test="order_type != null and order_type != ''">
+	           ORDER BY device_no ASC, map_dt ${order_type}
+	         </if>
+	         <if test="order_type == null or order_type == ''">
+	           ORDER BY device_no ASC, map_dt DESC
+	         </if>
+		   </if>
+	</select>
+	
+	<select id="selectWaterGraphList" parameterType="SubmergenceVO" resultType="SubmergenceVO">
+		SELECT *
+		  FROM TBL_COLLECT_WATERLEVEL
+		 WHERE company_id = #{company_id}
+		   AND sensor_id = #{mac_addr}
+		   AND DATE_FORMAT(time_observation,'%Y%m%d') = DATE_FORMAT( NOW() , '%Y%m%d')
+		 ORDER BY time_observation
+	</select>
+	
+	<select id="selectSubmergenceSensorDetailList" parameterType="SubmergenceVO" resultType="SubmergenceVO">
+		SELECT device_id, gas_type
+		  FROM TBL_COLLECT_FIRE
+		 WHERE company_id = #{company_id}
+		   AND DATE_FORMAT(msr_dt,'%Y%m%d') = DATE_FORMAT( NOW() , '%Y%m%d')
+		 GROUP BY device_id, gas_type
+	</select>
+	
+	<select id="selectGasType" parameterType="SubmergenceVO" resultType="SubmergenceVO">
+		SELECT gas_type, unit, gas_name
+		  FROM TBL_COLLECT_FIRE
+		 WHERE device_id = #{device_id}
+		 GROUP BY gas_type, unit, gas_name
+	</select>
+	
+	<select id="selectSensorHistoryList" parameterType="SubmergenceVO" resultType="SubmergenceVO">
+		SELECT A.time_observation
+		   , TM.device_no
+		   , A.status
+		   , A.value
+           	<include refid="commonRef.refSelectAreaName"/>
+           	
+  		  FROM ${table} A
+  		  	<include refid="commonRef.refJoinAreaTables"/>
+  		  
+  		 WHERE A.company_id = #{company_id}
+  		   <if test="mac_addr != null and mac_addr != ''">
+  		   AND A.sensor_id = #{mac_addr}
+  		   </if>
+  		   <if test="building_id != null and building_id != ''">
+  		   AND TM.building_id = #{building_id}
+  		   </if>
+  		   <if test="zone_id != null and zone_id != ''">
+  		   AND TM.zone_id = #{zone_id}
+  		   </if>
+  		   <if test="cell_id != null and cell_id != ''">
+  		   AND TM.cell_id = #{cell_id}
+  		   </if>
+  		   <if test="start_date != null and start_date != ''">
+		   AND A.time_observation BETWEEN STR_TO_DATE(CONCAT(#{start_date}, ' 00:00:00'),'%Y-%m-%d %H:%i:%s') AND STR_TO_DATE(CONCAT(#{end_date}, '23:59:59'),'%Y-%m-%d %H:%i:%s')
+		   </if>
+		 
+		 <if test="order_column != null and order_type != null">
+		 	ORDER BY ${order_column} ${order_type}
+		 </if>
+		 
+		 <if test="order_column == null">
+		 	ORDER BY time_observation DESC
+		 </if>
+		 
+		 <if test="notUsePage == null or notUsePage == ''">
+		 LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		 </if>
+	</select>
+	
+	<select id="selectSensorHistoryListTotal" parameterType="SubmergenceVO" resultType="Integer">
+		SELECT COUNT(sensor_id) 
+  		  FROM ${table} A
+  		  	LEFT OUTER JOIN TBL_MAPPING_DEVICE B ON B.mac_addr = A.sensor_id AND A.company_id = #{company_id}
+  		 WHERE A.company_id = #{company_id}
+  		   <if test="mac_addr != null and mac_addr != ''">
+  		   AND A.sensor_id = #{mac_addr}
+  		   </if>
+  		   <if test="building_id != null and building_id != ''">
+  		   AND B.building_id = #{building_id}
+  		   </if>
+  		   <if test="zone_id != null and zone_id != ''">
+  		   AND B.zone_id = #{zone_id}
+  		   </if>
+  		   <if test="cell_id != null and cell_id != ''">
+  		   AND B.cell_id = #{cell_id}
+  		   </if>
+  		   <if test="start_date != null and start_date != ''">
+		   AND A.time_observation BETWEEN STR_TO_DATE(CONCAT(#{start_date}, ' 00:00:00'),'%Y-%m-%d %H:%i:%s') AND STR_TO_DATE(CONCAT(#{end_date}, '23:59:59'),'%Y-%m-%d %H:%i:%s')
+		   </if>
+	</select>
+</mapper>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="notice" >
+
+	<insert id="insertNotice" parameterType="NoticeVO" useGeneratedKeys="true" keyProperty="notice_id">
+		INSERT INTO TB_NOTICE (
+		  	notice_title
+		  , notice_contents
+		  , user_id
+		  , user_name
+		  , notice_hits
+		  , notice_file_url
+		  , notice_importance
+		  , academy_id
+		  , updt_date
+		  , regi_date
+		) VALUES (
+		   #{notice_title}
+		  , #{notice_contents}
+		  , #{user_id}
+		  , #{user_name}
+		  , '0'
+		  , #{notice_file_url}
+		  , #{notice_importance}
+		  , #{academy_id}
+		  , NOW()
+		  , NOW()
+		)
+	</insert>
+	
+	<update id="updateNotice" parameterType="NoticeVO">
+		UPDATE TB_NOTICE
+		   SET notice_title = #{notice_title}
+		   	 , notice_contents = #{notice_contents}
+		   	 , notice_file_url = #{notice_file_url}
+		   	 , notice_importance = #{notice_importance}
+		   	 , user_id = #{user_id}
+		   	 , user_name = #{user_name}
+		     , updt_date = NOW()
+		 WHERE notice_id = #{notice_id}
+	</update>
+	
+	<update id="updateNoticeHits" parameterType="NoticeVO">
+		UPDATE TB_NOTICE
+		   SET notice_hits = notice_hits +1
+		 WHERE notice_id = #{notice_id}
+	</update>
+	
+	<delete id="deleteNotice" parameterType="NoticeVO">
+		<![CDATA[
+		DELETE FROM TB_NOTICE
+		 WHERE notice_id = #{notice_id}
+		]]>
+	</delete>
+	
+	<select id="selectNoticeList" parameterType="SearchVO" resultType="NoticeVO">
+		SELECT * 
+		  FROM TB_NOTICE
+		 WHERE 1=1
+		 <if test="academy_id != null and academy_id != ''">
+	       AND academy_id = #{academy_id}
+	      </if>
+		 ORDER BY notice_importance, notice_id DESC 
+		 LIMIT #{record_count} OFFSET #{first_index}
+	</select>
+	
+	<select id="selectNoticeListTotalCount" parameterType="SearchVO" resultType="Integer">
+		SELECT COUNT(*) 
+		  FROM TB_NOTICE
+		 WHERE 1=1
+		 <if test="academy_id != null and academy_id != ''">
+	       AND academy_id = #{academy_id}
+	      </if>
+	</select>
+	
+	<select id="selectNoticeDetail" parameterType="NoticeVO" resultType="NoticeVO">
+		SELECT *
+		  FROM TB_NOTICE
+		 WHERE notice_id = #{notice_id}
+	</select>
+	
+</mapper>

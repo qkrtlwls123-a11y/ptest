@@ -1,0 +1,200 @@
+/*========================占쎌넎野껋럩�젟癰귨옙==================*/
+/*占쎌넎野껋럩�젟癰귨옙 域밸챶�삋占쎈늄*/
+.graph-area {
+	padding: 10px;
+}
+.graph-area li{
+	width: 33.333%;
+	float: left;
+}
+.graph-area li dl {
+	padding: 10px;
+}
+.graph-area li dl dt {
+    display: block;
+    float: left;
+    line-height: 30px;
+    font-weight: 800;
+}
+.graph-area li dl .graph-info {
+    float: right;
+    display: block;
+    border-radius: 5px;
+    background-color: #222;
+    color: #fff;
+    padding: 3px 10px;
+    margin-bottom: 10px;
+	height: 30px;
+	line-height: 25px;
+}
+.graph-area li dl .graph-form {
+	width: 100%;
+    height: 100%;
+	background-color: #fff;
+	border: 1px solid #ddd;
+    border-radius: 5px;
+    min-height: 340px;
+    display: block;
+    clear: both;
+}
+.fullMode .graph-area li dl .graph-form {
+    min-height: 395px;
+}
+.graph-area li:nth-child(1) dl .graph-form {
+	background-size: cover;
+}
+.graph-area li:nth-child(2) dl .graph-form {
+	background-size: cover;
+}
+.graph-area li:nth-child(3) dl .graph-form {
+	background-size: cover;
+}
+.graph-area li:nth-child(4) dl .graph-form {
+	background-size: cover;
+}
+.graph-area li:nth-child(5) dl .graph-form {
+	background-size: cover;
+}
+.graph-area li:nth-child(6) dl .graph-form {
+	background-size: cover;
+}
+.graph-area li:nth-child(7) dl .graph-form {
+	background-size: cover;
+}
+.graph-area li:nth-child(8) dl .graph-form {
+	background-size: cover;
+}
+.graph-area .graph-wrap .graph-form {
+	position: relative;
+}
+.graph-area .graph-wrap .graph-form .graph-symbol {
+	position: absolute;
+	padding: 20px;
+	color: #222;
+	font-weight: 600;
+	font-size: 1.2rem;
+}
+.graph-area .graph-wrap .graph-form .graph-symbol li {width: 100%;}
+
+.graph-area .graph-wrap .temper .graph-symbol li:first-child::after {
+	content: '';
+	display: block;
+	width: 25px;
+	height: 25px;
+	background: url(../img/sub/icon-temp.png) 0 0 no-repeat;
+	float: left;
+	margin-right: 10px;
+	margin-top: -3px;
+}
+.graph-area .graph-wrap .temper .graph-symbol li:last-child::after {
+	content: '';
+	display: block;
+	width: 25px;
+	height: 25px;
+	background: url(../img/sub/icon-humi.png) 0 0 no-repeat;
+	float: left;
+	margin-right: 10px;
+	margin-top: -3px;
+}
+.graph-area .graph-wrap .rain .graph-symbol li:first-child::after {
+	content: '';
+	display: block;
+	width: 25px;
+	height: 25px;
+	background: url(../img/sub/icon-rain.png) 0 0 no-repeat;
+	float: left;
+	margin-right: 10px;
+	margin-top: -3px;
+}
+.graph-area .graph-wrap .wind .graph-symbol li:first-child::after {
+	content: '';
+	display: block;
+	width: 25px;
+	height: 25px;
+	background: url(../img/sub/icon-wind.png) 0 0 no-repeat;
+	float: left;
+	margin-right: 10px;
+	margin-top: -3px;
+}
+.graph-area .graph-wrap .dust .graph-symbol li:first-child::after {
+	content: '';
+	display: block;
+	width: 25px;
+	height: 25px;
+	background: url(../img/sub/icon-dust.png) 0 0 no-repeat;
+	float: left;
+	margin-right: 10px;
+	margin-top: -3px;
+}
+.graph-area .graph-wrap .wind .graph-symbol-right {
+	position: absolute;
+	right: 0;
+	top: 20px;
+	font-size: 1.2rem;
+	font-weight: 800;
+	color: #222;
+}
+.graph-area .graph-wrap .wind .graph-symbol-right li {
+	width: auto;
+	margin-right: 20px;
+}
+/*
+.graph-area .graph-wrap .wind .graph-symbol-right li::after {
+	content: '';
+	display: block;
+	width: 25px;
+	height: 25px;
+	/* background: url(../img/sub/icon-wind-arrow.png) 0 0 no-repeat; */
+	float: left;
+	margin-right: 10px;
+	margin-top: -3px;
+}
+*/
+.graph-area .graph-wrap .wind .graph-symbol-right li .graph-symbol-img {
+	content: '';
+	display: block;
+	width: 25px;
+	height: 25px;
+	float: left;
+	margin-right: 10px;
+	margin-top: -3px;
+}
+.graph-area .graph-wrap .wind .graph-symbol-right li span {
+	color: #222;
+}
+.graph-area .graph-wrap .graph-form .graph-num-data {
+    position: absolute;
+    left: 30%;
+    font-size: 2.5rem;
+    font-weight: 800;
+	top: 40px;
+	color: #222;
+}
+.graph-area .graph-wrap .graph-form .graph-num-data li {
+	width: auto;
+	margin-right: 50px;
+}
+.graph-area .graph-wrap .graph-form .graph-num-center {
+	left: 40%!important;
+}
+
+
+@media screen and (max-width: 1280px) {
+	.graph-area li{
+		width: 50%;
+		float: left;
+	}
+	.graph-area li dl .graph-form {
+		min-height: 300px;
+	}
+}
+
+.div-misemunzi{
+    position: relative;
+    clear: both;
+}
+
+.div-misemunzi > [class^=graph-munzi_] {
+	position: absolute;
+}
+

@@ -1,0 +1,54 @@
+@font-face {
+    font-family: 'KoPubBatang';
+    src: url('KoPubBatangMedium.woff2') format('woff2'),
+        url('KoPubBatangMedium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'KoPubBatang';
+    src: url('KoPubBatangLight.woff2') format('woff2'),
+        url('KoPubBatangLight.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'KoPubBatang';
+    src: url('KoPubBatangBold.woff2') format('woff2'),
+        url('KoPubBatangBold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'KoPubDotum';
+    src: url('KoPubDotumBold.woff2') format('woff2'),
+        url('KoPubDotumBold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'KoPubDotum';
+    src: url('KoPubDotumLight.woff2') format('woff2'),
+        url('KoPubDotumLight.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'KoPubDotum';
+    src: url('KoPubDotumMedium.woff2') format('woff2'),
+        url('KoPubDotumMedium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+

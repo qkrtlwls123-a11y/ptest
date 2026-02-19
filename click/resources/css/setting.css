@@ -1,0 +1,156 @@
+/*========================占쎄퐬占쎌젟==================*/
+
+/*02_�쁽�옣愿�由�_�쁽�옣�벑濡앹젙蹂�*/
+.no-regist {
+	background: #edfff4;
+	border: 3px solid #c1f5d5;
+	padding: 50px;
+	text-align: center;
+	margin: 0 20px;
+	clear: both;
+	margin-bottom: 20px;
+}
+.td-button01 {
+	max-width: 125px;
+	vertical-align: middle;
+	line-height: 26px;
+	cursor: pointer;
+	background-color: #333;
+	color: #fff;
+}
+.td-button01:hover , .td-button01:active {
+	background-color: #111;
+	color: #fff;
+	transition: 0.5s ease all;
+}
+.td-title01 {
+	width: 110px;
+	display: inline-block;
+	margin-left: 10px;
+}
+.fa-chevron-circle-up , .fa-chevron-circle-down {font-size: 1.5rem; color: #aaa; cursor: pointer;padding: 0 3px;}
+.fa-chevron-circle-up:hover , .fa-chevron-circle-down:hover {
+	color: #222; transition: 0.5s ease all;
+}
+.table-toggle {
+	position: relative;
+	margin: 0 auto;
+	margin-top: 10px; margin-bottom: 5px;
+	vertical-align: sub;
+}
+.table-toggle .layer {
+	background-color: #efefef;
+}
+.change-set-btn {
+	border-radius: 5px;
+	background-color: #555;
+	color: #fff;
+	padding: 3px 10px;
+	cursor: pointer;
+	display: inline-block;
+	margin-top: 8px;
+	margin-left: 5px;
+	vertical-align: top;
+}
+.change-set-btn:hover {
+	background-color: #222;
+	transition: 0.5s ease all;
+}
+.table-color01 {background-color: #fff;margin: 10px 20px 20px 20px;}
+.table .toggle-wrap {
+	margin: 0 auto; width: fit-content;
+}
+.sub-con-title {margin: 20px 0 0 20px;}
+.chemical-font {font-family: sans-serif!important;}
+
+/*�뙘�뾽 而щ윭�뙣�꼸*/
+.color-pannel-wrap {
+	margin-top: 10px;
+}
+.color-pannel-wrap li a{
+	display: block;
+	width: 70px; height: 40px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	text-indent: -99999px;
+}
+.color-pannel-wrap li {
+	display: block;
+	float: left;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+.color-pannel-wrap li a:hover {
+	border: 5px solid #fff000;
+}
+.color-pannel-wrap li .active {
+	border: 5px solid #fff000;
+}
+.color-pannel-wrap li:nth-child(1) a{
+	background-color: #fff;
+}
+.color-pannel-wrap li:nth-child(2) a{
+	background-color: #f22525;
+}
+.color-pannel-wrap li:nth-child(3) a{
+	background-color: #e4a449;
+}
+.color-pannel-wrap li:nth-child(4) a{
+	background-color: #b3da2a;
+}
+.color-pannel-wrap li:nth-child(5) a{
+	background-color: #9b9b9b;
+}
+.color-pannel-wrap li:nth-child(6) a{
+	background-color: #1ccda1;
+}
+.color-pannel-wrap li:nth-child(7) a{
+	background-color: #0792ba;
+}
+.color-pannel-wrap li:nth-child(8) a{
+	background-color: #4e47dc;
+}
+.color-pannel-wrap li:nth-child(9) a{
+	background-color: #be47dc;
+}
+.color-pannel-wrap li:nth-child(10) a{
+	background-color: #2b2b2b;
+}
+
+.appMenus {
+	background-color: #ffffff;
+    font-size: 16px;
+    padding: 5px 25px;
+    height: auto;
+    color: #222;
+    border-radius: 5px;
+    margin: 12px auto;
+    width: 95%;
+    border: 1px solid #ddd;
+    -webkit-box-shadow: 0px 10px 0px -1px rgba(0,0,0,0.12);
+    -moz-box-shadow: 0px 10px 0px -1px rgba(0,0,0,0.12);
+    box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.07);
+}
+.appMenus:hover {
+	background-color: #effff1;
+}
+.comFile { cursor:pointer; position:relative; display:inline-block; vertical-align:middle; padding-right:100px; box-sizing:border-box; -webkit-box-sizing:border-box; }
+.comFile .comText { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.comFile .comText.unselect { color:#888; }
+.comFile .hidFile:disabled + .comText { background-color:#e7e7e7 !important; }
+.comFile .fileName.disabled { background-color:#e7e7e7 !important; }
+.comFile .fileName.focus { outline:1px solid #96b8ef; }
+.comFile .fileName { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left; }
+.comFile .hidFile { position:absolute; z-index:-1; opacity:0; filter:alpha(opacity=0); top:5px; left:5px; width:0; height:0; overflow:hidden; }
+.comFile .sbtn { font-family: 'HDharmonyL';position:absolute; right:0; top:0; width:110px; vertical-align: middle; line-height:26px; cursor: pointer; text-align:center; box-sizing:border-box; -webkit-box-sizing:border-box; color:#fff; background-color: #333; color: #fff;}
+.comFile .sbtn:hover , .comFile .sbtn:active {
+	background-color: #111;
+	color: #fff;
+	transition: 0.5s ease all;
+}
+.comText {box-sizing:border-box; border:1px solid #ccc; height:26px; padding:4px 9px; line-height:20px; color:#555; border-radius:0;}
+.fileBox {position: relative; padding:5px 0;}
+.fileBox > .tbtn {position: absolute; top:5px; left:510px;}
+
+@media screen and (max-width: 1150px) {
+}

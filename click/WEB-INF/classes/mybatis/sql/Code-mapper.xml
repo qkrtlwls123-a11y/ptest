@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="code" >
+	<select id="selectCodeTypeList" parameterType="CodeVO" resultType="CodeVO">
+		SELECT *
+		  FROM TBL_CODE_TYPE
+		 <!-- WHERE (company_id = #{company_id} OR company_id IS NULL) -->
+		 WHERE ( ( cooperator_id IS NULL OR company_id = #{company_id} ) OR ( cooperator_id = #{cooperator_id} AND company_id = '' ) )
+		 <if test='noSch_company != null and noSch_company == "Y"'>
+		   AND code_type_id != '3'
+		 </if>
+		 <if test="code_type_id != null and code_type_id != ''">
+		   AND code_type_id = #{code_type_id}
+		 </if>
+		 <if test="code_type_code != null and code_type_code != ''">
+		   AND code_type_code = #{code_type_code}
+		 </if>
+		 ORDER BY order_no ASC
+		 <if test="notUsePage == null or notUsePage == ''">
+			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		</if>
+	</select>
+	
+	<select id="selectCodeTypeListTotal" parameterType="CodeVO" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM TBL_CODE_TYPE
+		 WHERE (company_id = #{company_id} OR company_id IS NULL)
+		 <if test="code_type_id != null and code_type_id != ''">
+		   AND code_type_id = #{code_type_id}
+		 </if>
+		 <if test="code_type_code != null and code_type_code != ''">
+		   AND code_type_code = #{code_type_code}
+		 </if>
+	</select>
+	
+	<select id="selectCodeTypeDetail" parameterType="CodeVO" resultType="CodeVO">
+		SELECT *
+		  FROM TBL_CODE_TYPE
+		 WHERE 1=1
+		   AND code_type_id = #{code_type_id}
+	</select>
+	
+	<select id="selectCodeTypeCount" parameterType="CodeVO" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM TBL_CODE_TYPE
+		 WHERE code_type_name = #{code_type_name}
+		   AND (company_id = #{company_id} OR company_id IS NULL)
+	</select>
+	
+	<insert id="insertCodeType" parameterType="CodeVO" useGeneratedKeys="true" keyProperty="code_type_id">
+		INSERT INTO TBL_CODE_TYPE
+			( 
+				company_id,
+				cooperator_id,
+				code_type_code,
+				code_type_name,
+				order_no,
+				reg_dt,
+				reg_id,
+				mod_dt,
+				mod_id
+			)
+			VALUES
+			(
+				#{company_id},
+				#{cooperator_id},
+				#{code_type_code},
+				#{code_type_name},
+				(SELECT MAX(Z.ORDER_NO) + 1 FROM TBL_CODE_TYPE Z),
+			 	now(),
+			 	#{reg_id},
+			 	now(),
+			 	#{mod_id}
+			 )
+	</insert>
+	
+	<update id="updateCodeType" parameterType="CodeVO">
+		UPDATE TBL_CODE_TYPE
+		   SET code_type_code= #{code_type_code},
+				code_type_name= #{code_type_name},
+				mod_dt= NOW(),
+				mod_id = #{mod_id}
+		 WHERE code_type_id = #{code_type_id}
+	</update>
+	
+	
+	<select id="selectBaseCodeList" parameterType="CodeVO" resultType="CodeVO">
+		SELECT    a.*
+				, b.code_type_name
+				, b.code_type_code
+				, c.cooperator_name
+				, a.base_code_id as common_code_id
+				, CASE WHEN (SELECT COUNT(*) FROM (SELECT d.base_code_id FROM TBL_BASE_CODE d WHERE d.code_index = (SELECT MIN(code_index) FROM TBL_BASE_CODE c WHERE c.code_type_id = '3') AND d.code_type_id = '3') CNT) > 0 THEN (SELECT d.base_code_id FROM TBL_BASE_CODE d WHERE 1=1 AND d.code_index = (SELECT MIN(code_index) FROM TBL_BASE_CODE c WHERE  c.code_type_id = '3') AND d.code_type_id = '3' AND a.cooperator_id = d.cooperator_id )
+				  	   WHEN (SELECT COUNT(*) FROM (SELECT d.base_code_id FROM TBL_BASE_CODE d WHERE d.code_index = (SELECT MIN(code_index) FROM TBL_BASE_CODE c WHERE c.code_type_id = '1') AND d.code_type_id = '1') CNT) > 0 THEN (SELECT d.base_code_id FROM TBL_BASE_CODE d WHERE 1=1 AND d.code_index = (SELECT MIN(code_index) FROM TBL_BASE_CODE c WHERE  c.code_type_id = '1') AND d.code_type_id = '1' AND a.cooperator_id = d.cooperator_id )
+				 	   WHEN (SELECT COUNT(*) FROM (SELECT d.base_code_id FROM TBL_BASE_CODE d WHERE d.code_index = (SELECT MIN(code_index) FROM TBL_BASE_CODE c WHERE c.code_type_id = '2') AND d.code_type_id = '2') CNT) > 0 THEN (SELECT d.base_code_id FROM TBL_BASE_CODE d WHERE 1=1 AND d.code_index = (SELECT MIN(code_index) FROM TBL_BASE_CODE c WHERE  c.code_type_id = '2') AND d.code_type_id = '2' AND a.cooperator_id = d.cooperator_id )
+				  	   WHEN (SELECT COUNT(*) FROM (SELECT d.base_code_id FROM TBL_BASE_CODE d WHERE d.code_index = (SELECT MIN(code_index) FROM TBL_BASE_CODE c WHERE c.code_type_id = '4') AND d.code_type_id = '4') CNT) > 0 THEN (SELECT d.base_code_id FROM TBL_BASE_CODE d WHERE 1=1 AND d.code_index = (SELECT MIN(code_index) FROM TBL_BASE_CODE c WHERE  c.code_type_id = '4') AND d.code_type_id = '4' AND a.cooperator_id = d.cooperator_id )
+				 	   WHEN (SELECT COUNT(*) FROM (SELECT d.base_code_id FROM TBL_BASE_CODE d WHERE d.code_index = (SELECT MIN(code_index) FROM TBL_BASE_CODE c WHERE c.code_type_id = '5') AND d.code_type_id = '5') CNT) > 0 THEN (SELECT d.base_code_id FROM TBL_BASE_CODE d WHERE 1=1 AND d.code_index = (SELECT MIN(code_index) FROM TBL_BASE_CODE c WHERE  c.code_type_id = '5') AND d.code_type_id = '5' AND a.cooperator_id = d.cooperator_id )
+				  ELSE 1 END AS first_base_code_id
+				, ( SELECT d.base_code_id FROM TBL_BASE_CODE d WHERE d.code_type_id = '5' AND d.code_index = (SELECT MAX(c.code_index) FROM TBL_BASE_CODE c WHERE  c.code_type_id = '5') AND a.cooperator_id = d.cooperator_id ) AS last_base_code_id
+		  FROM TBL_BASE_CODE a
+		JOIN TBL_CODE_TYPE b ON b.code_type_id = a.code_type_id
+		JOIN TBL_COOPERATOR c ON c.cooperator_id = a.cooperator_id
+		 WHERE ( b.company_id IS NULL OR b.company_id = '')
+		   <if test="cooperator_id != null and cooperator_id != ''">
+		   AND c.cooperator_id = #{cooperator_id}
+		   </if>
+		   <if test="code_type_id != null and code_type_id != ''">
+		   AND b.code_type_id = #{code_type_id}
+		   </if>
+		   <if test="search_word != null and search_word != ''">
+		   AND (a.code LIKE CONCAT('%',#{search_word},'%') OR a.code_name LIKE CONCAT('%',#{search_word},'%') OR a.code_name_eng LIKE CONCAT('%',#{search_word},'%') OR a.code_name LIKE CONCAT('%',#{search_word},'%'))
+		   </if>
+         <!-- ORDER BY (CASE WHEN SUBSTR(c.cooperator_name, 1, 1) REGEXP '^[가-힣ㄱ-ㅎㅏ-ㅣ\x20]' THEN 1
+                        WHEN UPPER(SUBSTR(c.cooperator_name, 1, 1)) REGEXP '^[A-Z]+$' THEN 2
+                        WHEN SUBSTR(c.cooperator_name, 1, 1) REGEXP '^[0-9]+$' THEN 3
+                        ELSE 4
+                   END) ASC, c.cooperator_name ASC, b.order_no ASC, a.base_code_id DESC  , a.code_index ASC
+                   END) ASC, a.code_index ASC -->
+		 ORDER BY b.order_no ASC, a.code_index ASC
+         <if test="notUsePage == null or notUsePage == ''">
+		 LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		 </if>
+	</select>
+	
+	<select id="selectBaseCodeListTotal" parameterType="CodeVO" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM TBL_BASE_CODE a
+		JOIN TBL_CODE_TYPE b ON b.code_type_id = a.code_type_id
+		JOIN TBL_COOPERATOR c ON c.cooperator_id = a.cooperator_id
+		 WHERE ( b.company_id IS NULL OR b.company_id = '')
+		   <if test="cooperator_id != null and cooperator_id != ''">
+		   AND c.cooperator_id = #{cooperator_id}
+		   </if>
+		   <if test="code_type_id != null and code_type_id != ''">
+		   AND b.code_type_id = #{code_type_id}
+		   </if>
+		   <if test="search_word != null and search_word != ''">
+		   AND (a.code LIKE CONCAT('%',#{search_word},'%') OR a.code_name LIKE CONCAT('%',#{search_word},'%') OR a.code_name_eng LIKE CONCAT('%',#{search_word},'%') OR a.code_name LIKE CONCAT('%',#{search_word},'%'))
+		   </if>
+	</select>
+	
+	<select id="selectBaseCodeDetail" parameterType="CodeVO" resultType="CodeVO">
+		SELECT *
+		  FROM TBL_BASE_CODE
+		 WHERE 1=1
+		   AND base_code_id = #{base_code_id}
+	</select>
+	
+	<insert id="insertBaseCode" parameterType="CodeVO" useGeneratedKeys="true" keyProperty="base_code_id">
+		INSERT INTO TBL_BASE_CODE
+			( 
+				cooperator_id,
+				code_type_id,
+				code,
+				code_name,
+				code_name_eng,
+				reserved1,
+				reserved2,
+				reserved3,
+				reg_dt,
+				reg_id,
+				mod_dt,
+				mod_id,
+				code_index
+			)
+			VALUES
+			(
+				#{cooperator_id},
+				#{code_type_id},
+				#{code},
+				#{code_name},
+				#{code_name_eng},
+				#{reserved1},
+				#{reserved2},
+				#{reserved3},
+			 	now(),
+			 	#{reg_id},
+			 	now(),
+			 	#{mod_id},
+			 	(
+					SELECT COALESCE(MAX(code_index)+1,1) as code_index
+					FROM TBL_BASE_CODE a
+					JOIN TBL_CODE_TYPE b 
+					ON b.code_type_id = a.code_type_id
+					WHERE 1=1
+					AND a.code_type_id = #{code_type_id}
+			 	)
+			)
+	</insert>
+	
+	
+	<update id="updateBaseCode" parameterType="CodeVO">
+		UPDATE TBL_BASE_CODE
+		   SET cooperator_id= #{cooperator_id},
+				code_type_id= #{code_type_id},
+				code= #{code},
+				code_name= #{code_name},
+				code_name_eng= #{code_name_eng},
+				reserved1= #{reserved1},
+				reserved2= #{reserved2},
+				reserved3= #{reserved3},
+				mod_dt= NOW(),
+				mod_id = #{mod_id}
+		 WHERE base_code_id = #{base_code_id}
+	</update>
+	
+	<delete id="deleteBaseCode" parameterType="CodeVO">
+		DELETE FROM TBL_BASE_CODE WHERE base_code_id = #{base_code_id}
+	</delete>
+	
+	
+	
+	<select id="selectCommonCodeList" parameterType="CodeVO" resultType="CodeVO">
+		SELECT    a.*
+				, b.code_type_name
+				, b.code_type_code
+				, CASE WHEN (SELECT COUNT(*) FROM (SELECT d.common_code_id FROM TBL_COMMON_CODE d WHERE d.company_id = #{company_id} AND d.code_index = (SELECT MIN(code_index) FROM TBL_COMMON_CODE c WHERE c.company_id = #{company_id} AND c.code_type_id = '3') AND d.code_type_id = '3') CNT) > 0 THEN (SELECT d.common_code_id FROM TBL_COMMON_CODE d WHERE 1=1 AND d.company_id = #{company_id} AND d.code_index = (SELECT MIN(code_index) FROM TBL_COMMON_CODE c WHERE c.company_id = #{company_id} AND c.code_type_id = '3') AND d.code_type_id = '3')
+				  	   WHEN (SELECT COUNT(*) FROM (SELECT d.common_code_id FROM TBL_COMMON_CODE d WHERE d.company_id = #{company_id} AND d.code_index = (SELECT MIN(code_index) FROM TBL_COMMON_CODE c WHERE c.company_id = #{company_id} AND c.code_type_id = '1') AND d.code_type_id = '1') CNT) > 0 THEN (SELECT d.common_code_id FROM TBL_COMMON_CODE d WHERE 1=1 AND d.company_id = #{company_id} AND d.code_index = (SELECT MIN(code_index) FROM TBL_COMMON_CODE c WHERE c.company_id = #{company_id} AND c.code_type_id = '1') AND d.code_type_id = '1')
+				 	   WHEN (SELECT COUNT(*) FROM (SELECT d.common_code_id FROM TBL_COMMON_CODE d WHERE d.company_id = #{company_id} AND d.code_index = (SELECT MIN(code_index) FROM TBL_COMMON_CODE c WHERE c.company_id = #{company_id} AND c.code_type_id = '2') AND d.code_type_id = '2') CNT) > 0 THEN (SELECT d.common_code_id FROM TBL_COMMON_CODE d WHERE 1=1 AND d.company_id = #{company_id} AND d.code_index = (SELECT MIN(code_index) FROM TBL_COMMON_CODE c WHERE c.company_id = #{company_id} AND c.code_type_id = '2') AND d.code_type_id = '2')
+				  	   WHEN (SELECT COUNT(*) FROM (SELECT d.common_code_id FROM TBL_COMMON_CODE d WHERE d.company_id = #{company_id} AND d.code_index = (SELECT MIN(code_index) FROM TBL_COMMON_CODE c WHERE c.company_id = #{company_id} AND c.code_type_id = '4') AND d.code_type_id = '4') CNT) > 0 THEN (SELECT d.common_code_id FROM TBL_COMMON_CODE d WHERE 1=1 AND d.company_id = #{company_id} AND d.code_index = (SELECT MIN(code_index) FROM TBL_COMMON_CODE c WHERE c.company_id = #{company_id} AND c.code_type_id = '4') AND d.code_type_id = '4')
+				 	   WHEN (SELECT COUNT(*) FROM (SELECT d.common_code_id FROM TBL_COMMON_CODE d WHERE d.company_id = #{company_id} AND d.code_index = (SELECT MIN(code_index) FROM TBL_COMMON_CODE c WHERE c.company_id = #{company_id} AND c.code_type_id = '5') AND d.code_type_id = '5') CNT) > 0 THEN (SELECT d.common_code_id FROM TBL_COMMON_CODE d WHERE 1=1 AND d.company_id = #{company_id} AND d.code_index = (SELECT MIN(code_index) FROM TBL_COMMON_CODE c WHERE c.company_id = #{company_id} AND c.code_type_id = '5') AND d.code_type_id = '5')
+				  ELSE 1 END AS first_common_code_id
+			  , ( SELECT d.common_code_id FROM TBL_COMMON_CODE d WHERE d.company_id = #{company_id} AND d.code_type_id = '5' AND d.code_index = (SELECT MAX(c.code_index) FROM TBL_COMMON_CODE c WHERE c.company_id = #{company_id} AND c.code_type_id = '5') ) AS last_common_code_id
+		FROM TBL_COMMON_CODE a
+		JOIN TBL_CODE_TYPE b ON b.code_type_id = a.code_type_id
+		 WHERE (b.company_id = #{company_id} OR b.company_id IS NULL)
+		 <if test='noSch_company != null and noSch_company == "Y"'>
+		   AND a.code_type_id != '3'
+		 </if>
+		 <if test="code_type_id != null and code_type_id != ''">
+		   AND a.code_type_id = #{code_type_id}
+		 </if>
+		 <if test="search_word != null and search_word != ''">
+		   AND (a.code LIKE CONCAT('%',#{search_word},'%') OR a.code_name LIKE CONCAT('%',#{search_word},'%') OR a.code_name_eng LIKE CONCAT('%',#{search_word},'%'))
+		 </if>
+		 <if test="company_id != null and company_id != ''">
+		   AND a.company_id = #{company_id}
+		 </if>
+         <!-- ORDER BY b.order_no ASC, a.common_code_id DESC -->
+         ORDER BY b.order_no ASC, a.code_index ASC
+         <if test="notUsePage == null or notUsePage == ''">
+		 LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		 </if>
+	</select>
+	
+	<select id="selectCommonCodeListTotal" parameterType="CodeVO" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM TBL_COMMON_CODE
+		 WHERE 1=1
+		 <if test='noSch_company != null and noSch_company == "Y"'>
+		   AND code_type_id != '3'
+		 </if>
+		 <if test="code_type_id != null and code_type_id != ''">
+		   AND code_type_id = #{code_type_id}
+		 </if>
+		 <if test="search_word != null and search_word != ''">
+		   AND (code LIKE CONCAT('%',#{search_word},'%') OR code_name LIKE CONCAT('%',#{search_word},'%') OR code_name_eng LIKE CONCAT('%',#{search_word},'%'))
+		 </if>
+		 <if test="company_id != null and company_id != ''">
+		   AND company_id = #{company_id}
+		 </if>
+	</select>
+	
+	<select id="selectCommonCodeDetail" parameterType="CodeVO" resultType="CodeVO">
+		SELECT *
+		  FROM TBL_COMMON_CODE
+		 WHERE 1=1
+		 <if test="common_code_id != null and common_code_id != ''">
+		   AND common_code_id = #{common_code_id}
+		 </if>
+		 <if test="company_id != null and company_id != ''">
+		   AND company_id = #{company_id}
+		 </if>
+		 <if test="code != null and code != ''">
+		   AND code = #{code}
+		 </if>
+		   
+		   
+	</select>
+		
+	<insert id="insertCommonCode" parameterType="CodeVO" useGeneratedKeys="true" keyProperty="code_type_id">
+		INSERT INTO TBL_COMMON_CODE
+			( 
+				company_id,
+				code_type_id,
+				code,
+				code_name,
+				code_name_eng,
+				reserved1,
+				reserved2,
+				reserved3,
+				reg_dt,
+				reg_id,
+				mod_dt,
+				mod_id,
+				code_index
+			)
+			VALUES
+			(
+				#{company_id},
+				#{code_type_id},
+				#{code},
+				#{code_name},
+				#{code_name_eng},
+				#{reserved1},
+				#{reserved2},
+				#{reserved3},
+			 	now(),
+			 	#{reg_id},
+			 	now(),
+			 	#{mod_id},
+			 	(
+					SELECT COALESCE(MAX(code_index)+1,1) as code_index
+					FROM TBL_COMMON_CODE a
+					JOIN TBL_CODE_TYPE b 
+					ON b.code_type_id = a.code_type_id
+					WHERE 1=1
+					AND a.code_type_id = #{code_type_id}
+			 	)
+			)
+	</insert>
+	
+	<update id="updateCommonCode" parameterType="CodeVO">
+		UPDATE TBL_COMMON_CODE
+		   SET company_id= #{company_id},
+				code_type_id= #{code_type_id},
+				code= #{code},
+				code_name= #{code_name},
+				code_name_eng= #{code_name_eng},
+				reserved1= #{reserved1},
+				reserved2= #{reserved2},
+				mod_dt= NOW(),
+				mod_id = #{mod_id}
+		 WHERE common_code_id = #{common_code_id}
+	</update>
+	
+	<delete id="deleteCommonCode" parameterType="CodeVO">
+		DELETE FROM TBL_COMMON_CODE WHERE common_code_id = #{common_code_id}
+	</delete>
+	
+	<insert id="copyCommonCodeFromBaseCode" parameterType="CodeVO" useGeneratedKeys="true" keyProperty="code_type_id">
+		INSERT INTO TBL_COMMON_CODE
+			( 
+				company_id,
+				code_type_id,
+				code,
+				code_name,
+				code_name_eng,
+				reserved1,
+				reserved2,
+				reserved3,
+				reg_dt,
+				reg_id,
+				mod_dt,
+				mod_id,
+				hpms_code
+			)
+			SELECT #{company_id}, code_type_id, code, code_name, code_name_eng, reserved1, reserved2, reserved3, NOW(), 'SYSTEM', NOW(), 'SYSTEM' , hpms_code
+			FROM TBL_BASE_CODE
+			WHERE cooperator_id = (SELECT cooperator_id FROM TBL_SITE WHERE company_id = #{company_id}) AND code_type_id = #{code_type_id}
+			
+	</insert>
+	
+	<select id="selectCommonCodeSite" parameterType="CodeVO" resultType="CodeVO">
+		SELECT *
+		  FROM TBL_COMMON_CODE
+		 WHERE 1=1
+		   AND company_id = #{company_id}
+		   <if test="code_type_id != null and code_type_id != ''">
+		   AND code_type_id = #{code_type_id}
+		   </if>
+	</select>
+	
+	
+	<select id="selectAdminCommonCodeSite" parameterType="CodeVO" resultType="CodeVO">
+		   SELECT *
+		   FROM TBL_COMMON_CODE
+		   WHERE 1=1
+		   AND company_id = #{company_id}
+		   <if test="code_type_id != null and code_type_id != ''">
+		   AND code_type_id = #{code_type_id}
+		   </if>
+		   <if test="code != null and code != ''">
+		   AND code = #{code}
+		   </if>
+	</select>
+	
+	
+	<update id="afterCodeIndexChagne" parameterType="CodeVO">
+		UPDATE TBL_BASE_CODE
+		   SET  code_index = #{after_index}
+		 WHERE base_code_id = #{before_code_id}
+	</update>
+	
+	<update id="beforeCodeIndexChagne" parameterType="CodeVO">
+		UPDATE TBL_BASE_CODE
+		   SET  code_index = #{before_index}
+		 WHERE base_code_id = #{after_code_id}
+	</update>
+	
+	<update id="afterCommonCodeIndexChagne" parameterType="CodeVO">
+		UPDATE TBL_COMMON_CODE
+		   SET  code_index = #{before_index}
+		 WHERE common_code_id = #{after_code_id}
+	</update>
+	
+	<update id="beforeCommonCodeIndexChagne" parameterType="CodeVO">
+		UPDATE TBL_COMMON_CODE
+		   SET  code_index = #{after_index}
+		 WHERE common_code_id = #{before_code_id}
+	</update>
+	
+	<select id="selectCodeIndex" parameterType="CodeVO" resultType="CodeVO">
+		SELECT T2.*
+		FROM TBL_COMMON_CODE T1 INNER JOIN
+		(
+		  <![CDATA[
+		  SELECT 'prev_row' AS row_type, code_index , code_type_id , common_code_id  FROM TBL_COMMON_CODE WHERE code_index = (SELECT MAX(code_index) FROM TBL_COMMON_CODE WHERE code_index < #{before_index} AND code_type_id = #{before_code_type_id} AND company_id = #{company_id} ) AND code_type_id = #{before_code_type_id} AND company_id = #{company_id}
+		  UNION ALL
+		  SELECT 'next_row' AS row_type, code_index , code_type_id , common_code_id  FROM TBL_COMMON_CODE WHERE code_index = (SELECT MIN(code_index) FROM TBL_COMMON_CODE WHERE code_index > #{before_index} AND code_type_id = #{before_code_type_id} AND company_id = #{company_id} ) AND code_type_id = #{before_code_type_id} AND company_id = #{company_id}
+		  ]]>
+		) T2 
+		ON T1.code_index = T2.code_index
+		AND T1.code_type_id = T2.code_type_id
+		WHERE 1=1
+		AND T1.company_id = #{company_id}
+		<if test='row_type == "U"'>
+		AND T2.row_type = 'prev_row'
+		</if>
+		<if test='row_type == "D"'>
+		AND T2.row_type = 'next_row'
+		</if>
+	</select>
+	
+	<select id="selectBaseCodeIndex" parameterType="CodeVO" resultType="CodeVO">
+		SELECT T2.*
+		FROM TBL_BASE_CODE T1 INNER JOIN
+		(
+		  <![CDATA[
+		  SELECT 'prev_row' AS row_type, code_index , code_type_id , base_code_id  FROM TBL_BASE_CODE WHERE code_index = (SELECT MAX(code_index) FROM TBL_BASE_CODE WHERE code_index < #{before_index} AND code_type_id = #{before_code_type_id} AND cooperator_id = #{before_cooperator_id}) AND code_type_id = #{before_code_type_id}
+		  UNION ALL
+		  SELECT 'next_row' AS row_type, code_index , code_type_id , base_code_id  FROM TBL_BASE_CODE WHERE code_index = (SELECT MIN(code_index) FROM TBL_BASE_CODE WHERE code_index > #{before_index} AND code_type_id = #{before_code_type_id} AND cooperator_id = #{before_cooperator_id}) AND code_type_id = #{before_code_type_id}
+		  ]]>
+		) T2 
+		ON T1.code_index = T2.code_index
+		AND T1.code_type_id = T2.code_type_id
+		WHERE 1=1
+		<if test='row_type == "U"'>
+		AND row_type = 'prev_row'
+		</if>
+		<if test='row_type == "D"'>
+		AND row_type = 'next_row'
+		</if>
+	</select>
+
+	
+	<select id="selectRanCodeUseCount" parameterType="CodeVO" resultType="Integer">
+		SELECT count(*)
+		  FROM TBL_CODE_VALUE
+		 WHERE 1=1
+		   AND code = #{code}
+		   AND company_id = #{company_id}
+	</select>
+	
+	<insert id="insertCodeValue" parameterType="CodeVO">
+		INSERT INTO TBL_CODE_VALUE
+			( 
+				code,
+				<if test="company_id != null and company_id != ''">
+				company_id,
+				</if>
+				<if test="cooperator_id != null and cooperator_id != ''">
+				cooperator_id,
+				</if>
+				code_type_code,
+				code_type_id,
+				code_gubun,
+				reg_dt,
+				reg_id
+			)
+			VALUES
+			(
+				#{randomCode},
+				<if test="company_id != null and company_id != ''">
+				#{company_id},
+				</if>
+				<if test="cooperator_id != null and cooperator_id != ''">
+				#{cooperator_id},
+				</if>
+				#{code_type_code},
+				#{code_type_id},
+				#{code_gubun},
+			 	now(),
+			 	#{reg_id}
+			 )
+	</insert>
+	
+	<select id="selectBaseCode" parameterType="CodeVO" resultType="CodeVO">
+		SELECT 	  A.code
+				, A.company_id
+				, A.code_type_code
+				, A.code_type_id
+		  FROM TBL_CODE_VALUE A
+		 WHERE 1=1
+		 	<if test="company_id != null and company_id != ''">
+			AND company_id = #{company_id}
+			</if>
+		   AND code_type_id = #{code_type_id}
+		   AND code_gubun = #{code_gubun}
+	</select>
+	
+	<select id="selectMaxCodeValue" parameterType="CodeVO" resultType="CodeVO">
+		SELECT IFNULL( CONCAT(#{code} , '_' ,LPAD(MAX(substring(A.code,4))+1,4,'0')) ,CONCAT(#{code},'_0001') ) as code
+		FROM ${table} A
+		WHERE 1=1
+		<if test="company_id != null and company_id != ''">
+		AND A.company_id = #{company_id}
+		</if>
+		AND A.code LIKE CONCAT('%',#{code},'%')
+	</select>
+	
+	<select id="selectBaseCodeValue" parameterType="CodeVO" resultType="CodeVO">
+		SELECT *
+		  FROM TBL_CODE_VALUE
+		 WHERE code_gubun = #{code_gubun}
+		 AND ( cooperator_id IS NULL OR cooperator_id = '' OR cooperator_id = #{cooperator_id} )
+	</select>
+	
+	<select id="selectCodeOfName" parameterType="CodeVO" resultType="CodeVO">
+		SELECT * 
+		FROM TBL_COMMON_CODE 
+		WHERE code_name = #{search_word}
+		AND company_id = #{company_id}
+		<if test="code_type_id != null and code_type_id != ''">
+		AND code_type_id = #{code_type_id}
+		</if>
+		LIMIT 1
+	</select>
+	
+	
+	<update id="updateCommonCodeOrder" parameterType="CodeVO">
+	UPDATE    TBL_COMMON_CODE A 
+			, (  
+				SELECT    a.common_code_id
+						, code_name
+						, a.reg_dt 
+						, b.order_no
+						, ROW_NUMBER() OVER( 
+							PARTITION BY b.order_no 
+							ORDER BY a.code ASC 
+						  ) code_index
+				FROM TBL_COMMON_CODE a
+				JOIN TBL_CODE_TYPE b 
+				ON b.code_type_id = a.code_type_id
+				WHERE 1=1
+				AND a.company_id = #{company_id}
+				ORDER BY b.order_no , code ASC
+			) B
+	SET  A.code_index = B.code_index
+	WHERE 1=1
+	AND A.common_code_id = B.common_code_id
+	AND A.company_id = #{company_id}
+	</update>
+	
+	
+	<select id="selectCodeOfBusiness" parameterType="CodeVO" resultType="CodeVO">
+		SELECT B.* 
+		FROM TBL_COMMON_CODE B
+		WHERE B.common_code_id = ( SELECT A.reserved1 FROM TBL_COMMON_CODE A WHERE A.code = #{code} AND A.company_id = #{company_id} )
+		<!-- AND B.company_id = #{company_id} -->
+	</select>
+	
+	<select id="selectAreaCodeList" parameterType="CodeVO" resultType="CodeVO">
+		SELECT *
+		  FROM TBL_COMMON_CODE
+		 WHERE code_type_id = '4'
+			AND company_id = #{company_id}
+			AND code IN 
+		    <foreach collection="area_type_list" item="item" index="index" separator="," open="(" close=")">
+		    	#{item}
+		  	</foreach>
+	</select>	
+	
+	
+	<select id="selectCooperatorBaseCodeType" parameterType="CodeVO" resultType="CodeVO">
+		<!-- SELECT a.*, b.code_type_name, b.code_type_code, c.cooperator_name, a.base_code_id as common_code_id
+		  FROM TBL_BASE_CODE a
+		JOIN TBL_CODE_TYPE b ON b.code_type_id = a.code_type_id
+		JOIN TBL_COOPERATOR c ON c.cooperator_id = a.cooperator_id
+		 WHERE (b.company_id = #{company_id} OR b.company_id IS NULL)
+		   <if test="cooperator_id != null and cooperator_id != ''">
+		   AND c.cooperator_id = #{cooperator_id}
+		   </if>
+		   <if test="search_word != null and search_word != ''">
+		   AND (a.code LIKE CONCAT('%',#{search_word},'%') OR a.code_name LIKE CONCAT('%',#{search_word},'%') OR a.code_name_eng LIKE CONCAT('%',#{search_word},'%') OR a.code_name LIKE CONCAT('%',#{search_word},'%'))
+		   </if>
+		   GROUP BY b.code_type_id
+		 ORDER BY b.order_no ASC, a.code_index ASC
+         <if test="notUsePage == null or notUsePage == ''">
+		 LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		 </if> -->
+		SELECT * 
+		FROM TBL_CODE_TYPE A
+		WHERE 1=1
+		<if test="cooperator_id != null and cooperator_id != ''">
+		AND ( A.cooperator_id IS NULL OR A.cooperator_id = #{cooperator_id} )
+		</if>
+		ORDER BY A.code_type_id
+	</select>
+</mapper>

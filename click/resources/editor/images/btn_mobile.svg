@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="31px" height="30px" viewBox="0 0 31 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>btn_phone</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="btn_phone" transform="translate(6.000000, 7.000000)">
+            <g id="btn_pc" transform="translate(5.000000, 2.000000)" fill="#FFFFFF" stroke="#3D3D3D">
+                <g id="Group-7">
+                    <rect id="Rectangle-6" x="0.5" y="0.5" width="8" height="12"></rect>
+                </g>
+            </g>
+            <rect id="Rectangle" fill="#3D3D3D" x="9" y="12" width="1" height="1"></rect>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="admin" >
+	<select id="actionAdminLogin" parameterType="AdminVO" resultType="AdminVO">
+		SELECT *
+		  FROM TB_ADMIN A
+		 WHERE A.admin_email = #{admin_email}
+		   AND A.admin_password = #{admin_password}
+	</select>
+	
+	<select id="checkAdminId" parameterType="AdminVO" resultType="AdminVO">
+	SELECT  *
+		  FROM TB_ADMIN A
+		 WHERE A.admin_email = #{admin_email}
+	</select>
+	
+	<select id="actionSiteAdminLogin" parameterType="AdminVO" resultType="AdminVO">
+		SELECT *
+		  FROM TB_ADMIN A
+		 WHERE A.admin_email = #{admin_email}
+		   AND A.company_id = #{company_id}
+		   AND A.admin_password = #{admin_password}
+	</select>
+	
+	<select id="checkSiteAdminId" parameterType="AdminVO" resultType="AdminVO">
+	SELECT  *
+		  FROM TB_ADMIN A
+		 WHERE A.admin_email = #{admin_email}
+		   AND A.company_id = #{company_id}
+	</select>
+	
+	<insert id="insertAdmin" parameterType="AdminVO">
+		INSERT INTO TB_ADMIN (
+				admin_email,
+				admin_password,
+				admin_grade,
+				company_id,
+				admin_name,
+				admin_phone,
+				updt_date,
+				regi_date
+			)
+			VALUES
+			(
+				#{admin_email},
+				#{admin_password},
+				#{admin_grade},
+				#{company_id},
+				#{admin_name},
+				#{admin_phone},
+				NOW(),
+				NOW()
+			 )
+	</insert>
+	
+	<update id="updateAdmin" parameterType="AdminVO">
+		 UPDATE TB_ADMIN
+		    SET admin_password = #{admin_password},
+				admin_grade = #{admin_grade},
+				company_id = #{company_id},
+				admin_name = #{admin_name},
+				admin_phone = #{admin_phone},
+				updt_date = NOW()
+		 WHERE admin_email = #{admin_email}
+	</update>
+	
+	<update id="updateUser" parameterType="AdminVO">
+		 UPDATE TB_ADMIN
+		    SET use_yn = 'Y'
+		 WHERE admin_email = #{admin_email}
+	</update>
+	
+	<update id="changePassword" parameterType="AdminVO">
+		 UPDATE TB_ADMIN
+		    SET admin_password = #{admin_password}
+		   	   , updt_date = NOW()
+		 WHERE admin_email = #{admin_email}
+	</update>
+	
+	<delete id="deleteAdmin" parameterType="AdminVO">
+		DELETE FROM TB_ADMIN 
+		WHERE admin_email = #{admin_email}
+	</delete>
+	
+	<insert id="insertUserSetting" parameterType="AdminVO">
+		INSERT INTO TB_USER_SETTING (
+				admin_email,
+				updt_date,
+				regi_date
+			)
+			VALUES
+			(
+				#{admin_email},
+				NOW(),
+				NOW()
+			 )
+	</insert>
+	
+	<update id="updateReturnSetting" parameterType="AdminVO">
+		 UPDATE TB_ADMIN
+		    SET admin_password = #{admin_password}
+		   	   , updt_date = NOW()
+		 WHERE admin_email = #{admin_email}
+	</update>
+	
+	<insert id="insertProduct" parameterType="AdminVO">
+		INSERT INTO TB_PRODUCT (
+				product_category_1,
+				product_name,
+				product_thumbnail,
+				product_thumbnail2,
+				product_thumbnail3,
+				product_price,
+				company_id,
+				return_reason,
+				product_url,
+				product_waybillNumber,
+				updt_date,
+				regi_date,
+				product_status
+			)
+			VALUES
+			(
+				#{product_category_1},
+				#{product_name},
+				#{product_thumbnail},
+				#{product_thumbnail2},
+				#{product_thumbnail3},
+				#{product_price},
+				#{company_id},
+				#{return_reason},
+				#{product_url},
+				#{product_waybillNumber},
+				NOW(),
+				NOW(),
+				#{product_status}
+			 )
+	</insert>
+	
+	<select id="selectProductList" parameterType="AdminVO" resultType="AdminVO">
+		SELECT *
+		  FROM TB_PRODUCT
+		 WHERE 1 = 1
+		 	<if test="product_status != null and product_status != ''">
+			   AND product_status = #{product_status}
+			</if>
+	
+	</select>
+	
+	<select id="selectAdminList" parameterType="AdminVO" resultType="AdminVO">
+		SELECT *
+		  FROM TB_ADMIN A, TB_SITE B
+		 WHERE A.company_id = B.company_id
+		   AND A.admin_grade != 'S'
+		 ORDER BY regi_date DESC
+	</select>
+	
+	<select id="selectSiteAdminList" parameterType="AdminVO" resultType="AdminVO">
+		SELECT *
+		  FROM TB_ADMIN A, TB_SITE B
+		 WHERE A.company_id = B.company_id
+		   AND A.company_id = #{company_id}
+	</select>
+	
+</mapper>
+

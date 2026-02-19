@@ -1,0 +1,224 @@
+<%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr">
+<!-- BEGIN: Head-->
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="Stack admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
+    <meta name="keywords" content="admin template, stack admin template, dashboard template, flat admin template, responsive admin template, web app">
+    <meta name="author" content="PIXINVENT">
+    <title>ONION BOX</title>
+    <link rel="apple-touch-icon" href="${pageContext.request.contextPath}/resources/app-assets/images/ico/apple-icon-120.png">
+    <link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/resources/app-assets/images/ico/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i%7COpen+Sans:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- BEGIN: Vendor CSS-->
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/app-assets/vendors/css/vendors.min.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/app-assets/css/plugins/forms/validation/form-validation.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/app-assets/vendors/css/forms/selects/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/app-assets/vendors/css/pickers/pickadate/pickadate.css">
+    <!-- END: Vendor CSS-->
+
+    <!-- BEGIN: Theme CSS-->
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/app-assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/app-assets/css/bootstrap-extended.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/app-assets/css/colors.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/app-assets/css/components.css">
+    <!-- END: Theme CSS-->
+
+    <!-- BEGIN: Page CSS-->
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/app-assets/css/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/app-assets/css/core/colors/palette-gradient.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/app-assets/css/pages/page-users.css">
+    <!-- END: Page CSS-->
+
+    <!-- BEGIN: Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/app-assets/fonts/simple-line-icons/style.min.css">
+    <!-- END: Custom CSS-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript">
+	
+	$(document).ready(function(){
+		$("#admin").addClass("active");
+	});
+
+	function fn_insertAdmin() {
+		var params = $("form[name=parameterVO]").serialize();
+		$.ajax({
+			url : "${pageContext.request.contextPath}/insertAdmin.json",
+			type : "POST",
+			data : params,
+			success : function(result) {
+				if (result.resultCode == "success") {
+					alert("등록되었습니다.");
+					location.href = "${pageContext.request.contextPath}/site/${siteVO.site_name}/siteAdminList.do";
+				} else {
+					
+				}
+			}
+		});
+	}
+	</script>
+
+</head>
+<!-- END: Head-->
+
+<!-- BEGIN: Body-->
+
+<body class="vertical-layout vertical-menu 2-columns   fixed-navbar" data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
+
+    <!-- BEGIN: Header-->
+    <c:import url="/siteTopMenu.do"/>
+    <!-- END: Header-->
+
+
+    <!-- BEGIN: Main Menu-->
+    <div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true">
+        <c:import url="/siteLeftMenu.do"/>
+    </div>
+    <!-- END: Main Menu-->
+
+    <!-- BEGIN: Content-->
+    <div class="app-content content content-radius">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+            </div>
+            <div class="content-body">
+                <!-- users edit start -->
+                <section class="users-edit">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-body">
+                                <ul class="nav nav-tabs mb-2" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link d-flex align-items-center active" id="account-tab" data-toggle="tab" href="#account" aria-controls="account" role="tab" aria-selected="true">
+                                            <i class="feather icon-airplay mr-25"></i><span class="d-none d-sm-block fw-1000 fs-1">관리자 등록</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
+                                    	<form:form id="parameterVO" name="parameterVO">
+                                    	<input type="hidden" id="company_id" name="company_id" value="${siteVO.company_id}"/>
+                                        <!-- users edit media object start -->
+                                        <div class="media mb-1">
+                                            <div class="media-body">
+                                                <h5 class="media-heading fw-1000">- 관리자 정보</h5>
+                                            </div>
+                                        </div>
+                                        <!-- users edit media object ends -->
+                                        <!-- users edit account form start -->
+                                        <div class="row mb-2">
+                                            <div class="col-12 col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="controls">
+                                                        <label>관리자 등급</label>
+                                                        <select class="select2 form-control" name="admin_grade">
+			                                                <option value="U">서브 관리자</option>
+			                                            </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>이메일</label>
+                                                    <input type="text" class="form-control" id="admin_email" name="admin_email" placeholder="이메일" value="">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>비밀번호</label>
+                                                    <input type="password" class="form-control" id="admin_password" name="admin_password" placeholder="비밀번호" value="">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="controls">
+                                                        <label><span class="required-star">*</span> 성명</label>
+                                                        <input type="text" class="form-control" name="admin_name" placeholder="성명" value="" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>연락처</label>
+                                                    <input type="text" class="form-control" name="admin_phone" placeholder="연락처" value="">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>비밀번호 확인</label>
+                                                    <input type="password" class="form-control" id="admin_password2" name="admin_password2" placeholder="비밀번호" value="">
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="row mb-2">
+                                        	<div class="col-12 col-sm-6">
+                                                   <div class="form-group">
+                                                    <div class="controls">
+                                                        <label><span class="required-star">*</span> 고객사 명</label>
+                                                        <input type="text" class="form-control" id="company_name" name="company_name" readonly placeholder="고객사 명" value="${siteVO.company_name}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                        	<div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
+                                                <button type="button" onclick="javascript:fn_insertAdmin();return false;" class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1">등록</button>
+                                                <button type="reset" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/site/${siteVO.site_name}/siteAdminList.do'">취소</button>
+                                            </div>
+                                        </div>
+                                        </form:form>
+                                        <!-- users edit account form ends -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- users edit ends -->
+            </div>
+        </div>
+    </div>
+    <!-- END: Content-->
+
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
+
+    <!-- BEGIN: Footer-->
+    <footer class="footer footer-static footer-light navbar-border">
+        <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2"><span class="float-md-left d-block d-md-inline-block">Copyright &copy; 2023 <a class="text-bold-800 grey darken-2" href="#" >클릭컨설팅 </a></span></p>
+    </footer>
+    <!-- END: Footer-->
+
+
+    <!-- BEGIN: Vendor JS-->
+    <script src="${pageContext.request.contextPath}/resources/app-assets/vendors/js/vendors.min.js"></script>
+    <!-- BEGIN Vendor JS-->
+
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="${pageContext.request.contextPath}/resources/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/app-assets/vendors/js/pickers/pickadate/picker.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/app-assets/vendors/js/pickers/pickadate/picker.date.js"></script>
+    <!-- END: Page Vendor JS-->
+
+    <!-- BEGIN: Theme JS-->
+    <script src="${pageContext.request.contextPath}/resources/app-assets/js/core/app-menu.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/app-assets/js/core/app.js"></script>
+    <!-- END: Theme JS-->
+
+    <!-- BEGIN: Page JS-->
+    <script src="${pageContext.request.contextPath}/resources/app-assets/js/scripts/pages/page-users.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/app-assets/js/scripts/pages/app-invoice.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/app-assets/js/scripts/navs/navs.js"></script>
+    
+    
+    <!-- END: Page JS-->
+
+</body>
+<!-- END: Body-->
+
+</html>

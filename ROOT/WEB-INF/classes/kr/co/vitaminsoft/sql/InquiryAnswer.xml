@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ItemAnswer">
+	
+	<!-- 답변항목 PART1 조회 -->
+	<select id="getPart1ItemAnswerList" parameterType="box" resultType="box">
+		SELECT
+			A.id as item_id
+			, A.item_sentence
+			, (CASE WHEN B.answer_no IS NULL THEN A.item_no ELSE B.answer_no END) as item_no
+			, (SELECT COUNT(*) FROM TB_INQUIRY_ITEM TT1 WHERE TT1.inquiry_id = A.inquiry_id) AS item_max_no
+			, B.answer_no
+			, B.confirm_yn
+			, A.inquiry_id
+		FROM TB_INQUIRY_ITEM A
+		LEFT OUTER JOIN TB_ITEM_ANSWER B ON A.ID = B.ITEM_ID AND B.RESPONDER_ID = #{s_responder_id}
+		WHERE A.INQUIRY_ID = #{s_inquiry_id}
+		ORDER BY (CASE WHEN B.answer_no IS NULL THEN A.item_no ELSE B.answer_no END)
+	</select>
+	
+	<!-- 답변항목 PART1 조회 -->
+	<select id="getPart1ItemAnswerList2" parameterType="box" resultType="box">
+		SELECT
+			A.id as item_id
+			, A.item_sentence
+			, (CASE WHEN B.answer_no IS NULL THEN A.item_no ELSE B.answer_no END) as item_no
+			, (SELECT COUNT(*) FROM TB_INQUIRY_ITEM TT1 WHERE TT1.inquiry_id = A.inquiry_id) AS item_max_no
+			, B.answer_no
+			, B.confirm_yn
+			, A.inquiry_id
+		FROM TB_INQUIRY_ITEM A
+		LEFT OUTER JOIN TB_ITEM_ANSWER B ON A.ID = B.ITEM_ID AND B.RESPONDER_ID = #{s_responder_id}
+		WHERE A.INQUIRY_ID = #{s_inquiry_id}
+		ORDER BY A.item_no
+	</select>
+	
+	<!-- 아이템항목상세뷰 -->
+	<select id="getItemAnswerView" parameterType="box" resultType="box">
+		SELECT 
+			A.id
+			, A.inquiry_id
+			, A.item_no
+			, B.answer_no
+			, B.confirm_yn
+		FROM TB_INQUIRY_ITEM A
+		LEFT OUTER JOIN TB_ITEM_ANSWER B ON A.ID = B.ITEM_ID AND B.RESPONDER_ID = #{s_responder_id}
+		WHERE 	A.id = #{s_item_id}
+	</select>
+	
+	<!-- 답변항목 Insert -->
+	<insert id="itemAnswerInsert" parameterType="box">
+	   INSERT INTO TB_ITEM_ANSWER (item_id, responder_id, answer_no,reg_id, reg_dt,edit_id,edit_dt)  VALUES 
+	        (#{item_id}, #{responder_id}, #{answer_no},#{mem_id},now(),#{mem_id},now())
+	</insert>
+	
+	<!-- 답변항목 정렬 스텝1 Update -->
+	<update id="sortItemAnswer1" parameterType="box" >
+	   UPDATE TB_ITEM_ANSWER SET ANSWER_NO = ANSWER_NO * 1000 
+	   WHERE ITEM_ID IN (SELECT ID FROM TB_INQUIRY_ITEM TT2 WHERE INQUIRY_ID = #{s_inquiry_id})
+	   AND RESPONDER_ID = #{responder_id}
+	</update>
+	
+	<!-- 답변항목 정렬 스텝2 Update  -->
+	<update id="sortItemAnswer2" parameterType="box" >
+	   UPDATE TB_ITEM_ANSWER set answer_no = ${num} * 1000 
+	   <choose>
+	   	<when test="pnum &lt;= num">
+	   		+1
+	   	</when>
+	   	<when test="original_no != '' and original_no &lt; num">
+	   		+1
+	   	</when>
+	   	<otherwise>
+	   		-1
+	   	</otherwise>
+	   </choose>
+	   WHERE ITEM_ID = #{item_id}
+	   AND RESPONDER_ID = #{responder_id}
+	</update>
+	
+	<!-- 답변항목 정렬 스텝3 Update  -->
+	<update id="sortItemAnswer3" parameterType="box">
+	   UPDATE TB_ITEM_ANSWER set answer_no = ${answer_no}
+	   WHERE ITEM_ID = #{answer_id}
+	   AND RESPONDER_ID = #{responder_id}
+	</update>
+	
+	<!-- autoSort용 답변항목리스트  -->
+	<select id="getSortItemAnswerList" parameterType="box" resultType="box">
+		SELECT A.id as answer_id
+		,IFNULL(B.ANSWER_NO,A.ITEM_NO) as answer_no
+		FROM TB_INQUIRY_ITEM A LEFT OUTER JOIN TB_ITEM_ANSWER B ON A.ID = B.ITEM_ID AND B.RESPONDER_ID = #{s_responder_id}
+		WHERE A.INQUIRY_ID = #{s_inquiry_id}
+		ORDER BY IFNULL(B.ANSWER_NO,A.ITEM_NO) ASC
+	</select>
+	
+	<!-- 답변항목 Update -->
+	<update id="itemAnswerUpdate" parameterType="box" >
+	   UPDATE TB_ITEM_ANSWER set
+	   ANSWER_NO = #{answer_no}
+	   WHERE ITEM_ID = #{s_item_id}
+	   AND RESPONDER_ID = #{s_responder_id}
+	   AND CONFIRM_YN = 'N'
+	</update>
+	
+	<!-- 답변항목 Delete -->
+	<delete id="itemAnswerDelete" parameterType="box">
+	   DELETE FROM TB_ITEM_ANSWER
+	   WHERE ITEM_ID = #{s_item_id}
+	   AND RESPONDER_ID = #{s_responder_id}
+	</delete>
+	
+	<!-- 답변항목 AllDelete -->
+	<delete id="itemAnswerAllDelete" parameterType="box">
+	   DELETE FROM TB_ITEM_ANSWER
+	   WHERE RESPONDER_ID = #{id}
+	</delete>
+	
+	<update id="confirmItemAnswer" parameterType="box" >
+	   UPDATE TB_ITEM_ANSWER SET CONFIRM_YN = 'Y'
+	   , edit_id = #{mem_id}
+	   , reg_dt = now()
+	   WHERE ITEM_ID IN 
+	   <foreach collection="itemsArray" item="item"  open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+	   AND RESPONDER_ID = #{s_responder_id}
+	</update>
+</mapper>

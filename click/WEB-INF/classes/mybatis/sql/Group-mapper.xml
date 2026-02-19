@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="group" >
+	<insert id="insertGroup" parameterType="GroupVO" useGeneratedKeys="true" keyProperty="group_id">
+		INSERT INTO TB_GROUP (
+				group_name,
+				company_id,
+				property_id_group,
+				regi_date,
+				updt_date
+			)
+			VALUES
+			(
+				#{group_name},
+				#{company_id},
+				#{property_id_group},
+				NOW(),
+				NOW()
+			 )
+	</insert>
+	
+	<select id="selectGroupList" parameterType="GroupVO" resultType="GroupVO">
+		SELECT *
+		  FROM TB_GROUP
+		 WHERE 1=1
+		 <if test="searchText != null and searchText != ''">
+		   AND group_name LIKE CONCAT('%',#{searchText},'%'))
+		 </if>
+		   AND company_id = #{company_id}
+		 ORDER BY group_id DESC
+	</select>
+	
+	<select id="checkGroup" parameterType="GroupVO" resultType="GroupVO">
+		SELECT *
+		  FROM TB_GROUP
+		 WHERE group_id = #{group_id}
+	</select>
+	
+	<update id="updateGroup" parameterType="GroupVO">
+		UPDATE TB_GROUP
+		   SET property_id_group = #{property_id_group}
+		     , updt_date = NOW()
+		 WHERE group_id = #{group_id}
+	</update>
+	
+	<update id="updateGroupDetail" parameterType="GroupVO">
+		UPDATE TB_GROUP
+		   SET group_name = #{group_name}
+		 WHERE group_id = #{group_id}
+	</update>
+	
+	<delete id="deleteGroup" parameterType="GroupVO">
+		DELETE FROM TB_GROUP
+		 WHERE group_id = #{group_id}
+	</delete>
+	
+	<select id="selectSitePropertyList" parameterType="PropertyVO" resultType="PropertyVO">
+		SELECT *
+		  FROM TB_PROPERTY
+		 WHERE company_id = #{company_id}
+		 ORDER BY property_id DESC
+	</select>
+	
+	<select id="selectGroupDetail" parameterType="GroupVO" resultType="GroupVO">
+		SELECT *
+		  FROM TB_GROUP
+		 WHERE group_id = #{group_id}
+	</select>
+	
+	<select id="selectGroupPropertyList" parameterType="GroupVO" resultType="PropertyVO">
+		SELECT *
+		  FROM TB_PROPERTY
+		 WHERE company_id = #{company_id}
+		<choose>
+            <when test="propertyList.size != 0">
+                AND property_id IN 
+                <foreach collection="propertyList" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </when>
+        </choose>
+		 ORDER BY property_id DESC
+	</select>
+	
+	<select id="selectCourseGroupList" parameterType="GroupVO" resultType="GroupVO">
+		SELECT *
+		  FROM TB_GROUP
+		 WHERE 1=1
+		<choose>
+            <when test="groupList.size != 0">
+                AND group_id IN 
+                <foreach collection="groupList" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </when>
+        </choose>
+		 ORDER BY group_id DESC
+	</select>
+	
+</mapper>

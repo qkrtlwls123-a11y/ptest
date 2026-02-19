@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="RecruitSurvey">
+	<sql id="survey_list_where">
+		<if test='s_recruit_nm !=null and s_recruit_nm !=""'>
+	 		AND AA.RECRUIT_NM LIKE CONCAT('%',#{s_recruit_nm},'%')
+	 	</if>
+	 	<if test='s_use_yn != null and s_use_yn != ""'>
+			AND	AA.USE_YN = #{s_use_yn}
+		</if>
+	 	<if test='s_survey_id != null and s_survey_id != ""'>
+			AND	AA.SURVEY_ID = #{s_survey_id}
+		</if>
+		<if test='s_company_code != null and s_company_code != ""'>
+			AND	AA.COMPANY_CODE = #{s_company_code}
+		</if>
+		<if test='period == "yesterday"'>
+			AND DATE_FORMAT(AA.REG_DT, '%Y-%m-%d') = DATE_FORMAT(now() -INTERVAL 1 DAY, '%Y-%m-%d')
+		</if>
+		<if test='period=="today"'>
+			AND DATE_FORMAT(AA.REG_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d') 
+		</if>
+		<if test='period=="custom_date"'>
+			<if test="s_start_dt != null and s_start_dt != '' and s_end_dt != null and s_end_dt != ''">
+				AND DATE_FORMAT(AA.REG_DT, '%Y-%m-%d') BETWEEN #{s_start_dt} AND #{s_end_dt}
+			</if>
+		</if>
+	</sql>
+	
+	<!-- 전체설문조회 -->
+	<select id="getRecruitSurveyList" parameterType="box" resultType="box">
+		SELECT
+			 AA.id
+			, AA.recruit_nm
+			, AA.company_code
+			, AA.survey_id
+			, A.survey_nm
+			, AA.start_day
+			, AA.end_day
+			, (case 
+			when IFNULL(AA.start_day,0) != 0 AND IFNULL(AA.end_day,0) != 0 AND CAST(REPLACE(AA.start_day,'-','') AS int) &lt;= CAST(REPLACE(DATE_FORMAT(NOW(), '%Y-%m-%d'),'-','') AS int) AND CAST(REPLACE(AA.end_day,'-','') AS int) &gt;= CAST(REPLACE(DATE_FORMAT(NOW(), '%Y-%m-%d'),'-','') AS int) then 'Y' 
+			when IFNULL(AA.start_day,0) = 0 OR IFNULL(AA.end_day,0) = 0 then 'Y'
+			ELSE 'N' END) AS day_yn
+			, AA.use_yn
+			, AA.reg_id
+			, DATE_FORMAT(AA.reg_dt, '%Y-%m-%d') as reg_dt
+			, AA.edit_id
+			, DATE_FORMAT(AA.edit_dt, '%Y-%m-%d') as edit_dt
+			, D.user_nm as edit_nm
+			, B.user_nm as reg_nm
+			, B.business_no as business_no
+			, C.code_nm as company_nm
+			, SUM(CASE WHEN E.SUMMARY_STEP = 7 THEN 1 ELSE 0 END) AS complete_cnt
+			, SUM(CASE WHEN E.SUMMARY_STEP IN (1,2,3,4,5,6) THEN 1 ELSE 0 END) AS save_cnt
+			, (AA.survey_cnt - SUM(CASE WHEN E.SUMMARY_STEP IN (1,2,3,4,5,6,7) THEN 1 ELSE 0 END)) AS not_cnt
+			, AA.survey_cnt
+		FROM SV_RECRUIT_SURVEY AA INNER JOIN TB_SURVEY A ON AA.SURVEY_ID = A.ID
+			LEFT OUTER JOIN TB_SURVEY_SUMMARY E ON AA.ID = E.RECRUIT_SURVEY_ID
+			LEFT OUTER JOIN SV_USER B ON AA.REG_ID = B.ID
+			LEFT OUTER JOIN SV_USER D ON AA.EDIT_ID = D.ID
+			LEFT OUTER JOIN SV_CODE C ON C.UP_CODE = 'COMPANY' AND C.CODE = AA.COMPANY_CODE
+			WHERE AA.USE_YN = 'Y'
+		<include refid="survey_list_where"/>
+		GROUP BY AA.id
+			, AA.survey_id
+			, A.survey_nm
+			, AA.survey_cnt
+			, AA.company_code
+			, AA.start_day
+			, AA.end_day
+			, AA.use_yn
+			, AA.reg_id
+			, DATE_FORMAT(AA.reg_dt, '%Y-%m-%d')
+			, A.edit_id
+			, DATE_FORMAT(AA.edit_dt, '%Y-%m-%d')
+			, D.user_nm
+			, B.user_nm
+			, C.code_nm
+		ORDER BY AA.ID DESC
+		LIMIT ${numPerPage} OFFSET ${startRow}
+	</select>
+
+	<select id="getRecruitSurveyListCount" parameterType="box" resultType="Integer">
+		SELECT
+			 COUNT(*) AS TOTAL_CNT
+		FROM SV_RECRUIT_SURVEY AA
+		WHERE AA.USE_YN = 'Y'
+		<include refid="survey_list_where"/>
+	</select>
+	
+	<!-- 설문상세뷰 -->
+	<select id="getRecruitSurveyView" parameterType="box" resultType="box">
+		SELECT 
+			A.id
+			, A.recruit_nm
+			, A.survey_id
+			, A.company_code
+			, A.start_day
+			, A.end_day
+			, A.survey_cnt
+			, A.use_yn
+			, A.reg_id
+			, DATE_FORMAT(A.reg_dt, '%Y-%m-%d') as reg_dt
+			, A.edit_id
+			, DATE_FORMAT(A.edit_dt, '%Y-%m-%d') as edit_dt
+			, D.user_nm as edit_nm
+			, B.user_nm as reg_nm
+			, B.business_no as business_no
+			, C.code_nm as company_nm
+		FROM SV_RECRUIT_SURVEY A 
+			LEFT OUTER JOIN SV_USER B ON A.REG_ID = B.ID
+			LEFT OUTER JOIN SV_USER D ON A.EDIT_ID = D.ID
+			LEFT OUTER JOIN SV_CODE C ON C.UP_CODE = 'COMPANY' AND C.CODE = A.COMPANY_CODE
+		WHERE A.id = #{id}
+	</select>
+	
+	<!-- 설문 Insert -->
+	<insert id="recruitSurveyInsert" parameterType="box">
+	   INSERT INTO SV_RECRUIT_SURVEY (recruit_nm, survey_cnt, company_code,survey_id, start_day, end_day, use_yn, reg_id, reg_dt,edit_id,edit_dt)  VALUES 
+	        (trim(#{recruit_nm}), #{survey_cnt}, #{company_code}, #{survey_id}, #{start_day}, #{end_day}, 'Y', #{mem_id},now(),#{mem_id},now())
+	</insert>
+	
+	<!-- 설문 Update -->
+	<update id="recruitSurveyUpdate" parameterType="box">
+	   UPDATE SV_RECRUIT_SURVEY set
+		   recruit_nm = trim(#{recruit_nm})
+		   , survey_cnt = #{survey_cnt}
+		   , company_code = #{company_code}
+		   , survey_id = #{survey_id}
+		   , start_day = #{start_day}
+		   , end_day = #{end_day}
+		   <!-- , use_yn = #{use_yn} -->
+		   , edit_id = #{mem_id}
+		   , edit_dt = now()
+	   WHERE id = #{id}
+	</update>
+	
+	<!-- 설문 Delete -->
+	<delete id="recruitSurveyDelete" parameterType="box">
+	   DELETE FROM SV_RECRUIT_SURVEY
+	   WHERE id = #{id}
+	</delete>
+	
+	<!-- 설문 사용안함으로 변경 -->
+	<update id="recruitSurveyUseYnUpdate" parameterType="box">
+	   UPDATE SV_RECRUIT_SURVEY SET USE_YN = 'N'
+	   WHERE id = #{id}
+	</update>
+		
+	<!-- 현재 설문을 참조하는 회원이 있는지 Count -->
+	<select id="lowDepthCount" resultType="Integer">
+		SELECT
+			COUNT(*) AS cnt
+		FROM TB_USER
+		WHERE RECRUIT_SURVEY_ID = #{s_recruit_survey_id}
+	</select>
+</mapper>

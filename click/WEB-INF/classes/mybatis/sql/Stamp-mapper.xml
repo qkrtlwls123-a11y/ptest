@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="stamp" >
+	
+	<insert id="insertStamp" parameterType="StampVO">
+		INSERT INTO TB_STAMP (
+				stamp_group_id,
+				stamp_name,
+				stamp_condition,
+				stamp_image,
+				stamp_mileage,
+				updt_date,
+				reg_date
+			)
+			VALUES
+			(
+				#{stamp_group_id},
+				#{stamp_name},
+				#{stamp_condition},
+				#{stamp_image},
+				#{stamp_mileage},
+				NOW(),
+				NOW()
+			 )
+	</insert>
+	
+	<select id="selectStampList" parameterType="StampVO" resultType="StampVO">
+		SELECT stamp_group_id
+			 , COUNT(stamp_group_id) AS stamp_count
+		  FROM TB_STAMP
+		 GROUP BY stamp_group_id
+	</select>
+	
+	<select id="selectStampDetailList" parameterType="StampVO" resultType="StampVO">
+		SELECT *
+		  FROM TB_STAMP
+	</select>
+	
+	<select id="selectStampDetail" parameterType="StampVO" resultType="StampVO">
+		SELECT *
+		  FROM TB_STAMP
+		 WHERE stamp_id = #{stamp_id}
+	</select>
+	
+	<update id="updateStamp" parameterType="StampVO">
+		UPDATE TB_STAMP
+		   SET stamp_name = #{stamp_name},
+				stamp_condition = #{stamp_condition},
+				stamp_image = #{stamp_image},
+				stamp_mileage = #{stamp_mileage},
+				updt_date = NOW(),
+				reg_date = NOW()
+		 WHERE stamp_id = #{stamp_id}
+	</update>
+	
+	<delete id="deleteStamp" parameterType="StampVO">
+		DELETE FROM TB_STAMP
+		 WHERE stamp_id = #{stamp_id}
+	</delete>
+	
+</mapper>

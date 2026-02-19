@@ -1,0 +1,822 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="fare" >
+	<select id="selectFareList" parameterType="FareVO" resultType="FareVO">
+		SELECT FARE.* 
+		  FROM (
+				SELECT
+					  fare_id
+					, cooperator_id
+					, ( SELECT cooperator_name FROM TBL_COOPERATOR B WHERE A.cooperator_id = B.cooperator_id ) cooperator_name
+					, site_status
+					, fare_start_date
+					, fare_end_date
+					, reg_dt
+					, reg_id
+					, mod_dt
+					, mod_id
+					, company_id
+					, ( SELECT site_name FROM TBL_SITE B WHERE A.company_id = B.company_id ) site_name
+					, use_yn
+					<![CDATA[
+					, CASE WHEN A.fare_start_date <= DATE_FORMAT(NOW(),'%Y%m%d') && A.fare_end_date >= DATE_FORMAT(NOW(),'%Y%m%d')
+						   THEN '사용중' 
+						   WHEN A.fare_start_date <= DATE_FORMAT(NOW(),'%Y%m%d') && A.fare_end_date < DATE_FORMAT(NOW(),'%Y%m%d')
+						   THEN '사용종료'
+						   WHEN A.fare_start_date > DATE_FORMAT(NOW(),'%Y%m%d')
+						   THEN '사용대기'
+						   END AS fare_status
+					]]>
+					, A.fare_standard
+					, CASE WHEN 'S' = A.fare_standard THEN '서비스'
+						   WHEN 'D' = A.fare_standard THEN '장치'
+						   WHEN 'A' = A.fare_standard THEN '계정'
+						   END fare_standard_name 
+					, ABS(MONTH(fare_start_date) - MONTH(fare_end_date))+1 monthdiff
+					, fare_basic_bill
+					, ( SELECT fare_cur_month_bill FROM TBL_FARE_BILL B WHERE A.fare_id = B.fare_id AND DATE_FORMAT(NOW(),'%Y%m') = B.fare_bill_month AND A.use_yn = 'Y' AND B.use_yn = 'Y' ) fare_cur_month_bill
+					, ( SELECT SUM(fare_cur_month_bill) fare_bill_total FROM TBL_FARE_BILL B WHERE A.fare_id = B.fare_id AND DATE_FORMAT(NOW(),'%Y%m') >= fare_bill_month AND A.use_yn = 'Y' AND B.use_yn = 'Y' ) fare_total
+				FROM TBL_FARE A
+				WHERE 1=1
+				AND use_yn = #{use_yn}
+				<if test="cooperator_id != null and cooperator_id != ''">
+				AND cooperator_id = #{cooperator_id}
+				</if>
+				<if test="fare_id != null and fare_id != ''">
+				AND fare_id = #{fare_id}
+				</if>
+				<if test="company_id != null and company_id != ''">
+				AND company_id = #{company_id}
+				</if>
+				) FARE
+		 WHERE 1=1
+		   <if test="searchText != null and searchText != ''">
+		   AND FARE.site_name LIKE CONCAT('%', #{searchText}, '%')
+		   </if>
+		   <if test="fare_status != null and fare_status != ''">
+		   AND FARE.fare_status = #{fare_status}
+		   </if>
+		   <if test="fare_standard != null and fare_standard != ''">
+		   AND FARE.fare_standard = #{fare_standard}
+		   </if>
+	</select>
+	
+	<select id="selectFareListTotal" parameterType="FareVO" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM (
+				SELECT
+					  fare_id
+					, cooperator_id
+					, ( SELECT cooperator_name FROM TBL_COOPERATOR B WHERE A.cooperator_id = B.cooperator_id ) cooperator_name
+					, site_status
+					, fare_start_date
+					, fare_end_date
+					, reg_dt
+					, reg_id
+					, mod_dt
+					, mod_id
+					, company_id
+					, ( SELECT site_name FROM TBL_SITE B WHERE A.company_id = B.company_id ) site_name
+					, use_yn
+					<![CDATA[
+					, CASE WHEN A.fare_start_date <= DATE_FORMAT(NOW(),'%Y%m%d') && A.fare_end_date >= DATE_FORMAT(NOW(),'%Y%m%d')
+						   THEN '사용중' 
+						   WHEN A.fare_start_date <= DATE_FORMAT(NOW(),'%Y%m%d') && A.fare_end_date < DATE_FORMAT(NOW(),'%Y%m%d')
+						   THEN '사용종료'
+						   WHEN A.fare_start_date > DATE_FORMAT(NOW(),'%Y%m%d')
+						   THEN '사용대기'
+						   END AS fare_status
+					]]>
+					, A.fare_standard
+					, CASE WHEN 'S' = A.fare_standard THEN '서비스'
+						   WHEN 'D' = A.fare_standard THEN '장치'
+						   WHEN 'A' = A.fare_standard THEN '계정'
+						   END fare_standard_name 
+					, ABS(MONTH(fare_start_date) - MONTH(fare_end_date))+1 monthdiff
+					, fare_basic_bill
+					, ( SELECT fare_cur_month_bill FROM TBL_FARE_BILL B WHERE A.fare_id = B.fare_id AND DATE_FORMAT(NOW(),'%Y%m') = B.fare_bill_month AND A.use_yn = 'Y' AND B.use_yn = 'Y' ) fare_cur_month_bill
+					, ( SELECT SUM(fare_cur_month_bill) fare_bill_total FROM TBL_FARE_BILL B WHERE A.fare_id = B.fare_id AND DATE_FORMAT(NOW(),'%Y%m') >= fare_bill_month AND A.use_yn = 'Y' AND B.use_yn = 'Y' ) fare_total
+				FROM TBL_FARE A
+				WHERE 1=1
+				AND use_yn = #{use_yn}
+				<if test="cooperator_id != null and cooperator_id != ''">
+				AND cooperator_id = #{cooperator_id}
+				</if>
+				<if test="fare_id != null and fare_id != ''">
+				AND fare_id = #{fare_id}
+				</if>
+				<if test="company_id != null and company_id != ''">
+				AND company_id = #{company_id}
+				</if>
+				) FARE
+		 WHERE 1=1
+		   <if test="searchText != null and searchText != ''">
+		   AND FARE.site_name LIKE CONCAT('%', #{searchText}, '%')
+		   </if>
+		   <if test="fare_status != null and fare_status != ''">
+		   AND FARE.fare_status = #{fare_status}
+		   </if>
+		   <if test="fare_standard != null and fare_standard != ''">
+		   AND FARE.fare_standard = #{fare_standard}
+		   </if>
+	</select>
+
+	<select id="selectFareId" parameterType="FareVO" resultType="Integer">
+		SELECT MAX(fare_id)
+		  FROM TBL_FARE
+		  WHERE 1=1
+		  AND company_id = #{company_id}
+	</select>
+	
+	<insert id="insertFareBase" parameterType="FareVO">
+		INSERT INTO TBL_FARE(
+			  cooperator_id
+			, company_id
+			, fare_start_date
+			, fare_end_date
+			, use_yn
+			, reg_dt
+			, reg_id
+			, fare_standard
+			, fare_basic_bill
+			)VALUES(
+			  #{cooperator_id}
+			, #{company_id}
+			, #{fare_start_date}
+			, #{fare_end_date}
+			, #{use_yn}
+			, NOW()
+			, #{reg_id}
+			, #{fare_standard}
+			, #{fare_basic_bill}
+			)
+	</insert>
+	
+	<insert id="insertFareDetail" parameterType="FareVO">
+		INSERT INTO TBL_FARE_DETAIL(
+			  fare_id
+			<if test="menu_type != null and menu_type != ''">
+			, menu_type
+			</if>
+			<if test="menu_id != null and menu_id != ''">
+			, menu_id
+			</if>
+			<if test="fare_use_strt_dt != null and fare_use_strt_dt != ''">
+			, fare_use_strt_dt
+			</if>
+			<if test="fare_use_end_dt != null and fare_use_end_dt != ''">
+			, fare_use_end_dt
+			</if>
+			<if test="fare_bill != null and fare_bill != ''">
+			, fare_bill
+			</if>
+			<if test="device_id != null and device_id != ''">
+			, device_id
+			</if>
+			<if test="device_no != null and device_no != ''">
+			, device_no
+			</if>
+			<if test="device_code != null and device_code != ''">
+			, device_code
+			</if>
+			<if test="device_price != null and device_price != ''">
+			, device_price
+			</if>
+			<if test="device_unit != null and device_unit != ''">
+			, device_unit
+			</if>
+			<if test="account_price != null and account_price != ''">
+			, account_price
+			</if>
+			<if test="account_unit != null and account_unit != ''">
+			, account_unit
+			</if>
+			<if test="fare_standard != null and fare_standard != ''">
+			, fare_standard
+			</if>
+			<if test="use_yn != null and use_yn != ''">
+			, use_yn
+			</if>
+			, reg_dt
+			, reg_id 
+		)VALUES(
+			  #{fare_id}
+			<if test="menu_type != null and menu_type != ''">
+			, #{menu_type}
+			</if>
+			<if test="menu_id != null and menu_id != ''">
+			, #{menu_id}
+			</if>
+			<if test="fare_use_strt_dt != null and fare_use_strt_dt != ''">
+			, #{fare_use_strt_dt}
+			</if>
+			<if test="fare_use_end_dt != null and fare_use_end_dt != ''">
+			, #{fare_use_end_dt}
+			</if>
+			<if test="fare_bill != null and fare_bill != ''">
+			, #{fare_bill}
+			</if>
+			<if test="device_id != null and device_id != ''">
+			, #{device_id}
+			</if>
+			<if test="device_no != null and device_no != ''">
+			, #{device_no}
+			</if>
+			<if test="device_code != null and device_code != ''">
+			, #{device_code}
+			</if>
+			<if test="device_price != null and device_price != ''">
+			, #{device_price}
+			</if>
+			<if test="device_unit != null and device_unit != ''">
+			, #{device_unit}
+			</if>
+			<if test="account_price != null and account_price != ''">
+			, #{account_price}
+			</if>
+			<if test="account_unit != null and account_unit != ''">
+			, #{account_unit}
+			</if>
+			<if test="fare_standard != null and fare_standard != ''">
+			, #{fare_standard}
+			</if>
+			<if test="use_yn != null and use_yn != ''">
+			, #{use_yn}
+			</if>
+			, NOW()
+			, #{reg_id} 
+		)
+	</insert>
+	
+	<select id="selectFareDetail" parameterType="FareVO" resultType="FareVO">
+		SELECT    fare_id
+				, menu_type
+				, menu_id
+				, (SELECT menu_name FROM TBL_MENU B WHERE A.menu_id = B.menu_id ) menu_name
+				, ( SELECT B.device_name FROM TBL_DEVICE_TYPE B WHERE A.device_code = B.device_code ) device_name
+				, fare_use_strt_dt
+				, fare_use_end_dt
+				, fare_bill
+				, device_no
+				, device_price
+				, device_unit
+				, account_price
+				, account_unit
+				, use_yn
+				, device_code
+				, fare_standard
+		  FROM TBL_FARE_DETAIL A
+		  WHERE 1=1
+		  AND fare_id = #{fare_id}
+		  AND use_yn = #{use_yn}
+		  <if test="fare_standard != null and fare_standard != ''">
+		  AND fare_standard = #{fare_standard}
+		  </if>
+		  <if test="menu_type != null and menu_type != ''">
+		  AND menu_type = #{menu_type}
+		  </if>
+	</select>
+	
+	
+	<update id="updateFare" parameterType="FareVO">
+	UPDATE TBL_FARE
+	SET 	mod_dt = NOW()
+		  , mod_id = #{mod_id}
+		  <if test="use_yn != null and use_yn != ''">
+		  , use_yn = #{use_yn}
+		  </if>
+		  <if test="fare_start_date != null and fare_start_date != ''">
+		  , fare_start_date = #{fare_start_date}
+		  </if>
+		  <if test="fare_end_date != null and fare_end_date != ''">
+		  , fare_end_date = #{fare_end_date}
+		  </if>
+		  <if test="fare_standard != null and fare_standard != ''">
+		  , fare_standard = #{fare_standard}
+		  </if>
+		  <if test="fare_basic_bill != null and fare_basic_bill != ''">
+		  , fare_basic_bill = #{fare_basic_bill}
+		  </if>
+	WHERE fare_id = #{fare_id}
+	</update>
+	
+	<update id="updateFareDetail" parameterType="FareVO">
+	UPDATE TBL_FARE_DETAIL
+	SET 	mod_dt = NOW()
+		  , mod_id = #{mod_id}
+		  <if test="use_yn != null and use_yn != ''">
+		  , use_yn = #{use_yn}
+		  </if>
+		  <if test="menu_type != null and menu_type != ''">
+		  , menu_type = #{menu_type}
+		  </if>
+		  <if test="menu_id != null and menu_id != ''">
+		  , menu_id = #{menu_id}
+		  </if>
+		  <if test="fare_use_strt_dt != null and fare_use_strt_dt != ''">
+		  , fare_use_strt_dt = #{fare_use_strt_dt}
+		  </if>
+		  <if test="fare_use_end_dt != null and fare_use_end_dt != ''">
+		  , fare_use_end_dt = #{fare_use_end_dt}
+		  </if>
+		  <if test="fare_bill != null and fare_bill != ''">
+		  , fare_bill = #{fare_bill}
+		  </if>
+		  <if test="device_no != null and device_no != ''">
+		  , device_no = #{device_no}
+		  </if>
+		  <if test="device_price != null and device_price != ''">
+		  , device_price = #{device_price}
+		  </if>
+		  <if test="device_unit != null and device_unit != ''">
+		  , device_unit = #{device_unit}
+		  </if>
+		  <if test="account_price != null and account_price != ''">
+		  , account_price = #{account_price}
+		  </if>
+		  <if test="account_unit != null and account_unit != ''">
+		  , account_unit = #{account_unit}
+		  </if>
+		  <if test="use_yn != null and use_yn != ''">
+		  , use_yn = #{use_yn}
+		  </if>
+		  <if test="device_code != null and device_code != ''">
+		  , device_code = #{device_code}
+		  </if>
+		  <if test="fare_standard != null and fare_standard != ''">
+		  , fare_standard = #{fare_standard}
+		  </if>
+	WHERE fare_id = #{fare_id}
+	</update>
+	
+	<select id="selectFareBillNo" parameterType="FareVO" resultType="FareVO">
+			SELECT COALESCE(MAX(fare_bill_no),0)+1 fare_bill_no FROM TBL_FARE_BILL;
+	</select>
+	
+	<insert id="insertFareBill" parameterType="FareVO">
+		INSERT INTO TBL_FARE_BILL (
+			  fare_bill_no
+			, fare_id
+			, fare_bill_month
+			, fare_bill_day
+			, fare_bill_strt_date
+			, fare_bill_end_date
+			, fare_basic_bill
+			, fare_standard
+			, fare_bill_total
+			, fare_mod_dt
+			, fare_cur_month_bill
+			, reg_dt
+			, reg_id
+			, use_yn
+		)values(
+			  #{fare_bill_no}
+			, #{fare_id}
+			, #{fare_bill_month}
+			, #{fare_bill_day}
+			, #{fare_bill_strt_date}
+			, #{fare_bill_end_date}
+			, #{fare_basic_bill}
+			, #{fare_standard}
+			, #{fare_bill_total}
+			, #{fare_mod_dt}
+			, #{fare_cur_month_bill}
+			, NOW()
+			, #{reg_id}
+			, #{use_yn}
+		)
+	</insert>
+	
+	<insert id="insertFareBillDetail" parameterType="FareVO">
+		INSERT INTO TBL_FARE_BILL_DETAIL (
+			  fare_bill_no
+			, fare_id
+			<if test="fare_bill_month != null and fare_bill_month != ''">
+			, fare_bill_month
+			</if>
+			<if test="fare_bill_service_day != null and fare_bill_service_day != ''">
+			, fare_bill_service_day
+			</if>
+			<if test="fare_bill_service_strt_date != null and fare_bill_service_strt_date != ''">
+			, fare_bill_service_strt_date
+			</if>
+			<if test="fare_bill_service_end_date != null and fare_bill_service_end_date != ''">
+			, fare_bill_service_end_date
+			</if>
+			<if test="fare_service_bill != null and fare_service_bill != ''">
+			, fare_service_bill
+			</if>
+			<if test="fare_standard != null and fare_standard != ''">
+			, fare_standard
+			</if>
+			<if test="menu_id != null and menu_id != ''">
+			, menu_id
+			</if>
+			<if test="menu_type != null and menu_type != ''">
+			, menu_type
+			</if>
+			<if test="fare_use_strt_dt != null and fare_use_strt_dt != ''">
+			, fare_use_strt_dt
+			</if>
+			<if test="fare_use_end_dt != null and fare_use_end_dt != ''">
+			, fare_use_end_dt
+			</if>
+			<if test="fare_bill != null and fare_bill != ''">
+			, fare_bill
+			</if>
+			<if test="device_no != null and device_no != ''">
+			, device_no
+			</if>
+			<if test="device_price != null and device_price != ''">
+			, device_price
+			</if>
+			<if test="device_unit != null and device_unit != ''">
+			, device_unit
+			</if>
+			<if test="account_price != null and account_price != ''">
+			, account_price
+			</if>
+			<if test="account_unit != null and account_unit != ''">
+			, account_unit
+			</if>
+			, reg_dt
+			, reg_id
+			, use_yn
+			<if test="device_code != null and device_code != ''">
+			, device_code
+			</if>
+		)values(
+			  #{fare_bill_no}
+			, #{fare_id}
+			<if test="fare_bill_month != null and fare_bill_month != ''">
+			, #{fare_bill_month}
+			</if>
+			<if test="fare_bill_service_day != null and fare_bill_service_day != ''">
+			, #{fare_bill_service_day}
+			</if>
+			<if test="fare_bill_service_strt_date != null and fare_bill_service_strt_date != ''">
+			, #{fare_bill_service_strt_date}
+			</if>
+			<if test="fare_bill_service_end_date != null and fare_bill_service_end_date != ''">
+			, #{fare_bill_service_end_date}
+			</if>
+			<if test="fare_service_bill != null and fare_service_bill != ''">
+			, #{fare_service_bill}
+			</if>
+			<if test="fare_standard != null and fare_standard != ''">
+			, #{fare_standard}
+			</if>
+			<if test="menu_id != null and menu_id != ''">
+			, #{menu_id}
+			</if>
+			<if test="menu_type != null and menu_type != ''">
+			, #{menu_type}
+			</if>
+			<if test="fare_use_strt_dt != null and fare_use_strt_dt != ''">
+			, #{fare_use_strt_dt}
+			</if>
+			<if test="fare_use_end_dt != null and fare_use_end_dt != ''">
+			, #{fare_use_end_dt}
+			</if>
+			<if test="fare_bill != null and fare_bill != ''">
+			, #{fare_bill}
+			</if>
+			<if test="device_no != null and device_no != ''">
+			, #{device_no}
+			</if>
+			<if test="device_price != null and device_price != ''">
+			, #{device_price}
+			</if>
+			<if test="device_unit != null and device_unit != ''">
+			, #{device_unit}
+			</if>
+			<if test="account_price != null and account_price != ''">
+			, #{account_price}
+			</if>
+			<if test="account_unit != null and account_unit != ''">
+			, #{account_unit}
+			</if>
+			, NOW()
+			, #{reg_id}
+			, #{use_yn}
+			<if test="device_code != null and device_code != ''">
+			, #{device_code}
+			</if>
+		)
+	</insert>
+	
+	<update id="updateFareBill" parameterType="FareVO">
+	UPDATE TBL_FARE_BILL
+	SET 	  mod_dt = NOW()
+		    , mod_id = #{mod_id}
+		  	<if test="fare_bill_no != null and fare_bill_no != ''">
+			, fare_bill_no = #{fare_bill_no}
+		  	</if>
+			<if test="fare_bill_month != null and fare_bill_month != ''">
+			, fare_bill_month = #{fare_bill_month}
+			</if>
+			<if test="fare_bill_day != null and fare_bill_day != ''">
+			, fare_bill_day = #{fare_bill_day}
+			</if>
+			<if test="fare_bill_strt_date != null and fare_bill_strt_date != ''">
+			, fare_bill_strt_date = #{fare_bill_strt_date}
+			</if>
+			<if test="fare_bill_end_date != null and fare_bill_end_date != ''">
+			, fare_bill_end_date = #{fare_bill_end_date}
+			</if>
+			<if test="fare_basic_bill != null and fare_basic_bill != ''">
+			, fare_basic_bill = #{fare_basic_bill}
+			</if>
+			<if test="fare_standard != null and fare_standard != ''">
+			, fare_standard = #{fare_standard}
+			</if>
+			<if test="fare_bill_total != null and fare_bill_total != ''">
+			, fare_bill_total = #{fare_bill_total}
+			</if>
+			<if test="fare_mod_dt != null and fare_mod_dt != ''">
+			, fare_mod_dt = #{fare_mod_dt}
+			</if>
+			<if test="fare_cur_month_bill != null and fare_cur_month_bill != ''">
+			, fare_cur_month_bill = #{fare_cur_month_bill}
+			</if>
+			<if test="fare_bill_total_day != null and fare_bill_total_day != ''">
+			, fare_bill_total_day = #{fare_bill_total_day}
+			</if>
+			<if test="use_yn != null and use_yn != ''">
+			, use_yn = #{use_yn}
+			</if>
+	WHERE fare_id = #{fare_id}
+	<if test="fare_bill_month_notChg != null and fare_bill_month_notChg != ''">
+	<![CDATA[
+	AND fare_bill_month > #{fare_bill_month_notChg}
+	]]>
+	</if>
+	</update>
+	
+	<update id="updateFareBillDetail" parameterType="FareVO">
+	UPDATE TBL_FARE_BILL_DETAIL
+	SET 	  mod_dt = NOW()
+		    , mod_id = #{mod_id}
+			<if test="fare_bill_month != null and fare_bill_month != ''">
+			, fare_bill_month = #{fare_bill_month}
+			</if>
+			<if test="fare_bill_service_day != null and fare_bill_service_day != ''">
+			, fare_bill_service_day = #{fare_bill_service_day}
+			</if>
+			<if test="fare_bill_service_strt_date != null and fare_bill_service_strt_date != ''">
+			, fare_bill_service_strt_date = #{fare_bill_service_strt_date}
+			</if>
+			<if test="fare_bill_service_end_date != null and fare_bill_service_end_date != ''">
+			, fare_bill_service_end_date = #{fare_bill_service_end_date}
+			</if>
+			<if test="fare_service_bill != null and fare_service_bill != ''">
+			, fare_service_bill = #{fare_service_bill}
+			</if>
+			<if test="fare_standard != null and fare_standard != ''">
+			, fare_standard = #{fare_standard}
+			</if>
+			<if test="menu_id != null and menu_id != ''">
+			, menu_id = #{menu_id}
+			</if>
+			<if test="menu_type != null and menu_type != ''">
+			, menu_type = #{menu_type}
+			</if>
+			<if test="fare_use_strt_dt != null and fare_use_strt_dt != ''">
+			, fare_use_strt_dt = #{fare_use_strt_dt}
+			</if>
+			<if test="fare_use_end_dt != null and fare_use_end_dt != ''">
+			, fare_use_end_dt = #{fare_use_end_dt}
+			</if>
+			<if test="fare_bill != null and fare_bill != ''">
+			, fare_bill = #{fare_bill}
+			</if>
+			<if test="device_no != null and device_no != ''">
+			, device_no = #{device_no}
+			</if>
+			<if test="device_price != null and device_price != ''">
+			, device_price = #{device_price}
+			</if>
+			<if test="device_unit != null and device_unit != ''">
+			, device_unit = #{device_unit}
+			</if>
+			<if test="account_price != null and account_price != ''">
+			, account_price = #{account_price}
+			</if>
+			<if test="account_unit != null and account_unit != ''">
+			, account_unit = #{account_unit}
+			</if>
+			<if test="use_yn != null and use_yn != ''">
+			, use_yn = #{use_yn}
+			</if>
+			<if test="device_code != null and device_code != ''">
+			, device_code = #{device_code}
+			</if>
+	WHERE fare_id = #{fare_id}
+	<if test="fare_bill_detail_no != null and fare_bill_detail_no != ''">
+	AND fare_bill_detail_no = #{fare_bill_detail_no}
+	</if>
+	<if test="fare_bill_no != null and fare_bill_no != ''">
+	AND fare_bill_no = #{fare_bill_no}	  
+	</if>
+	<if test="fare_bill_no != null and fare_bill_no != ''">
+	AND fare_bill_no = #{fare_bill_no}	  
+	</if>
+	<if test="fare_bill_month_notChg != null and fare_bill_month_notChg != ''">
+	<![CDATA[
+	AND fare_bill_month > #{fare_bill_month_notChg}
+	]]>
+	</if>
+	</update>
+	
+	
+	<select id="selectFareMonthlyBill" parameterType="FareVO" resultType="FareVO">
+		SELECT 
+			  A.fare_bill_no
+			, A.fare_id
+			, A.fare_bill_month
+			, CONCAT(SUBSTRING(A.fare_bill_month,1,4),'년 ',SUBSTRING(A.fare_bill_month,5,6),'월' ) as fare_bill_month_name
+			, A.fare_bill_day
+			, A.fare_bill_strt_date
+			, A.fare_bill_end_date
+			, A.fare_basic_bill
+			, A.fare_standard
+			, CASE WHEN 'S' = A.fare_standard THEN '서비스별 산정'
+				   WHEN 'D' = A.fare_standard THEN '장치별 산정'
+				   WHEN 'A' = A.fare_standard THEN '계정별 산정'
+				   END fare_standard_name 
+			, A.fare_bill_total
+			, A.fare_mod_dt
+			, A.fare_cur_month_bill
+			, A.reg_dt
+			, A.reg_id
+			, A.mod_dt
+			, A.mod_id
+			, A.fare_bill_total_day
+			, A.use_yn
+		FROM TBL_FARE_BILL A
+		WHERE A.fare_id = #{fare_id}
+		AND A.use_yn = #{use_yn}
+		<if test="siteRegi == null or siteRegi == ''">
+		<![CDATA[
+		AND A.fare_bill_month <= DATE_FORMAT(NOW(),'%Y%m')
+		]]>
+		</if>
+		<if test="siteRegi != null and siteRegi != ''">
+		<![CDATA[
+		AND A.fare_bill_month < DATE_FORMAT(NOW(),'%Y%m')
+		]]>
+		</if>
+		<if test="siteRegi == null or siteRegi == ''">
+		ORDER BY A.fare_bill_month ASC
+		</if>
+		<if test="siteRegi != null and siteRegi != ''">
+		ORDER BY A.fare_bill_month DESC
+		</if>
+	</select>
+	
+	<select id="selectFareMonthlyBillDetail" parameterType="FareVO" resultType="FareVO">
+		SELECT 	  A.fare_basic_bill
+				, B.fare_bill_detail_no
+				, B.fare_bill_no
+				, B.fare_id
+				, B.fare_bill_month
+				, B.fare_bill_service_day
+				, B.fare_bill_service_strt_date
+				, B.fare_bill_service_end_date
+				, B.fare_service_bill
+				, B.fare_standard
+				, B.menu_id
+				, B.fare_use_strt_dt
+				, B.fare_use_end_dt
+				, B.fare_bill
+				, B.device_no
+				, B.device_price
+				, B.device_unit
+				, B.account_price
+				, B.account_unit
+				, B.reg_dt
+				, B.reg_id
+				, B.mod_dt
+				, B.mod_id
+				, B.use_yn
+				, B.device_code
+				, B.menu_type
+				, ( SELECT C.menu_name FROM TBL_MENU C WHERE B.menu_id = C.menu_id ) menu_name
+				, ( SELECT C.device_name FROM TBL_DEVICE_TYPE C WHERE B.device_code = C.device_code ) device_name
+				, CONCAT(    SUBSTRING(B.fare_bill_service_strt_date,1,4),'/'
+						   , SUBSTRING(B.fare_bill_service_strt_date,5,2),'/'
+						   , SUBSTRING(B.fare_bill_service_strt_date,7,2),' ~ '
+						   , SUBSTRING(B.fare_bill_service_end_date,1,4),'/'
+						   , SUBSTRING(B.fare_bill_service_end_date,5,2),'/'
+						   , SUBSTRING(B.fare_bill_service_end_date,7,2)
+						) as fare_bill_service_date
+		FROM TBL_FARE_BILL A 
+		LEFT JOIN TBL_FARE_BILL_DETAIL B
+		ON A.fare_bill_no = B.fare_bill_no
+		WHERE 1=1 
+		AND A.use_yn = #{use_yn}
+		AND B.use_yn = #{use_yn}
+		AND A.fare_bill_no = #{fare_bill_no}
+		AND B.fare_bill_no = #{fare_bill_no}
+		<if test="menu_type != null and menu_type != ''">
+		AND B.menu_type = #{menu_type}
+		</if>
+		<if test="fare_standard != null and fare_standard != ''">
+		AND B.fare_standard = #{fare_standard}
+		</if>
+	</select>
+	
+	
+	<select id="selectFareBillChangeDetail" parameterType="FareVO" resultType="FareVO">
+		SELECT 	  SUM(A.fare_basic_bill)  fare_basic_bill
+				, B.fare_bill_detail_no
+				, B.fare_bill_no
+				, B.fare_id
+				, B.fare_bill_month
+				, B.fare_bill_service_day
+				, MIN(B.fare_bill_service_strt_date) fare_bill_service_strt_date
+				, MAX(B.fare_bill_service_end_date) fare_bill_service_end_date
+				, SUM(B.fare_service_bill) fare_service_bill
+				, B.fare_standard
+				, B.menu_id
+				, B.fare_use_strt_dt
+				, B.fare_use_end_dt
+				, B.fare_bill
+				, B.device_no
+				, SUM(B.device_price)	device_price
+				, SUM(B.device_unit)	device_unit
+				, SUM(B.account_price)	account_price
+				, SUM(B.account_unit)	account_unit
+				, B.reg_dt
+				, B.reg_id
+				, B.mod_dt
+				, B.mod_id
+				, B.use_yn
+				, B.device_code
+				, B.menu_type
+				, ( SELECT C.menu_name FROM TBL_MENU C WHERE B.menu_id = C.menu_id ) menu_name
+				, ( SELECT C.device_name FROM TBL_DEVICE_TYPE C WHERE B.device_code = C.device_code ) device_name
+				, CONCAT(    SUBSTRING(MIN(B.fare_bill_service_strt_date),1,4),'/'
+						   , SUBSTRING(MIN(B.fare_bill_service_strt_date),5,2),'/'
+						   , SUBSTRING(MIN(B.fare_bill_service_strt_date),7,2),' ~ '
+						   , SUBSTRING(MAX(B.fare_bill_service_end_date),1,4),'/'
+						   , SUBSTRING(MAX(B.fare_bill_service_end_date),5,2),'/'
+						   , SUBSTRING(MAX(B.fare_bill_service_end_date),7,2)
+						) as fare_bill_service_date
+		FROM TBL_FARE_BILL A 
+		LEFT JOIN TBL_FARE_BILL_DETAIL B
+		ON A.fare_bill_no = B.fare_bill_no
+		WHERE 1=1 
+		AND A.use_yn = #{use_yn}
+		AND B.use_yn = #{use_yn}
+		<if test="arrFareBillNo != null and arrFareBillNo != ''"> 
+		AND A.fare_bill_no IN
+			<foreach collection='arrFareBillNo' index='index' item='item' open='(' close=')' separator=','>
+				#{item}
+			</foreach>
+		</if>
+		<if test="menu_type != null and menu_type != ''">
+		AND B.menu_type = #{menu_type}
+		</if>
+		<if test="fare_standard != null and fare_standard != ''">
+		AND B.fare_standard = #{fare_standard}
+		</if>
+		GROUP BY menu_id
+	</select>
+	
+	<select id="selectFareChangeHistory" parameterType="FareVO" resultType="FareVO">
+	SELECT    MIN(A.fare_bill_strt_date) fare_bill_strt_date
+			, MAX(A.fare_bill_end_date) fare_bill_end_date
+			, SUM(fare_cur_month_bill) fare_cur_month_bill
+			, A.fare_mod_dt
+			, MIN(A.fare_bill_no) fare_strt_bill_no
+			, MAX(A.fare_bill_no) fare_end_bill_no
+			, A.fare_standard
+			, CASE WHEN 'S' = A.fare_standard THEN '서비스별 산정'
+				   WHEN 'D' = A.fare_standard THEN '장치별 산정'
+				   WHEN 'A' = A.fare_standard THEN '계정별 산정'
+				   END fare_standard_name 
+	FROM TBL_FARE_BILL A
+	WHERE A.fare_id = #{fare_id}
+	AND A.use_yn = 'Y'
+	GROUP BY fare_mod_dt
+	ORDER BY fare_bill_no DESC
+	</select>
+	
+	<select id="selectFareChangeHistoryTotal" parameterType="FareVO" resultType="Integer">
+	SELECT count(*)
+	FROM(
+		SELECT  count(*)
+		FROM TBL_FARE_BILL A
+		WHERE A.fare_id = #{fare_id}
+		AND A.use_yn = 'Y'
+		GROUP BY fare_mod_dt
+		ORDER BY fare_bill_no DESC
+	) X
+	</select>
+	
+</mapper>

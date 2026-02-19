@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="academy" >
+
+	<insert id="insertAcademy" parameterType="AcademyVO" useGeneratedKeys="true" keyProperty="academy_id">
+		INSERT INTO TB_ACADEMY (
+		    academy_id
+		  ,	academy_name
+		  , academy_address
+		  , academy_detail_address
+		  , academy_email
+		  , academy_banner_type
+		  , academy_tel
+		  , academy_logo
+		  , academy_text
+		  , academy_target
+		  , academy_subject
+		  , academy_ceo
+		  , academy_photo_url_1
+		  , academy_photo_url_2
+		  , academy_photo_url_3
+		  , academy_photo_url_4
+		  , academy_photo_url_5
+		  , updt_date
+		  , regi_date
+		) VALUES (
+			#{academy_id}
+		  , #{academy_name}
+		  , #{academy_address}
+		  , #{academy_detail_address}
+		  , #{academy_email}
+		  , #{academy_banner_type}
+		  , #{academy_tel}
+		  , #{academy_logo}
+		  , #{academy_text}
+		  , #{academy_target}
+		  , #{academy_subject}
+		  , #{academy_ceo}
+		  , #{academy_photo_url_1}
+		  , #{academy_photo_url_2}
+		  , #{academy_photo_url_3}
+		  , #{academy_photo_url_4}
+		  , #{academy_photo_url_5}
+		  , NOW()
+		  , NOW()
+		)
+	</insert>
+	
+	<update id="updateAcademy" parameterType="AcademyVO">
+		<![CDATA[
+		UPDATE TB_ACADEMY
+		   SET academy_name = #{academy_name}
+		     , academy_logo = #{academy_logo}
+		     , academy_email = #{academy_email}
+		     , academy_address = #{academy_address}
+		     , academy_detail_address = #{academy_detail_address}
+		     , academy_homepage = #{academy_homepage}
+		     , academy_banner_type = #{academy_banner_type}
+		     , academy_tel = #{academy_tel}
+		     , academy_text = #{academy_text}
+		     , academy_target = #{academy_target}
+		     , academy_subject = #{academy_subject}
+		     , academy_ceo = #{academy_ceo}
+		     , academy_photo_url_1 = #{academy_photo_url_1}
+		     , academy_photo_url_2 = #{academy_photo_url_2}
+		     , academy_photo_url_3 = #{academy_photo_url_3}
+		     , academy_photo_url_4 = #{academy_photo_url_4}
+		     , academy_photo_url_5 = #{academy_photo_url_5}
+		     , updt_date = NOW()
+		 WHERE academy_id = #{academy_id}
+		]]>
+	</update>
+	
+	<update id="deleteAcademy" parameterType="AcademyVO">
+		<![CDATA[
+		UPDATE TB_ACADEMY
+		   SET delete_yn = 'Y'
+		 WHERE academy_id = #{academy_id}
+		]]>
+	</update>
+	
+	<select id="selectAcademyList" parameterType="SearchVO" resultType="AcademyVO">
+		SELECT * 
+		  FROM TB_ACADEMY
+		 WHERE 1=1
+		 ORDER BY regi_date DESC
+		 LIMIT #{record_count} OFFSET #{first_index}
+	</select>
+	
+	<select id="selectAcademyTotalList" parameterType="SearchVO" resultType="AcademyVO">
+		SELECT * 
+		  FROM TB_ACADEMY
+		 WHERE 1=1
+		 ORDER BY regi_date DESC
+	</select>
+	
+	<select id="selectAcademyListTotalCount" parameterType="SearchVO" resultType="Integer">
+		SELECT COUNT(*) 
+		  FROM TB_ACADEMY
+		 WHERE 1=1
+	</select>
+	
+	<select id="selectAcademyDetail" parameterType="AcademyVO" resultType="AcademyVO">
+		SELECT * 
+		  FROM TB_ACADEMY
+		 WHERE academy_id = #{academy_id}
+	</select>
+	
+	<select id="selectTargetList" parameterType="SearchVO" resultType="TargetVO">
+		SELECT *
+		  FROM TB_TARGET
+		 ORDER BY target_id
+	</select>
+	
+	<select id="selectSubjectList" parameterType="SearchVO" resultType="SubjectVO">
+		SELECT *
+		  FROM TB_SUBJECT
+		 ORDER BY subject_id
+	</select>
+</mapper>

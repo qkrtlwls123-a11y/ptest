@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="app" >
+	<select id="selectAppList" parameterType="AppVO" resultType="AppVO">
+		SELECT 	  A.* 
+				, B.code
+				, B.account_name
+				, B.grade_id
+				<![CDATA[
+				, CASE WHEN B.grade_id < 4 THEN B.cooperator_name
+				       ELSE ( SELECT C.code_name FROM TBL_COMMON_CODE C WHERE B.code = C.code AND company_id = #{company_id} LIMIT 1 )
+				       END AS code_name
+				]]>
+				<![CDATA[
+				, CASE WHEN B.grade_id < 4 THEN B.cooperator_name_eng
+				       ELSE ( SELECT C.code_name_eng FROM TBL_COMMON_CODE C WHERE B.code = C.code AND company_id = #{company_id} LIMIT 1 )
+				       END AS code_name_eng
+				]]>
+				, DATE_FORMAT( A.reg_dt, '%Y/%m/%d' ) AS reg_dt_list
+				, DATE_FORMAT( A.reg_dt2, '%Y/%m/%d' ) AS reg_dt_list2
+		FROM TBL_APP_DEVICE A , (
+				SELECT 	  A.account_id 
+						, A.account_name 
+						, B.code 
+						, A.cooperator_id 
+						, (SELECT COOPERATOR_NAME FROM TBL_COOPERATOR C WHERE C.cooperator_id = A.cooperator_id) AS cooperator_name
+						, (SELECT COOPERATOR_NAME_ENG FROM TBL_COOPERATOR C WHERE C.cooperator_id = A.cooperator_id) AS cooperator_name_eng
+						, A.grade_id
+				  FROM TBL_ACCOUNT A LEFT OUTER JOIN TBL_COMMON_CODE B
+				  ON A.code = B.code
+				  AND B.company_id = #{company_id}
+				 WHERE 1=1
+				 AND A.account_status = 'N'
+				 AND ( A.cooperator_id = #{cooperator_id} OR A.cooperator_id = (select cooperator_id FROM TBL_COOPERATOR WHERE cooperator_name LIKE '%현대오토에버%') )
+				 <if test='grade_id != null and grade_id != "2"'>
+				 <![CDATA[
+			     AND A.grade_id >= #{grade_id}
+			     ]]>
+			     </if>
+			     <if test="company_id != null and company_id != ''">
+			     AND #{company_id} = CASE WHEN (A.grade_id = '4' OR A.grade_id = '5') THEN (SELECT Z.company_id FROM TBL_ACCOUNT_SITE Z WHERE Z.account_id = A.account_id) ELSE #{company_id} END
+			     </if>
+			) B
+		WHERE 1=1
+		AND A.account_id = B.account_id
+		<if test="sch_account_id != null and sch_account_id != ''">
+			AND ( A.account_id LIKE CONCAT('%',#{sch_account_id},'%') OR B.account_name LIKE CONCAT('%',#{sch_account_id},'%') )
+		</if>
+		<if test="sch_code != null and sch_code != ''">
+			AND ( B.code = #{sch_code} or B.cooperator_id = #{sch_code} )
+		</if>
+ 		<if test="sch_grade_id != null and sch_grade_id != ''">
+ 		 	AND B.grade_id IN
+ 		 	<foreach collection='sch_grade_id' index='index' item='item' open='(' close=')' separator=','>
+			#{item}
+			</foreach>
+ 		</if>
+	    ORDER BY (CASE WHEN SUBSTR(${order_column}, 1, 1) REGEXP '^[가-힣ㄱ-ㅎㅏ-ㅣ\x20]' THEN 1
+	                WHEN UPPER(SUBSTR(${order_column}, 1, 1)) REGEXP '^[A-Z]+$' THEN 2
+	                WHEN SUBSTR(${order_column}, 1, 1) REGEXP '^[0-9]+$' THEN 3
+			        ELSE 4
+	           END) ASC, ${order_column} ${order_type}
+	           <if test="order_column != null and order_column != 'A.reg_dt'">
+	           , ${base_order_column} ${base_order_type}
+	           </if>
+	    <if test="notUsePage == null or notUsePage == ''">
+	    LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	    </if>
+	</select>
+	
+	<select id="selectAppListTotal" parameterType="AppVO" resultType="Integer">
+		SELECT 	  COUNT(*) 
+		FROM TBL_APP_DEVICE A , (
+				SELECT A.account_id ,  A.account_name , B.code , A.cooperator_id 
+				  FROM TBL_ACCOUNT A LEFT OUTER JOIN TBL_COMMON_CODE B
+				  ON A.code = B.code
+				  AND B.company_id = #{company_id}
+				 WHERE 1=1
+				 AND A.account_status = 'N'
+			     AND ( A.cooperator_id = #{cooperator_id} OR A.cooperator_id = (select cooperator_id FROM TBL_COOPERATOR WHERE cooperator_name LIKE '%현대오토에버%') )
+				 <if test='grade_id != null and grade_id != "2"'>
+				 <![CDATA[
+			     AND A.grade_id >= #{grade_id}
+			     ]]>
+			     </if>
+			     <if test="company_id != null and company_id != ''">
+			     AND #{company_id} = CASE WHEN (A.grade_id = '4' OR A.grade_id = '5') THEN (SELECT Z.company_id FROM TBL_ACCOUNT_SITE Z WHERE Z.account_id = A.account_id) ELSE #{company_id} END
+			     </if>
+			) B
+		WHERE 1=1
+		AND A.account_id = B.account_id
+		<if test="sch_account_id != null and sch_account_id != ''">
+			AND ( A.account_id LIKE CONCAT('%',#{sch_account_id},'%') OR B.account_name LIKE CONCAT('%',#{sch_account_id},'%') )
+		</if>
+		<if test="sch_code != null and sch_code != ''">
+			AND ( B.code = #{sch_code} or B.cooperator_id = #{sch_code} )
+		</if>
+	</select>
+	
+<!-- 	<insert id="insertApp" parameterType="AppVO">
+		INSERT INTO TBL_APP_DEVICE
+			( 
+				company_id,
+				app_title,
+				app_version,
+				oxygen_from,
+				oxygen_to,
+				oxygen_ment,
+				oxygen_ment_eng,
+				carbon,
+				carbon_ment,
+				carbon_ment_eng,
+				methan,
+				methan_ment,
+				methan_ment_eng,
+				hydrogen,
+				hydrogen_ment,
+				hydrogen_ment_eng,
+				reg_dt,
+				reg_id,
+				mod_dt,
+				mod_id
+			)
+			VALUES
+			(
+				#{company_id},
+				#{app_title},
+				#{app_version},
+				#{oxygen_from},
+				#{oxygen_to},
+				#{oxygen_ment},
+				#{oxygen_ment_eng},
+				#{carbon},
+				#{carbon_ment},
+				#{carbon_ment_eng},
+				#{methan},
+				#{methan_ment},
+				#{methan_ment_eng},
+				#{hydrogen},
+				#{hydrogen_ment},
+				#{hydrogen_ment_eng},
+				NOW(),
+				#{reg_id},
+				NOW(),
+				mod_id
+			 )
+	</insert> -->
+	
+	<insert id="insertApp" parameterType="AppVO">
+		REPLACE INTO TBL_APP_DEVICE
+			( 
+				os_type
+				, push_token
+				<if test="company_id != null and company_id != ''">
+				, company_id
+				</if>
+				, account_id
+				, serial_number
+				, serial_number2
+				, model
+				, model2
+				, phone_name
+				, phone_name2
+				, reg_dt
+				, use_yn
+			)
+			VALUES
+			(
+			    #{os_type}
+			    , #{push_token}
+				<if test="company_id != null and company_id != ''">
+				, #{company_id}
+				</if>
+			    , #{account_id}
+			    , #{serial_number}
+			    , #{serial_number2}
+			    , #{model}
+			    , #{model2}
+				, #{phone_name}
+				, #{phone_name2}
+			    , NOW()
+			    , #{use_yn}
+			 )
+	</insert>
+	
+	<update id="updateAppDevice" parameterType="AppVO">
+		UPDATE TBL_APP_DEVICE
+		   SET    mod_dt= NOW()
+		   		, mod_id= #{mod_id}
+				<if test="os_type != null and os_type != ''">
+				, os_type = #{os_type}
+				</if>
+				<if test="push_token != null and push_token != ''">
+				, push_token = #{push_token}
+				</if>
+				<if test="push_token2 != null and push_token2 != ''">
+				, push_token2 = #{push_token2}
+				</if>
+				<if test="company_id != null and company_id != ''">
+				, company_id = #{company_id}
+				</if>
+				<if test="account_id != null and account_id != ''">
+				, account_id = #{account_id}
+				</if>
+				<if test="serial_number != null and serial_number != ''">
+				, serial_number = #{serial_number}
+				</if>
+				<if test="serial_number2 != null and serial_number2 != ''">
+				, serial_number2 = #{serial_number2}
+				</if>
+				<if test="model != null and model != ''">
+				, model = #{model}
+				</if>
+				<if test="model2 != null and model2 != ''">
+				, model2 = #{model2}
+				</if>
+				<if test="use_yn != null and use_yn != ''">
+				, use_yn = #{use_yn}
+				</if>
+				<if test="reg_dt != null and reg_dt != ''">
+				, reg_dt = #{reg_dt}
+				</if>
+				<if test="reg_dt2 != null and reg_dt2 != ''">
+				, reg_dt2 = #{reg_dt2}
+				</if>
+				<if test="phone_name != null and phone_name != ''">
+				, phone_name = #{phone_name}
+				</if>
+				<if test="phone_name2 != null and phone_name2 != ''">
+				, phone_name2 = #{phone_name2}
+				</if>
+		 WHERE account_id = #{account_id}
+	</update>
+	
+	<update id="deleteAppDevice" parameterType="AppVO">
+		UPDATE TBL_APP_DEVICE
+		   SET    mod_dt= NOW()
+		   		, mod_id= #{mod_id}
+				<if test="serial_type == 1">
+					, serial_number = null
+					, model 		= null
+					, push_token 	= null
+					, reg_dt 		= null
+					, phone_name	= null
+				</if>
+				<if test="serial_type == 2">
+					, serial_number2 = null
+					, model2 		 = null
+					, push_token2 	 = null
+					, reg_dt2 		 = null
+					, phone_name2	= null
+				</if>
+		 WHERE account_id = #{account_id}
+	</update>
+	
+	<delete id="deleteApp" parameterType="AppVO">
+		DELETE FROM TBL_APP_DEVICE 
+		WHERE account_id = #{account_id}
+		<if test="app_id != null and app_id != ''">
+		AND app_id = #{app_id}
+		</if>
+	</delete>
+	
+	<select id="selectAppDetail" parameterType="AppVO" resultType="AppVO">
+		SELECT *
+		  FROM TBL_APP_DEVICE
+		 WHERE account_id = #{account_id}
+	</select>	
+	
+	<select id="selectAppDeviceCnt" parameterType="AppVO" resultType="AppVO">
+		SELECT count(*)
+		FROM TBL_APP_DEVICE
+		WHERE 1=1
+		AND account_id = #{account_id}
+		AND company_id = #{company_id}
+		AND use_yn = 'Y'
+	</select>
+	
+	<select id="selectAppMenuGrade" parameterType="AppVO" resultType="AppVO">
+		SELECT
+		  	  A.company_id
+			, A.account_id
+			, D.account_name
+			, A.menu_app_id_1
+			, A.menu_app_use_yn_1
+			, A.menu_app_id_2
+			, A.menu_app_use_yn_2
+			, A.menu_app_id_3
+			, A.menu_app_use_yn_3
+			, A.menu_app_id_4
+			, A.menu_app_use_yn_4
+			, A.menu_app_id_5
+			, A.menu_app_use_yn_5
+			, A.reg_dt
+			, A.reg_id
+			<![CDATA[
+			, CASE WHEN D.grade_id < 4 THEN D.cooperator_name
+			       ELSE ( SELECT C.code_name FROM TBL_COMMON_CODE C WHERE D.code = C.code AND company_id = #{company_id} LIMIT 1 )
+			       END AS code_name
+			]]>	
+			<![CDATA[
+			, CASE WHEN D.grade_id < 4 THEN D.cooperator_name_eng
+			       ELSE ( SELECT C.code_name_eng FROM TBL_COMMON_CODE C WHERE D.code = C.code AND company_id = #{company_id} LIMIT 1 )
+			       END AS code_name_eng
+			]]>	
+		FROM TBL_APP_ACCOUNT_MENU A , (
+				SELECT 	  A.account_id 
+						, A.account_name 
+						, B.code 
+						, A.cooperator_id 
+						, (SELECT COOPERATOR_NAME FROM TBL_COOPERATOR C WHERE C.cooperator_id = A.cooperator_id) AS cooperator_name
+						, (SELECT COOPERATOR_NAME_ENG FROM TBL_COOPERATOR C WHERE C.cooperator_id = A.cooperator_id) AS cooperator_name_eng
+						, A.grade_id
+				  FROM TBL_ACCOUNT A LEFT OUTER JOIN TBL_COMMON_CODE B
+				  ON A.code = B.code
+				  AND B.company_id = #{company_id}
+				 WHERE 1=1
+				 AND A.account_status = 'N'
+				 AND A.cooperator_id = #{cooperator_id}
+				 <if test='grade_id != null and grade_id != "2"'>
+				 <![CDATA[
+			     AND A.grade_id >= #{grade_id}
+			     ]]>
+			     </if>
+			     <if test="company_id != null and company_id != ''">
+			     AND #{company_id} = CASE WHEN (A.grade_id = '4' OR A.grade_id = '5') THEN (SELECT Z.company_id FROM TBL_ACCOUNT_SITE Z WHERE Z.account_id = A.account_id) ELSE #{company_id} END
+			     </if>
+			) D
+		WHERE 1=1
+		AND A.account_id = D.account_id
+		AND A.use_yn = 'Y'
+		AND A.company_id = #{company_id}
+		<if test="sch_account_id != null and sch_account_id != ''">
+			AND ( A.account_id LIKE CONCAT('%',#{sch_account_id},'%') OR A.account_id LIKE CONCAT('%',#{sch_account_id},'%') )
+		</if>
+		<if test="sch_code != null and sch_code != ''">
+			AND ( D.code = #{sch_code} or D.cooperator_id = #{sch_code} )
+		</if>
+	    ORDER BY (CASE WHEN SUBSTR(${order_column}, 1, 1) REGEXP '^[가-힣ㄱ-ㅎㅏ-ㅣ\x20]' THEN 1
+	                WHEN UPPER(SUBSTR(${order_column}, 1, 1)) REGEXP '^[A-Z]+$' THEN 2
+	                WHEN SUBSTR(${order_column}, 1, 1) REGEXP '^[0-9]+$' THEN 3
+			        ELSE 4
+	           END) ASC, ${order_column} ${order_type} , D.account_name ASC
+	           <if test="order_column != null and order_column != 'A.reg_dt'">
+	           , ${base_order_column} ${base_order_type}
+	           </if>
+	    <if test="notUsePage == null or notUsePage == ''">
+	    LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	    </if>
+	</select>
+	
+	<select id="selectAppMenuGradeCount" parameterType="AppVO" resultType="Integer">
+		SELECT COUNT(*)
+		FROM TBL_APP_ACCOUNT_MENU A , (
+				SELECT 	  A.account_id 
+						, A.account_name 
+						, B.code 
+						, A.cooperator_id 
+						, (SELECT COOPERATOR_NAME FROM TBL_COOPERATOR C WHERE C.cooperator_id = A.cooperator_id) AS cooperator_name
+						, A.grade_id
+				  FROM TBL_ACCOUNT A LEFT OUTER JOIN TBL_COMMON_CODE B
+				  ON A.code = B.code
+				  AND B.company_id = #{company_id}
+				 WHERE 1=1
+				 AND A.account_status = 'N'
+				 AND A.cooperator_id = #{cooperator_id}
+				 <if test='grade_id != null and grade_id != "2"'>
+				 <![CDATA[
+			     AND A.grade_id >= #{grade_id}
+			     ]]>
+			     </if>
+			     <if test="company_id != null and company_id != ''">
+			     AND #{company_id} = CASE WHEN (A.grade_id = '4' OR A.grade_id = '5') THEN (SELECT Z.company_id FROM TBL_ACCOUNT_SITE Z WHERE Z.account_id = A.account_id) ELSE #{company_id} END
+			     </if>
+			) D
+		WHERE 1=1
+		AND A.account_id = D.account_id
+		AND A.use_yn = 'Y'
+		AND A.company_id = #{company_id}
+		<if test="sch_account_id != null and sch_account_id != ''">
+			AND ( A.account_id LIKE CONCAT('%',#{sch_account_id},'%') OR A.account_id LIKE CONCAT('%',#{sch_account_id},'%') )
+		</if>
+		<if test="sch_code != null and sch_code != ''">
+			AND ( D.code = #{sch_code} or D.cooperator_id = #{sch_code} )
+		</if>
+	</select>
+	
+	<update id="updateAppMenuGrade" parameterType="AppVO">
+		UPDATE TBL_APP_ACCOUNT_MENU
+		   SET    mod_dt = NOW()
+		   		, mod_id = #{mod_id}
+				<if test="menu_app_use_id == 8">
+				, menu_app_use_yn_1 = #{menu_app_use_yn}
+				</if>
+				<if test="menu_app_use_id == 9">
+				, menu_app_use_yn_2 = #{menu_app_use_yn}
+				</if>
+				<if test="menu_app_use_id == 10">
+				, menu_app_use_yn_3 = #{menu_app_use_yn}
+				</if>
+				<if test="menu_app_use_id == 11">
+				, menu_app_use_yn_4 = #{menu_app_use_yn}
+				</if>
+				<if test="menu_app_use_id == 12">
+				, menu_app_use_yn_5 = #{menu_app_use_yn}
+				</if>
+		 WHERE 1=1
+		 AND company_id = #{company_id}
+		 <if test="account_id != null and account_id != ''">
+		 AND account_id = #{account_id}
+		 </if>
+	</update>
+	
+	<insert id="insertAppMenuGrade" parameterType="AppVO">
+		INSERT INTO TBL_APP_ACCOUNT_MENU
+			(
+				  company_id
+				, account_id
+				, reg_dt
+				, reg_id
+				, use_yn
+			)
+			VALUES
+			(
+				  #{company_id}
+				, #{account_id}
+				, NOW()
+				, #{reg_id}
+				, 'Y'
+			 )
+	</insert>
+	
+	<insert id="insertAppMenuGradeAll" parameterType="AppVO">
+		INSERT INTO TBL_APP_ACCOUNT_MENU( company_id , account_id , menu_app_id_1 , menu_app_use_yn_1 , menu_app_id_2 , menu_app_use_yn_2 , menu_app_id_3 , menu_app_use_yn_3 , menu_app_id_4 , menu_app_use_yn_4 , menu_app_id_5 , menu_app_use_yn_5 , reg_dt , reg_id , use_yn )
+		SELECT	  #{company_id} AS company_id    
+				, A.account_id
+				, '8' AS menu_app_id_1
+				, CASE WHEN ( SELECT menu_id FROM TBL_SITE_MENU WHERE company_id = #{company_id} AND menu_type = 'A' AND menu_id = '8' ) IS NULL THEN 'N' ELSE 'Y' END AS menu_app_use_yn_1
+				, '9' AS menu_app_id_2
+				, CASE WHEN ( SELECT menu_id FROM TBL_SITE_MENU WHERE company_id = #{company_id} AND menu_type = 'A' AND menu_id = '9' ) IS NULL THEN 'N' ELSE 'Y' END AS menu_app_use_yn_2
+				, '10' AS menu_app_id_3
+				, CASE WHEN ( SELECT menu_id FROM TBL_SITE_MENU WHERE company_id = #{company_id} AND menu_type = 'A' AND menu_id = '10' ) IS NULL THEN 'N' ELSE 'Y' END AS menu_app_use_yn_3
+				, '11' AS menu_app_id_4
+				, CASE WHEN ( SELECT menu_id FROM TBL_SITE_MENU WHERE company_id = #{company_id} AND menu_type = 'A' AND menu_id = '11' ) IS NULL THEN 'N' ELSE 'Y' END AS menu_app_use_yn_4
+				, '12' AS menu_app_id_5
+				, CASE WHEN ( SELECT menu_id FROM TBL_SITE_MENU WHERE company_id = #{company_id} AND menu_type = 'A' AND menu_id = '12' ) IS NULL THEN 'N' ELSE 'Y' END AS menu_app_use_yn_5
+				, NOW() AS reg_dt
+				, 'SYSTEM' AS reg_id
+				, 'Y'
+		<if test='bonsa_yn != null and bonsa_yn != "Y"'>
+			FROM TBL_ACCOUNT A
+			<![CDATA[
+			WHERE grade_id <= #{grade_id}
+			]]>
+		</if>
+		<if test='bonsa_yn != null and bonsa_yn != "N"'>
+			FROM TBL_ACCOUNT A LEFT OUTER JOIN TBL_COMMON_CODE B
+			ON A.code = B.code
+			AND B.company_id = #{company_id}
+			WHERE 1=1
+			AND A.cooperator_id = #{cooperator_id}
+			AND A.grade_id != '1'
+		</if>
+		<if test="cooperator_id != null and cooperator_id != ''">
+			AND A.cooperator_id = #{cooperator_id}
+		</if>
+		AND NOT EXISTS ( SELECT * FROM TBL_APP_ACCOUNT_MENU C WHERE C.company_id = #{company_id} AND A.account_id = C.account_id )
+	</insert>
+	
+	<update id="updateAppMenuGradeAll" parameterType="AppVO">
+		UPDATE TBL_APP_ACCOUNT_MENU A , (
+						SELECT	  #{company_id} AS company_id    
+								, A.account_id
+								, '8' AS menu_app_id_1
+								, CASE WHEN ( SELECT menu_id FROM TBL_SITE_MENU WHERE company_id = #{company_id} AND menu_type = 'A' AND menu_id = '8' ) IS NULL THEN 'N' ELSE 'Y' END AS menu_app_use_yn_1
+								, '9' AS menu_app_id_2
+								, CASE WHEN ( SELECT menu_id FROM TBL_SITE_MENU WHERE company_id = #{company_id} AND menu_type = 'A' AND menu_id = '9' ) IS NULL THEN 'N' ELSE 'Y' END AS menu_app_use_yn_2
+								, '10' AS menu_app_id_3
+								, CASE WHEN ( SELECT menu_id FROM TBL_SITE_MENU WHERE company_id = #{company_id} AND menu_type = 'A' AND menu_id = '10' ) IS NULL THEN 'N' ELSE 'Y' END AS menu_app_use_yn_3
+								, '11' AS menu_app_id_4
+								, CASE WHEN ( SELECT menu_id FROM TBL_SITE_MENU WHERE company_id = #{company_id} AND menu_type = 'A' AND menu_id = '11' ) IS NULL THEN 'N' ELSE 'Y' END AS menu_app_use_yn_4
+								, '12' AS menu_app_id_5
+								, CASE WHEN ( SELECT menu_id FROM TBL_SITE_MENU WHERE company_id = #{company_id} AND menu_type = 'A' AND menu_id = '12' ) IS NULL THEN 'N' ELSE 'Y' END AS menu_app_use_yn_5
+								, NOW() AS reg_dt
+								, 'SYSTEM' AS reg_id
+								, 'Y'
+							<if test='bonsa_yn != null and bonsa_yn != "Y"'>
+								FROM TBL_ACCOUNT A
+								<![CDATA[
+								WHERE grade_id <= #{grade_id}
+								]]>
+							</if>
+							<if test='bonsa_yn != null and bonsa_yn != "N"'>
+								FROM TBL_ACCOUNT A LEFT OUTER JOIN TBL_COMMON_CODE B
+								ON A.code = B.code
+								AND B.company_id = #{company_id}
+								WHERE 1=1
+								AND A.cooperator_id = #{cooperator_id}
+								AND A.grade_id != '1'
+							</if>
+							<if test="cooperator_id != null and cooperator_id != ''">
+								AND A.cooperator_id = #{cooperator_id}
+							</if>
+						AND EXISTS ( SELECT * FROM TBL_APP_ACCOUNT_MENU C WHERE C.company_id = #{company_id} AND A.account_id = C.account_id )
+					) B
+		SET   A.mod_dt = NOW()
+			, A.mod_id = #{mod_id}
+			, A.menu_app_use_yn_1 = B.menu_app_use_yn_1
+			, A.menu_app_use_yn_2 = B.menu_app_use_yn_2
+			, A.menu_app_use_yn_3 = B.menu_app_use_yn_3
+			, A.menu_app_use_yn_4 = B.menu_app_use_yn_4
+			, A.menu_app_use_yn_5 = B.menu_app_use_yn_5
+		WHERE A.account_id = B.account_id
+		AND A.company_id = #{company_id}
+	</update>
+	
+	
+	<update id="deleteAppMenuGrade" parameterType="AppVO">
+		UPDATE TBL_APP_ACCOUNT_MENU
+		   SET    mod_dt = NOW()
+		   		, mod_id = #{mod_id}
+		   		, use_yn = 'N'
+		 WHERE 1=1
+		 <if test="company_id != null and company_id != ''">
+		 AND company_id = #{company_id}
+		 </if>
+		 AND account_id = #{account_id}
+	</update>
+	
+	<update id="deleteSiteAppMenu" parameterType="AppVO">
+		UPDATE TBL_APP_ACCOUNT_MENU
+		SET    	  mod_dt = NOW()
+		   		, mod_id = #{mod_id}
+		   		, menu_app_use_yn_1 = 'N'
+		   		, menu_app_use_yn_2 = 'N'
+		   		, menu_app_use_yn_3 = 'N'
+		   		, menu_app_use_yn_4 = 'N'
+		   		, menu_app_use_yn_5 = 'N'
+		 WHERE 1=1
+		 AND company_id = #{company_id}
+	</update>
+	
+</mapper>

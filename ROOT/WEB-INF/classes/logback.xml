@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<!-- <appender name="SYSTEM" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/home/hosting_users/worknet538/tomcat/system.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			rollover daily
+			<fileNamePattern>system%d{yyyyMMdd}.%i.log</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				or whenever the file size reaches 100MB
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>▶  %-5level %d{yyyy.MM.dd HH:mm:ss.SSS} [%thread] %logger[%method:%line] - %msg%n</Pattern>
+		</encoder>
+	</appender> -->
+	
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				▶  %-5level %d{yyyy.MM.dd HH:mm:ss} [%thread] %logger[%method:%line] - %msg%n
+			</Pattern>
+		</layout>
+	</appender>
+	
+	<logger name="org.springframework" level="INFO"/>
+	<logger name="callcenter" level="DEBUG"/>
+	<logger name="java.sql" level="ERROR" />
+	<logger name="jdbc.sqlonly" level="DEBUG" />
+	<logger name="jdbc.sqltiming" level="DEBUG" />
+	<logger name="jdbc.audit" level="ERROR" />
+	<logger name="jdbc.resultset" level="ERROR" />
+	
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+		<!-- <appender-ref ref="SYSTEM" /> -->
+	</root>
+	
+</configuration>

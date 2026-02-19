@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="appVersion" >
+	<select id="selectAppVersionList" parameterType="AppVersionVO" resultType="AppVersionVO">
+		SELECT * , DATE_FORMAT( reg_dt , '%Y/%m/%d') as reg_dt_list
+		FROM TBL_APP_VERSION
+		ORDER BY reg_dt DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<select id="selectAppVersionListTotal" parameterType="AppVersionVO" resultType="Integer">
+		SELECT COUNT(*) FROM TBL_APP_VERSION
+	</select>
+	
+	<insert id="insertAppVersion" parameterType="AppVersionVO">
+		INSERT INTO TBL_APP_VERSION
+			( 
+				os_type,
+				version_name,
+				description,
+				file_id,
+				reg_dt,
+				reg_id,
+				mod_dt,
+				mod_id
+			)
+			VALUES
+			(
+				#{os_type},
+				#{version_name},
+				#{description},
+				#{file_id},
+				NOW(),
+				#{reg_id},
+				NOW(),
+				#{mod_id}
+			 )
+	</insert>
+	
+	<update id="updateAppVersion" parameterType="AppVersionVO">
+		UPDATE TBL_APP_VERSION
+		   SET 
+		   	<if test="version_name != null and version_name != ''">
+		   		version_name=#{version_name},
+		 	</if>
+		   	<if test="description != null and description != ''">
+		   		description=#{description},
+		 	</if>
+		   	<if test="file_id > 0 and description != ''">
+		   		file_id=#{file_id},
+		 	</if>
+			mod_dt=NOW(),
+			mod_id=#{mod_id}
+		 WHERE app_version_id = #{app_version_id}
+	</update>
+	
+	<delete id="deleteAppVersion" parameterType="AppVersionVO">
+		DELETE FROM TBL_APP_VERSION WHERE app_version_id = #{app_version_id}
+	</delete>
+	
+	<select id="selectAppVersionDetail" parameterType="AppVersionVO" resultType="AppVersionVO">
+		SELECT    A.*
+				, ( SELECT file_real_name FROM TB_FILE B WHERE A.file_id = B.file_id ) file_real_name
+		  FROM TBL_APP_VERSION A
+		 WHERE app_version_id = #{app_version_id}
+	</select>
+	
+</mapper>

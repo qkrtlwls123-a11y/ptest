@@ -1,0 +1,653 @@
+/*========================cctv 占쎌겱占쎌넺==================*/
+/*============�넫�슣瑜� 占쎈솇占쎄퐶 占쎌겫占쎈열============*/
+.con-wrap {
+	height: 100%;
+	padding-bottom: 0;
+}
+.con-area {overflow-y: auto;}
+.content-box .cctv-pannel-area {width: 22%; float: left;}
+.content-box .cctv-pannel-area .today-event-pannel {
+	background-color: #fff;
+	border-radius: 5px;
+	padding-bottom: 10px;
+	box-shadow: 5px 2px 15px rgba( 0 , 0 , 0 , 0.05);
+}
+.content-box .cctv-pannel-area .today-event-pannel dt{
+	font-size: 1.08rem; font-weight: 800;
+	padding: 10px 0 10px 0;
+	margin: 0 20px;
+	border-bottom: 1px solid #eee;
+	margin-bottom: 10px;
+}
+.content-box .cctv-pannel-area .today-event-pannel dd {
+	padding: 0 20px;
+}
+.content-box .cctv-pannel-area .today-event-pannel dd span {
+	vertical-align: middle;
+}
+.content-box .cctv-pannel-area .today-event-pannel dd .safe-helmet , .content-box .cctv-pannel-area .today-event-pannel dd .safe-padding {
+	color: #999;
+	font-size: 1.1rem;
+	font-weight: 800;
+}
+.content-box .cctv-pannel-area .today-event-pannel dd .safe-helmet::before {
+	content: '';
+	display: inline-block;
+	width: 33px; height: 33px;
+	background: url(../img/sub/icon_helmet.png) 0 0 no-repeat;
+	vertical-align: middle;
+	margin-right: 10px;
+}
+.content-box .cctv-pannel-area .today-event-pannel dd .safe-padding::before {
+	content: '';
+	display: inline-block;
+	width: 33px; height: 33px;
+	background: url(../img/sub/icon_padding.png) 0 0 no-repeat;
+	vertical-align: middle;
+	margin-right: 10px;
+}
+.content-box .cctv-pannel-area .today-event-pannel dd .blue {
+	font-size: 1.8rem; font-weight: 800;
+}
+/*CCTV 占쎈쐻占쎈짗占쎌굲占쎈쐻占쎈짗占쎌굲占쎈뱜*/
+.content-box .cctv-pannel-area .cctv-list-pannel {
+	background-color: #fff;
+	border-radius: 5px;
+	padding-bottom: 10px;
+	margin-top: 10px;
+	box-shadow: 5px 2px 15px rgba( 0 , 0 , 0 , 0.05);
+}
+.content-box .cctv-pannel-area .cctv-list-pannel dt{
+	font-size: 1.08rem; font-weight: 800;
+	padding: 10px 0 10px 0;
+	margin: 0 20px;
+	border-bottom: 1px solid #eee;
+	margin-bottom: 10px;
+}
+.content-box .cctv-pannel-area .cctv-list-pannel .cctv-list-wrap {
+	height: 100px; overflow-y: auto;
+	margin: 0 20px;
+}
+.content-box .cctv-pannel-area .cctv-list-pannel .cctv-no-list-wrap {
+	height: 100px; line-height: 100px;
+	text-align: center;
+	margin: 0 20px;
+}
+
+.no-cctv {
+	font-size: 1.5rem;
+	line-height: 30;
+	background-color: #fff;
+	text-align: center;
+}
+
+.content-box .cctv-pannel-area .cctv-list-pannel .cctv-list-wrap ul {
+	clear: both;
+	display: block;
+	padding: 5px 0;
+}
+.content-box .cctv-pannel-area .cctv-list-pannel .cctv-list-wrap ul li {
+	float: left;
+	color: #999; font-weight: 700;
+	margin-right: 20px;
+}
+.content-box .cctv-pannel-area .cctv-list-pannel .cctv-list-wrap ul .edit-btn {
+	float: right;
+}
+.content-box .cctv-pannel-area .cctv-list-pannel .cctv-list-wrap ul .edit-btn button {
+	background-color: #333;
+	border-radius: 100px;
+	font-size: 0.95rem;
+	color: #fff;
+	cursor: pointer;
+	padding: 4px 15px;
+}
+.content-box .pannel-btn-style01 {
+	height: 35px; line-height: 35px;
+	color: #fff; border-radius: 3px;
+	font-size: 1rem;
+	font-weight: 800;
+	clear: both;
+	width: 135px; text-align: center;
+	margin: 0 auto;
+	display: block;
+	background-color: #05a951;
+	margin-top: 10px;
+	cursor: pointer;
+}
+/*view-mode*/
+.content-box .cctv-pannel-area .view-mode-pannel {
+	background-color: #fff;
+	border-radius: 5px;
+	padding-bottom: 10px;
+	margin-top: 10px;
+	box-shadow: 5px 2px 15px rgba( 0 , 0 , 0 , 0.05);
+}
+.content-box .cctv-pannel-area .view-mode-pannel dd {
+	padding: 5px 0;
+}
+.content-box .cctv-pannel-area .view-mode-pannel dt{
+	font-size: 1.08rem; font-weight: 800;
+	padding: 10px 0 10px 0;
+	margin: 0 20px;
+	border-bottom: 1px solid #eee;
+	margin-bottom: 10px;
+}
+.content-box .cctv-pannel-area .view-mode-pannel dd  {
+	text-align: center;
+}
+.content-box .cctv-pannel-area .view-mode-pannel dd label {
+	vertical-align: middle;
+	width: 32%;
+	display: inline-block;
+	font-size: 0.95rem;
+}
+.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn01 , 
+.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn02 , 
+.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn03 {
+	border: 1px solid #bbb;
+	background-color: #fff;
+	display: inline-block;
+	height: 30px; line-height: 30px;
+	color: #222;
+	border-radius: 5px;
+	cursor: pointer;
+	padding: 0 2% 0 2%;
+    margin: 0 2%;
+}
+.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn01:hover , 
+.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn02:hover , 
+.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn03:hover {
+	background-color: #f4f4f4;
+}
+.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn01 i , 
+.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn02 i , 
+.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn03 i {
+	float: left;
+	margin-top: -2px;
+}
+.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn01 span , 
+.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn02 span , 
+.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn03 span {
+	float: left;
+	margin-left: 10px;
+}
+
+/*PTZ Control*/
+/*ptz �뚢뫂�뱜嚥▲끇�쑎 占쎄텢占쎌뒠�겫�뜃占쏙옙�뮟占쎈뻻*/
+.content-box .cctv-pannel-area .ptz-pannel-off::after {
+	content: '';
+	display: block;
+	opacity: 0.3;
+	background-color: #222;
+	height: 220px;
+	position: relative;
+	top: -48px;
+	border-radius: 5px;
+}
+.content-box .cctv-pannel-area .ptz-pannel-off {
+	background-color: rgb(255, 255, 255);
+	border-radius: 5px;
+	margin-top: 10px;
+	padding-bottom: 10px;
+	height: 220px;
+	box-shadow: 5px 2px 15px rgba( 0 , 0 , 0 , 0.05);
+}
+.content-box .cctv-pannel-area .ptz-pannel-off ol {
+	display: inline-block;
+	margin: 5px 0 0 20px;
+}
+.content-box .cctv-pannel-area .ptz-pannel-off dt{
+	font-size: 1.08rem; font-weight: 800;
+	padding: 10px 0 10px 0;
+	margin: 0 20px;
+	border-bottom: 1px solid #eee;
+	margin-bottom: 10px;
+}
+.content-box .cctv-pannel-area .ptz-pannel-off .leftUp-control {
+	text-indent: -9999px;
+	width: 50px; height: 50px;
+	background: url(../img/sub/leftUp-control-normal.png) 0 0 no-repeat;
+	cursor: pointer;
+}
+
+.content-box .cctv-pannel-area .ptz-pannel-off .up-control {
+	text-indent: -9999px;
+	width: 50px; height: 50px;
+	background: url(../img/sub/up-control-normal.png) 0 0 no-repeat;
+	cursor: pointer;
+	float: left;
+}
+
+.content-box .cctv-pannel-area .ptz-pannel-off .rightUp-control {
+	text-indent: -9999px;
+	width: 50px; height: 50px;
+	background: url(../img/sub/rightUp-control-normal.png) 0 0 no-repeat;
+	cursor: pointer;
+}
+
+.content-box .cctv-pannel-area .ptz-pannel-off .left-control {
+	text-indent: -9999px;
+	width: 50px; height: 50px;
+	background: url(../img/sub/left-control-normal.png) 0 0 no-repeat;
+	cursor: pointer;
+}
+.content-box .cctv-pannel-area .ptz-pannel-off .right-control {
+	text-indent: -9999px;
+	width: 50px; height: 50px;
+	background: url(../img/sub/right-control-normal.png) 0 0 no-repeat;
+	cursor: pointer;
+	margin-left: 50px;
+}
+.content-box .cctv-pannel-area .ptz-pannel-off .leftDown-control {
+	text-indent: -9999px;
+	width: 50px; height: 50px;
+	background: url(../img/sub/leftDown-control-normal.png) 0 0 no-repeat;
+	cursor: pointer;
+}
+
+.content-box .cctv-pannel-area .ptz-pannel-off .down-control {
+	text-indent: -9999px;
+	width: 50px; height: 50px;
+	background: url(../img/sub/down-control-normal.png) 0 0 no-repeat;
+	cursor: pointer;
+}
+
+.content-box .cctv-pannel-area .ptz-pannel-off .rightDown-control {
+	text-indent: -9999px;
+	width: 50px; height: 50px;
+	background: url(../img/sub/rightDown-control-normal.png) 0 0 no-repeat;
+	cursor: pointer;
+}
+
+.content-box .cctv-pannel-area .ptz-pannel-off .zoom-in-control button {
+	margin-top: 15px;
+}
+.content-box .cctv-pannel-area .ptz-pannel-off .zoom-in-control button , .content-box .cctv-pannel-area .ptz-pannel-off .zoom-out-control button {
+	background-color: #fff;
+    color: #333;
+    border-radius: 5px;
+    box-shadow: 0px -6px 10px rgba(255, 255, 255, 1), 0px 4px 15px rgba(0, 0, 0, 0.15);
+    padding: 10px 5px;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    min-width: 80px;
+    margin-bottom: 15px;
+    margin-right: 20px;
+    border: 1px solid #f4f4f4;
+}
+/*ptz �뚢뫂�뱜嚥▲끇�쑎 占쎄텢占쎌뒠揶쏉옙占쎈뮟*/
+.content-box .cctv-pannel-area .ptz-control-pannel {
+	background-color: #fff;
+	border-radius: 5px;
+	margin-top: 15px;
+	padding-bottom: 10px;
+	height: 220px;
+	box-shadow: 5px 2px 15px rgba( 0 , 0 , 0 , 0.05);
+}
+.content-box .cctv-pannel-area .ptz-control-pannel ol {
+	display: inline-block;
+	margin: 5px 0 0 20px;
+}
+.content-box .cctv-pannel-area .ptz-control-pannel dt{
+	font-size: 1.08rem; font-weight: 800;
+	padding: 10px 0 10px 0;
+	margin: 0 20px;
+	border-bottom: 1px solid #eee;
+	margin-bottom: 10px;
+}
+.content-box .cctv-pannel-area .ptz-control-pannel .leftUp-control {
+	text-indent: -9999px;
+	width: 50px; height: 50px;
+	background: url(../img/sub/leftUp-control-normal.png) 0 0 no-repeat;
+	cursor: pointer;
+}
+.content-box .cctv-pannel-area .ptz-control-pannel .leftUp-control:hover {
+	background: url(../img/sub/leftUp-control-on.png) 0 0 no-repeat;
+	transition: 0.3s ease-in-out;
+}
+.content-box .cctv-pannel-area .ptz-control-pannel .up-control {
+	text-indent: -9999px;
+	width: 50px; height: 50px;
+	background: url(../img/sub/up-control-normal.png) 0 0 no-repeat;
+	cursor: pointer;
+	float: left;
+}
+.content-box .cctv-pannel-area .ptz-control-pannel .up-control:hover {
+	background: url(../img/sub/up-control-on.png) 0 0 no-repeat;
+	transition: 0.3s ease-in-out;
+}
+.content-box .cctv-pannel-area .ptz-control-pannel .rightUp-control {
+	text-indent: -9999px;
+	width: 50px; height: 50px;
+	background: url(../img/sub/rightUp-control-normal.png) 0 0 no-repeat;
+	cursor: pointer;
+}
+.content-box .cctv-pannel-area .ptz-control-pannel .rightUp-control:hover {
+	background: url(../img/sub/rightUp-control-on.png) 0 0 no-repeat;
+	transition: 0.3s ease-in-out;
+}
+
+.content-box .cctv-pannel-area .ptz-control-pannel .left-control {
+	text-indent: -9999px;
+	width: 50px; height: 50px;
+	background: url(../img/sub/left-control-normal.png) 0 0 no-repeat;
+	cursor: pointer;
+}
+.content-box .cctv-pannel-area .ptz-control-pannel .left-control:hover {
+	background: url(../img/sub/left-control-on.png) 0 0 no-repeat;
+	transition: 0.3s ease-in-out;
+}
+.content-box .cctv-pannel-area .ptz-control-pannel .right-control {
+	text-indent: -9999px;
+	width: 50px; height: 50px;
+	background: url(../img/sub/right-control-normal.png) 0 0 no-repeat;
+	cursor: pointer;
+	margin-left: 50px;
+}
+.content-box .cctv-pannel-area .ptz-control-pannel .right-control:hover {
+	background: url(../img/sub/right-control-on.png) 0 0 no-repeat;
+	transition: 0.3s ease-in-out;
+}
+
+.content-box .cctv-pannel-area .ptz-control-pannel .leftDown-control {
+	text-indent: -9999px;
+	width: 50px; height: 50px;
+	background: url(../img/sub/leftDown-control-normal.png) 0 0 no-repeat;
+	cursor: pointer;
+}
+.content-box .cctv-pannel-area .ptz-control-pannel .leftDown-control:hover {
+	background: url(../img/sub/leftDown-control-on.png) 0 0 no-repeat;
+	transition: 0.3s ease-in-out;
+}
+.content-box .cctv-pannel-area .ptz-control-pannel .down-control {
+	text-indent: -9999px;
+	width: 50px; height: 50px;
+	background: url(../img/sub/down-control-normal.png) 0 0 no-repeat;
+	cursor: pointer;
+}
+.content-box .cctv-pannel-area .ptz-control-pannel .down-control:hover {
+	background: url(../img/sub/down-control-on.png) 0 0 no-repeat;
+	transition: 0.3s ease-in-out;
+}
+.content-box .cctv-pannel-area .ptz-control-pannel .rightDown-control {
+	text-indent: -9999px;
+	width: 50px; height: 50px;
+	background: url(../img/sub/rightDown-control-normal.png) 0 0 no-repeat;
+	cursor: pointer;
+}
+.content-box .cctv-pannel-area .ptz-control-pannel .rightDown-control:hover {
+	background: url(../img/sub/rightDown-control-on.png) 0 0 no-repeat;
+	transition: 0.3s ease-in-out;
+}
+
+.content-box .cctv-pannel-area .ptz-control-pannel .zoom-in-control button {
+	margin-top: 25px;
+}
+.content-box .cctv-pannel-area .ptz-control-pannel .zoom-in-control button , .content-box .cctv-pannel-area .ptz-control-pannel .zoom-out-control button {
+	background-color: #fff;
+	color: #333;
+	border-radius: 5px;
+	box-shadow: 0px -6px 10px rgba(255, 255, 255, 1), 0px 4px 15px rgba(0, 0, 0, 0.15);
+	padding: 5px;
+	font-size: 1rem;
+	font-weight: 800;
+	cursor: pointer;
+	min-width: 120px;
+	margin-bottom: 15px;
+	margin-right: 20px;
+	border: 1px solid #f4f4f4;
+}
+.content-box .cctv-pannel-area .ptz-control-pannel .zoom-in-control button:hover , .content-box .cctv-pannel-area .ptz-control-pannel .zoom-out-control button:hover {
+	background-color: #e7f7ff;
+	color: #14abfa;
+	transition: 0.3s ease-in-out;
+}
+
+/*cctv 占쎈쐻占쎈짗占쎌굲占쎈쐻占쎈짗占쎌굲*/
+.content-box .cctv-area {
+	width: 78%;
+	float: left;
+}
+.content-box .cctv-wrap01 {
+	float: left;
+	display: block;
+	width: calc( 50% - 15px );
+	margin-left: 15px;
+}
+.content-box .cctv-wrap01 li:nth-child(2) , .content-box .cctv-wrap01 li:nth-child(3) {
+	width: calc(50% - 7.5px); float: left;
+}
+.content-box .cctv-wrap02 {
+	width: calc( 26% - 15px );
+    float: left;
+    margin-left: 15px;
+}
+.content-box .cctv-wrap03 {
+	width: calc(39% - 15px);
+	float: left;
+	margin-left: 15px;
+}
+.content-box .cctv-wrap04 {
+	width: calc( 39% - 5px );
+	float: left;
+	margin-left: 5px;
+}
+.content-box .cctv-wrap05 {
+	width: calc( 100% - 15px );
+	float: left;
+	margin-left: 15px;
+}
+.content-box .cctv-wrap01 li , .content-box .cctv-wrap02 li , .content-box .cctv-wrap03 li , .content-box .cctv-wrap04 li , .content-box .cctv-wrap05 li {
+	position: relative;
+	display: inline-table;
+	width: 100%;
+}
+.content-box .cctv-wrap01 li h4 , .content-box .cctv-wrap02 li h4 , .content-box .cctv-wrap03 li h4 , .content-box .cctv-wrap04 li h4 , .content-box .cctv-wrap05 li h4 {
+	position: absolute;
+	font-size: 1.2rem;
+    padding: 10px;
+    color: #fff;
+    text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.8);
+}
+.content-box .cctv-wrap01 .cctv-view-big {
+	width: 100%;
+	height: 463px;
+	margin-bottom: 15px;
+}
+
+.content-box .cctv-wrap01 .cctv-view-big img {
+	height: inherit;
+	width: inherit;
+}
+.content-box .cctv-wrap03 .cctv-view-mid {
+	width: 100%;
+	height: 340px;
+	margin-bottom: 5px;
+}
+
+.content-box .cctv-wrap03 .cctv-view-mid img {
+	height: inherit;
+	width: inherit;
+}
+.content-box .cctv-wrap04 .cctv-view-mid {
+	width: 100%;
+	height: 340px;
+	margin-bottom: 5px;
+}
+
+.content-box .cctv-wrap04 .cctv-view-mid img {
+	height: inherit;
+	width: inherit;
+}
+.content-box .cctv-wrap05 .cctv-view-biger {
+	width: 100%;
+	height: 686px;
+	background-color: #fff;
+}
+.content-box .cctv-wrap05 .cctv-view-biger span {
+	display: block;
+	height: 800px; line-height: 800px;
+	text-align: center; font-size: 1.5rem;
+}
+
+.content-box .cctv-wrap05 .cctv-view-biger img {
+	height: inherit;
+	width: inherit;
+}
+.content-box .cctv-wrap01 .cctv-view-small {
+	height: 221px;
+	width: 100%;
+}
+.content-box .cctv-wrap01 li:last-child {
+	margin-left: 15px;
+}
+.content-box .cctv-wrap01 .cctv-view-small img {
+	height: inherit;
+	width: inherit;
+}
+.content-box .cctv-wrap02 .cctv-view-small {
+	height: 227px;
+	width: 100%;
+	margin-bottom: 5px;
+}
+
+.content-box .cctv-wrap02 li:last-child .cctv-view-small {
+	height: 221px;
+	margin-bottom: 0;
+}
+.content-box .cctv-wrap02 .cctv-view-small img {
+	height: inherit;
+	width: inherit;
+}
+/*占쎈쐻占쎈짗占쎌굲占쎌넺占쎈쐻占쎈뼄筌뤿슣�굲占쎈쐻�뜝占� fullMode css*/
+.fullMode .content-box .cctv-pannel-area {
+	width: 22%;
+	float: left;
+}
+.fullMode .content-box .cctv-pannel-area .cctv-list-pannel .cctv-list-wrap {
+	height: 285px!important;
+}
+.fullMode .content-box .cctv-wrap05 .cctv-view-biger {
+	height: 885px!important;
+}
+.fullMode .rt-con-wrap , .fullMode .left-menu , .fullMode .page-info-wrap , .fullMode #footer {display: none;}
+.fullMode .page-navigation ul {display: none;}
+.fullMode .page-navigation .notice-wrap {display: block;}
+
+.fullMode2Area .rt-con-wrap , .fullMode2Area .left-menu , .fullMode2Area .page-info-wrap , .fullMode2Area #footer {display: none;}
+.fullMode2Area .page-navigation ul {display: none;}
+.fullMode2Area .page-navigation .notice-wrap {display: block;}
+
+.no-notice .page-navigation .notice-wrap {display: none;}
+
+/*4�겫袁る막 占쏙옙筌뤴뫀諭띰옙�뻻*/
+.cctv-fullMode-n4 .cctv-wrap03 , .cctv-fullMode-n4 .cctv-wrap04 {
+	margin-top: 20px;
+}
+.cctv-fullMode-n4 .cctv-wrap03 .cctv-view-mid , .cctv-fullMode-n4 .cctv-wrap04 .cctv-view-mid {
+	height: 463px!important;
+}
+/*9�겫袁る막 占쏙옙筌뤴뫀諭띰옙�뻻*/
+.cctv-fullMode-n9 .cctv-wrap02 {margin-top: 20px;}
+.cctv-fullMode-n9 .cctv-view-small {height: 307px!important;}
+
+/*占쎈쐻占쎈짗占쎌굲占쎌넺占쎈쐻占쎈뼄筌뤿슣�굲占쎈쐻�뜝占� fullMode css 占쎈쐻占쎈짗占쎌굲*/
+
+/*占쎈쐻占쎈짗占쎌굲占쎈쐻占쎈짗占쎌굲占쎈쐻占쎈짗占쎌굲占쎈쐻占쎈짗占쎌굲 占쎈쐻占쎈짗占쎌굲占쎈쐻占쎈짗占쎌굲占쎈쐻占쎈짗占쎌굲 css*/
+.no-notice .content-box .cctv-pannel-area {margin-top: 20px;}
+.no-notice .content-box .cctv-wrap05 {margin-top: 20px;}
+.no-notice .content-box .cctv-pannel-area .cctv-no-list-wrap {
+	height: 330px!important;
+	line-height: 330px!important;
+}
+.no-notice .content-box .cctv-pannel-area .cctv-list-pannel .cctv-list-wrap {
+	height: 330px;
+}
+.no-notice .cctv-view-biger {height: 930px!important;}
+.no-notice .content-box .cctv-pannel-area .cctv-list-pannel .cctv-list-wrap {
+	height: 330px!important;
+}
+.no-notice .content-box .cctv-wrap05 .cctv-view-biger {
+	height: 930px!important;
+}
+/*占쎈쐻占쎈짗占쎌굲占쎈쐻占쎈짗占쎌굲占쎈쐻占쎈짗占쎌굲占쎈쐻占쎈짗占쎌굲 占쎈쐻占쎈짗占쎌굲占쎈쐻占쎈짗占쎌굲占쎈쐻占쎈짗占쎌굲 css 占쎈쐻占쎈짗占쎌굲*/
+
+@media screen and (max-width: 1860px) {	
+	.con-area {overflow-y: auto; height: calc( 100% - 250px );position:absolute;}
+	.con-wrap {
+		height: calc( 100% - 1px );
+		padding-bottom: 20px;
+	}
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn01 , 
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn02 , 
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn03 {
+		padding: 0 2% 0 2%;
+		margin: 0 2%;
+	}
+	.content-box .cctv-pannel-area .ptz-pannel-off .zoom-in-control button , .content-box .cctv-pannel-area .ptz-pannel-off .zoom-out-control button {
+		padding: 13px 5px;
+		font-size: 0.8rem;
+		letter-spacing: -0.5px;
+		min-width: 78px;
+		margin-right: 40px;
+	}
+}
+@media screen and (max-width: 1720px) {	
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn01 , 
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn02 , 
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn03 {
+		padding: 0 2% 0 2%;
+		margin: 0 2%;
+	}
+	.content-box .cctv-pannel-area .ptz-control-pannel .zoom-in-control button , .content-box .cctv-pannel-area .ptz-control-pannel .zoom-out-control button {
+		min-width: 100px;
+		padding: 5px;
+	}
+}
+@media screen and (max-width: 1600px) {	
+
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn01 , 
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn02 , 
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn03 {
+		padding: 0 2% 0 2%;
+		margin: 0 2%;
+	}
+}
+@media screen and (max-width: 1480px) {	
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn01 , 
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn02 , 
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn03 {
+		padding: 0 2% 0 2%;
+		margin: 0 2%;
+	}
+}
+@media screen and (max-width: 1280px) {	
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn01 , 
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn02 , 
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn03 {
+		padding: 0 1.5% 0 1.5%;
+		margin: 0 1.5%;
+	}
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn01 span , 
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn02 span , 
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn03 span {
+		float: left;
+		margin-left: 5px;
+	}
+}
+@media screen and (max-width: 1140px) {	
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn01 , 
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn02 , 
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn03 {
+		padding: 0 1% 0 1%;
+		margin: 0 1%;
+	}
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn01 span , 
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn02 span , 
+	.content-box .cctv-pannel-area .view-mode-pannel dd .view-mode-btn03 span {
+		float: left;
+		margin-left: 2px;
+	}
+}

@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="User">
+	<sql id="userListWhere">
+		<if test='s_user_nm !=null and s_user_nm !=""'>
+	 			AND A.USER_NM LIKE CONCAT('%',#{s_user_nm},'%')
+	 	</if>
+		<if test='s_email != null and s_email != ""'>
+	 			AND A.EMAIL LIKE CONCAT('%',#{s_email},'%')
+	 	</if>
+	 	<if test='s_recruit_survey_id != null and s_recruit_survey_id != ""'>
+			AND	A.RECRUIT_SURVEY_ID = #{s_recruit_survey_id}
+		</if>
+	 	<if test='s_user_type != null and s_user_type != ""'>
+			AND	A.USER_TYPE = #{s_user_type}
+		</if>
+	 	<if test='s_use_yn != null and s_use_yn != ""'>
+			AND	A.USE_YN = #{s_use_yn}
+		</if>
+		<if test='s_company_code != null and s_company_code != ""'>
+			AND	A.COMPANY_CODE = #{s_company_code}
+		</if>
+		<if test='s_belong_code != null and s_belong_code != ""'>
+			AND	A.BELONG_CODE = #{s_belong_code}
+		</if>
+		<if test='s_summary_step != null and s_summary_step != ""'>
+			<choose>
+				<when test='s_summary_step == "7"'>
+					AND	TT12.SUMMARY_STEP = 7
+				</when>
+				<when test='s_summary_step == "0"'>
+					AND	TT12.SUMMARY_STEP IS NULL
+				</when>
+				<otherwise>
+					AND	TT12.SUMMARY_STEP IN (1,2,3,4,5,6)
+				</otherwise>
+			</choose>
+		</if>
+		<if test='period == "yesterday"'>
+			AND DATE_FORMAT(A.REG_DT, '%Y-%m-%d') = DATE_FORMAT(now() -INTERVAL 1 DAY, '%Y-%m-%d')
+		</if>
+		<if test='period=="today"'>
+			AND DATE_FORMAT(A.REG_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d') 
+		</if>
+		<if test='period=="custom_date"'>
+			<if test="s_start_dt != null and s_start_dt != '' and s_end_dt != null and s_end_dt != ''">
+				AND DATE_FORMAT(A.REG_DT, '%Y-%m-%d') BETWEEN #{s_start_dt} AND #{s_end_dt}
+			</if>
+		</if>
+	</sql>
+
+	<select id="getUserList" parameterType="box" resultType="box">
+			SELECT 
+		      	A.id,
+			    A.user_nm,
+			    A.hp,
+			    A.email,
+			    A.last_login_dt,
+			    COALESCE(A.login_fail_cnt,0) login_fail_cnt,
+			    A.user_type,
+			    A.year_birth,
+			    A.area,
+			    A.use_yn,
+			    A.business_no,
+			    TT4.code_nm as company_nm,
+			    TT5.code_nm as belong_nm,
+			    TT6.code_nm as position_nm,
+			    TT7.code_nm as job_nm,
+			    TT8.code_nm as duty_nm,
+			    TT9.code_nm as gender_nm,
+			    TT10.code_nm as recruit_nm,
+			    TT11.recruit_nm as recruit_survey_nm,
+			    D.user_nm as edit_nm,
+			    B.user_nm as reg_nm,
+			    DATE_FORMAT(A.REG_DT, '%Y-%m-%d') as reg_dt,
+			    DATE_FORMAT(A.EDIT_DT, '%Y-%m-%d') as edit_dt,
+			    TT12.summary_step,
+			    DATE_FORMAT(TT12.COMPLETE_DT, '%Y-%m-%d') as complete_dt
+			FROM SV_USER A LEFT OUTER JOIN SV_USER B ON A.REG_ID = B.ID
+			LEFT OUTER JOIN SV_USER D ON A.EDIT_ID = D.ID
+			LEFT OUTER JOIN SV_CODE TT4 ON TT4.UP_CODE = 'COMPANY' AND TT4.CODE = A.COMPANY_CODE
+			LEFT OUTER JOIN SV_CODE TT5 ON TT5.UP_CODE = 'BELONG' AND TT5.CODE = A.BELONG_CODE
+			LEFT OUTER JOIN SV_CODE TT6 ON TT6.UP_CODE = 'POSITION_TYPE' AND TT6.CODE = A.POSITION_CODE
+			LEFT OUTER JOIN SV_CODE TT7 ON TT7.UP_CODE = 'JOB_TYPE' AND TT7.CODE = A.JOB_CODE
+			LEFT OUTER JOIN SV_CODE TT8 ON TT8.UP_CODE = 'DUTY_TYPE' AND TT8.CODE = A.DUTY_CODE
+			LEFT OUTER JOIN SV_CODE TT9 ON TT9.UP_CODE = 'GENDER_TYPE' AND TT9.CODE = A.GENDER_CODE
+			LEFT OUTER JOIN SV_CODE TT10 ON TT10.UP_CODE = 'RECRUIT_TYPE' AND TT10.CODE = A.RECRUIT_CODE
+			LEFT OUTER JOIN SV_RECRUIT_SURVEY TT11 ON A.RECRUIT_SURVEY_ID = TT11.ID
+			LEFT OUTER JOIN TB_SURVEY_SUMMARY TT12 ON A.ID =  TT12.RESPONDER_ID
+			WHERE 1=1
+			<include refid="userListWhere"/>
+			ORDER BY A.id DESC
+	        LIMIT ${numPerPage}
+	        OFFSET ${startRow}
+	</select>
+	<select id="getUserListCount" parameterType="box" resultType="int">
+		SELECT	COUNT(*)
+		FROM	SV_USER A
+		LEFT OUTER JOIN TB_SURVEY_SUMMARY TT12 ON A.ID =  TT12.RESPONDER_ID
+		WHERE	1=1
+		<include refid="userListWhere"/>
+	</select>
+	
+	<!-- 회원 상세 -->
+	<select id="getUserView" parameterType="box" resultType="box">
+		SELECT 
+		      	A.id,
+			    A.user_nm,
+			    A.hp,
+			    A.email,
+			    A.gender_code,
+			    A.year_birth,
+			    A.recruit_code,
+			    A.position_code,
+			    A.job_code,
+			    A.duty_code,
+			    A.area,
+			    A.belong_code,
+			    A.business_no,
+			    A.last_login_dt,
+			    COALESCE(A.login_fail_cnt,0) login_fail_cnt,
+			    A.user_type,
+			    A.use_yn,
+			    D.user_nm as edit_nm,
+			    B.user_nm as reg_nm,
+			    DATE_FORMAT(A.REG_DT, '%Y-%m-%d') as reg_dt,
+			    C.code_nm as company_nm,
+			    A.company_code,
+			    DATE_FORMAT(A.EDIT_DT, '%Y-%m-%d') as edit_dt,
+			    F.summary_step,
+			    DATE_FORMAT(F.COMPLETE_DT, '%Y-%m-%d') as complete_dt,
+			    E.recruit_nm as recruit_survey_nm,
+			    E.id as recruit_survey_id
+			FROM SV_USER A LEFT OUTER JOIN SV_USER B ON A.REG_ID = B.ID
+			LEFT OUTER JOIN SV_USER D ON A.EDIT_ID = D.ID
+			LEFT OUTER JOIN SV_CODE C ON C.UP_CODE = 'COMPANY' AND C.CODE = A.COMPANY_CODE
+			LEFT OUTER JOIN SV_RECRUIT_SURVEY E ON A.RECRUIT_SURVEY_ID = E.ID
+			LEFT OUTER JOIN TB_SURVEY_SUMMARY F ON A.ID =  F.RESPONDER_ID
+		WHERE A.ID = #{id}
+	</select>
+	
+	<!-- 회원정보 수정 -->
+	<update id="updateUser" parameterType="box">
+		UPDATE  SV_USER
+		SET  
+		<if test='use_yn !=null and use_yn !=""'>
+			USE_YN = #{use_yn},
+		</if>
+		<if test='passwd !=null and passwd !=""'>
+			  PASSWD = #{passwd},
+		</if>
+			USER_NM = #{user_nm},
+			HP = #{hp},
+	    	<if test='company_code !=null and company_code !=""'>
+	    	COMPANY_CODE = #{company_code},
+	    	</if>
+	    	<if test='business_no !=null and business_no !=""'>
+	    	business_no = #{business_no},
+	    	</if>
+	    	USER_TYPE = #{user_type},
+	    	GENDER_CODE = #{gender_code},
+	    	RECRUIT_CODE = #{recruit_code},
+	    	BELONG_CODE = #{belong_code},
+	    	YEAR_BIRTH = #{year_birth},
+	    	POSITION_CODE = #{position_code},
+	    	JOB_CODE = #{job_code},
+	    	DUTY_CODE = #{duty_code},
+	    	AREA = #{area},
+	    	DUTY_CODE = #{duty_code},
+	    EDIT_ID = #{mem_id},
+	    EDIT_DT = now()
+		WHERE ID = #{id}
+	</update>
+	
+	<!-- 회원정보 수정 -->
+	<update id="updateUser2" parameterType="box">
+		UPDATE  SV_USER
+		SET  
+		<if test='passwd !=null and passwd !=""'>
+			  PASSWD = #{passwd},
+		</if>
+		<if test='business_no !=null and business_no !=""'>
+	    	business_no = #{business_no},
+    	</if>
+			USER_NM = #{user_nm},
+			HP = #{hp},
+	    	YEAR_BIRTH = #{year_birth},	    	
+	    	GENDER_CODE = #{gender_code},
+	    EDIT_ID = #{mem_id},
+	    EDIT_DT = now()
+		WHERE ID = #{id}
+	</update>
+	
+	<!-- 아이디 중복 체크  -->
+	<select id="checkEmail" parameterType="string" resultType="int">
+	    SELECT
+		 	COUNT(*) AS CNT
+	     FROM 
+	         SV_USER
+	     WHERE LOWER(email) = LOWER(#{email}) LIMIT 1
+	</select>
+	
+	<select id="checkEmailId" parameterType="string" resultType="box">
+	    SELECT
+		 	id
+	     FROM 
+	         SV_USER
+	     WHERE LOWER(email) = LOWER(#{email}) LIMIT 1
+	</select> 
+	
+	<!-- 회원가입 -->
+	<insert id="userCreate" parameterType="box">
+	INSERT INTO SV_USER
+		(
+			EMAIL,
+			USER_NM,
+			PASSWD,
+			HP,
+			GENDER_CODE,
+			YEAR_BIRTH,
+			RECRUIT_CODE,
+			POSITION_CODE,
+			JOB_CODE,
+			DUTY_CODE,
+			COMPANY_CODE,
+			LAST_LOGIN_DT,
+			LOGIN_FAIL_CNT,
+			USER_TYPE,
+			AREA,
+			BELONG_CODE,
+			USE_YN,
+			<if test="mem_id != null and mem_id != '' ">
+			REG_ID,
+			</if>
+			REG_DT,
+			<if test="mem_id != null and mem_id != '' ">
+			EDIT_ID,
+			</if>
+			<if test='business_no !=null and business_no !=""'>
+	    	business_no,
+	    	</if>
+			EDIT_DT
+		)VALUES(
+			#{email},
+			#{user_nm},
+			#{passwd},
+			#{hp},
+			#{gender_code},
+			#{year_birth},
+			#{recruit_code},
+			#{position_code},
+			#{job_code},
+			#{duty_code},
+			#{company_code},
+			now(),
+			0,
+			#{user_type},
+			#{area},
+			#{belong_code},
+			<choose>
+				<when test="use_yn != null and use_yn != '' ">
+				 #{use_yn},
+				</when>
+				<otherwise>
+				 'Y',
+				</otherwise>
+			</choose>
+			<if test="mem_id != null and mem_id != '' ">
+			 #{mem_id},
+			</if>
+			now(),
+			<if test="mem_id != null and mem_id != '' ">
+			 #{mem_id},
+			</if>
+			<if test='business_no !=null and business_no !=""'>
+	    	#{business_no},
+	    	</if>
+			now()
+		) 
+	</insert>
+	
+	<!-- 회원가입2 -->
+	<insert id="userCreate2" parameterType="box">
+	INSERT INTO SV_USER
+		(
+			EMAIL,
+			USER_NM,
+			PASSWD,
+			HP,
+			YEAR_BIRTH,
+			RECRUIT_SURVEY_ID,
+			LAST_LOGIN_DT,
+			LOGIN_FAIL_CNT,
+			USER_TYPE,
+			GENDER_CODE,
+			COMPANY_CODE,
+			USE_YN,
+			<if test="mem_id != null and mem_id != '' ">
+			REG_ID,
+			</if>
+			REG_DT,
+			<if test="mem_id != null and mem_id != '' ">
+			EDIT_ID,
+			</if>
+			<if test='business_no !=null and business_no !=""'>
+	    	business_no,
+	    	</if>
+			EDIT_DT
+		)VALUES(
+			#{email},
+			#{user_nm},
+			#{passwd},
+			#{hp},
+			#{year_birth},
+			#{recruit_survey_id},
+			now(),
+			0,
+			'N',
+			#{gender_code},
+			(SELECT T2.COMPANY_CODE FROM SV_RECRUIT_SURVEY T2 WHERE T2.ID=#{recruit_survey_id}),
+			<choose>
+				<when test="use_yn != null and use_yn != '' ">
+				 #{use_yn},
+				</when>
+				<otherwise>
+				 'Y',
+				</otherwise>
+			</choose>
+			<if test="mem_id != null and mem_id != '' ">
+			 #{mem_id},
+			</if>
+			now(),
+			<if test="mem_id != null and mem_id != '' ">
+			 #{mem_id},
+			</if>
+			<if test='business_no !=null and business_no !=""'>
+	    	#{business_no},
+	    	</if>
+			now()
+		) 
+	</insert>
+	
+	<delete id="userDelete" parameterType="box">
+		DELETE FROM SV_USER WHERE id = #{id}
+	</delete>
+	
+	<delete id="userDeleteEmail" parameterType="box">
+		DELETE FROM SV_USER WHERE email = #{email}
+	</delete>
+	
+	<!-- 아이디 패스워드 확인 -->
+	<select id="selectLoginInfo" parameterType="box" resultType="box">
+		SELECT 
+			ID as userId,
+			EMAIL as userEmail,
+			USER_NM as userName
+		FROM SV_USER
+		WHERE	EMAIL = #{nm}
+			AND	PASSWD = #{pw}
+			AND	RECRUIT_SURVEY_ID = #{s_recruit_survey_id}
+			AND USE_YN = 'Y'
+	</select>
+	
+	<!-- 최종 접속시간 update -->
+	<update id="updateLastLogin" parameterType="box">
+		UPDATE SV_USER 
+		SET LAST_LOGIN_DT = now(),
+		LOGIN_FAIL_CNT = 0
+		WHERE ID = #{userId}
+	</update>
+	
+	<!-- 로그인 실패 카운트 update -->
+	<update id="updateLoginFailCnt" parameterType="box">
+		UPDATE SV_USER 
+		SET LOGIN_FAIL_CNT = COALESCE(LOGIN_FAIL_CNT,0) + 1
+		WHERE EMAIL = #{nm}
+	</update>
+	
+	<!-- 비밀번호 변경 회원정보 조회 -->
+	<select id="searchInfo" parameterType="box" resultType="box">
+	    SELECT	USER_ID, USER_NM, EMAIL
+	    FROM	SV_USER
+	    WHERE 	EMAIL = #{email}
+	     	AND USER_NM = #{user_nm}
+	     	AND USE_YN = 'Y'
+	</select>
+	
+	<!-- 비밀번호 변경 -->
+	<update id="passwdUpdate" parameterType="box">
+		UPDATE	 SV_USER
+		SET  PASSWD = #{passwd},
+		LOGIN_FAIL_CNT = 0
+		WHERE	id = #{id} AND USE_YN = 'Y'
+	</update>
+	
+	<!--로그인처리 -->
+	<select id="selectAdminInfo" parameterType="box" resultType="box">
+		SELECT	id,email,user_nm,user_type
+		FROM	SV_USER
+		WHERE	EMAIL = #{nm}
+			AND	PASSWD = #{pw}
+			AND USE_YN = 'Y'
+			AND USER_TYPE IN ('A','S')
+	</select>
+	
+	<!-- 로그인 오류 카운트  -->
+	<select id="loginErrorCount" parameterType="string" resultType="int">
+	    SELECT COALESCE(LOGIN_FAIL_CNT,0)
+	    FROM SV_USER
+	    WHERE LOWER(EMAIL) = LOWER(#{nm}) LIMIT 1
+	</select>
+	
+	<select id="getMailList" parameterType="box" resultType="box">
+		SELECT email
+		  FROM SV_USER
+		 WHERE 1=1
+		 <choose>
+            <when test="idList.size != 0">
+                and ID in 
+                <foreach collection="idList" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </when>
+        </choose>
+	</select>
+</mapper>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Valid 한 설정 xml을 만들기 위해 DTD를 추가해 줍니다. -->
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- db 접속과 관련된 설정값을 가지고 있는 파일 지정 -->
+	<properties resource="properties/db.properties" />
+
+	<!-- VO 클래스에 대한 alias 설정 -->
+	<typeAliases>
+		<typeAlias alias="AdminVO" type="com.sgsone.click.vo.AdminVO" />
+		<typeAlias alias="ContentsVO" type="com.sgsone.click.vo.ContentsVO" />
+		<typeAlias alias="FileVO" type="com.sgsone.click.vo.FileVO" />
+		<typeAlias alias="PropertyVO" type="com.sgsone.click.vo.PropertyVO" />
+		<typeAlias alias="GroupVO" type="com.sgsone.click.vo.GroupVO" />
+		<typeAlias alias="SiteVO" type="com.sgsone.click.vo.SiteVO" />
+		<typeAlias alias="StickerVO" type="com.sgsone.click.vo.StickerVO" />
+		<typeAlias alias="StampVO" type="com.sgsone.click.vo.StampVO" />
+		<typeAlias alias="GameVO" type="com.sgsone.click.vo.GameVO" />
+		<typeAlias alias="QuizVO" type="com.sgsone.click.vo.QuizVO" />
+		<typeAlias alias="EmoticonVO" type="com.sgsone.click.vo.EmoticonVO" />
+		<typeAlias alias="NoticeVO" type="com.sgsone.click.vo.NoticeVO" />
+		<typeAlias alias="MemberVO" type="com.sgsone.click.vo.MemberVO" />
+		<typeAlias alias="CourseVO" type="com.sgsone.click.vo.CourseVO" />
+		<typeAlias alias="SurveyVO" type="com.sgsone.click.vo.SurveyVO" />
+		<typeAlias alias="SurveyFormVO" type="com.sgsone.click.vo.SurveyFormVO" />
+		<typeAlias alias="SurveyItemVO" type="com.sgsone.click.vo.SurveyItemVO" />
+		<typeAlias alias="PointVO" type="com.sgsone.click.vo.PointVO" />
+		<typeAlias alias="CommunityVO" type="com.sgsone.click.vo.CommunityVO" />
+		<typeAlias alias="CommentVO" type="com.sgsone.click.vo.CommentVO" />
+		<typeAlias alias="LikeVO" type="com.sgsone.click.vo.LikeVO" />
+		<typeAlias alias="ScrapVO" type="com.sgsone.click.vo.ScrapVO" />
+		<typeAlias alias="SurveyScoreVO" type="com.sgsone.click.vo.SurveyScoreVO" />
+		<typeAlias alias="SurveyScoreGroupVO" type="com.sgsone.click.vo.SurveyScoreGroupVO" />
+	</typeAliases>
+
+	<!-- DB Connection 을 위한 정보, ${} 내의 값들은 위의 properties 에서 선언된 값들 -->
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${jdbc.driver}"/>
+				<property name="url" value="${jdbc.url}"/>
+				<property name="username" value="${jdbc.username}"/>
+				<property name="password" value="${jdbc.password}"/>
+				<property name="poolPingQuery" value="select 1"/>
+			</dataSource>
+		</environment>
+	</environments>
+
+	<!-- mapper .xmp 파일 정의 - 실제 SQL Query 가 선언되어 있는 부분 -->
+	<mappers>
+		<mapper resource="mybatis/sql/Admin-mapper.xml"/>
+		<mapper resource="mybatis/sql/Game-mapper.xml"/>
+		<mapper resource="mybatis/sql/Quiz-mapper.xml"/>
+		<mapper resource="mybatis/sql/Contents-mapper.xml"/>
+		<mapper resource="mybatis/sql/File-mapper.xml"/>
+		<mapper resource="mybatis/sql/Property-mapper.xml"/>
+		<mapper resource="mybatis/sql/Group-mapper.xml"/>
+		<mapper resource="mybatis/sql/Site-mapper.xml"/>
+		<mapper resource="mybatis/sql/Stamp-mapper.xml"/>
+		<mapper resource="mybatis/sql/Sticker-mapper.xml"/>
+		<mapper resource="mybatis/sql/Emoticon-mapper.xml"/>
+		<mapper resource="mybatis/sql/Notice-mapper.xml"/>
+		<mapper resource="mybatis/sql/Member-mapper.xml"/>
+		<mapper resource="mybatis/sql/Course-mapper.xml"/>
+		<mapper resource="mybatis/sql/Survey-mapper.xml"/>
+		<mapper resource="mybatis/sql/Point-mapper.xml"/>
+		<mapper resource="mybatis/sql/Community-mapper.xml"/>
+		<mapper resource="mybatis/sql/Comment-mapper.xml"/>
+		<mapper resource="mybatis/sql/Like-mapper.xml"/>
+		<mapper resource="mybatis/sql/Scrap-mapper.xml"/>
+	</mappers>
+</configuration>

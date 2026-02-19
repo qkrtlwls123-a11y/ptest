@@ -1,0 +1,73 @@
+body {
+    /* site variables */
+    /* fixme : change base colors */
+    --color-base: #bacdd9;
+    --color-base-light: #f2f2f2;
+    --color-base-dark: #6d90a6;
+
+    --main-color : #2659dd;
+
+    --color-point1: #bf4d34;
+    --color-point1-dark: #80230e;
+    --color-point2: #72a663;
+
+    --color-point2-dimmed: rgba(114, 166, 99, 0.2);
+
+    --color-check: var(--color-point1);
+
+    --text-color: #222222;
+    --border-color: #e9e9e9;
+
+    --color-point1-text: #ffffff;
+    --color-point2-text: #ffffff;
+
+    --font-family-nskr: 'Noto Sans KR', sans-serif;
+
+    --font-size-20: 20px;
+    --font-size-18: 18px;
+    --font-size-16: 16px;
+    --font-size-14: 14px;
+    --font-size-12: 12px;
+    --font-size-11: 11px;
+    --font-size-9: 9px;
+
+    --font-size-tiny: var(--font-size-9);
+    --font-size-small: var(--font-size-11);
+    --font-size-normal: var(--font-size-14);
+    --font-size-big: var(--font-size-16);
+    --font-size-title: var(--font-size-20);
+
+    --font-weight-normal: 400;
+    --font-weight-extra-bold: 900;
+    --font-weight-bold: 700;
+    --font-weight-semibold: 500;
+    --font-weight-thin: 300;
+
+    /* --content-min-width: 1280px; */
+    --content-min-width: 100%;
+
+    --top-header-height: 68px;
+    --page-left-width: 235px;
+}
+
+
+body.font-normal {
+    --font-size-big: var(--font-size-16);
+    --font-size-normal: var(--font-size-14);
+    --font-size-small: var(--font-size-11);
+    --font-size-tiny: var(--font-size-9);
+}
+
+body.font-big {
+    --font-size-big: var(--font-size-18);
+    --font-size-normal: var(--font-size-16);
+    --font-size-small: var(--font-size-14);
+    --font-size-tiny: var(--font-size-11);
+}
+
+body.font-more-big {
+    --font-size-big: var(--font-size-20);
+    --font-size-normal: var(--font-size-18);
+    --font-size-small: var(--font-size-16);
+    --font-size-tiny: var(--font-size-14);
+}

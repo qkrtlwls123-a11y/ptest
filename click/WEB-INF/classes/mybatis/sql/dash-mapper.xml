@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="dash" >
+
+	<select id="selectDashSetting" parameterType="dashVO" resultType="dashVO">
+	SELECT *
+	FROM(
+		SELECT A.* , count(B.type_id) as frame_count
+		FROM TBL_DASH A
+		LEFT JOIN TBL_DASH_FRAME B
+		ON A.type_id = B.type_id 
+		WHERE 1=1
+		AND A.company_id = #{company_id}
+		AND A.dash_id = ( SELECT MAX(dash_id) FROM TBL_DASH WHERE company_id = #{company_id} )
+	) A
+	WHERE A.dash_id IS NOT NULL
+	</select>
+	
+	
+	<update id="updateDashUse" parameterType="dashVO">
+		UPDATE TBL_DASH
+		SET   use_yn = #{use_yn}
+			<if test="set_yn != null and set_yn != ''">
+			, set_yn = #{set_yn}
+			</if>
+			<if test="intro_page_no != null and intro_page_no != ''">
+			, intro_page_no = #{intro_page_no}
+			</if>
+			<if test="menu_id != null and menu_id != ''">
+			, menu_id = #{menu_id}
+			</if>
+			<if test="menu_sub_id != null and menu_sub_id != ''">
+			, menu_sub_id = #{menu_sub_id}
+			</if>
+			, mod_dt = NOW()
+			, mod_id = #{mod_id}
+		WHERE company_id = #{company_id}
+		<if test="dash_id != null and dash_id != ''">
+		AND dash_id = #{dash_id}
+		</if>
+	</update>
+	
+	<insert id="insertDashUse" parameterType="dashVO">
+		INSERT INTO TBL_DASH
+		(
+			  company_id
+			<if test="type_id != null and type_id != ''">
+			, type_id
+			</if>
+			<if test="menu_id != null and menu_id != ''">
+			, menu_id
+			</if>
+			<if test="menu_sub_id != null and menu_sub_id != ''">
+			, menu_sub_id
+			</if>
+			<if test="intro_page_no != null and intro_page_no != ''">
+			, intro_page_no
+			</if>
+			, set_yn
+			, use_yn
+			, reg_dt
+			, reg_id
+		)
+		VALUES(
+			  #{company_id}
+			<if test="type_id != null and type_id != ''">
+			, #{type_id}
+			</if>
+			<if test="menu_id != null and menu_id != ''">
+			, #{menu_id}
+			</if>
+			<if test="menu_sub_id != null and menu_sub_id != ''">
+			, #{menu_sub_id}
+			</if>
+			<if test="intro_page_no != null and intro_page_no != ''">
+			, #{intro_page_no}
+			</if>
+			, #{set_yn}
+			, #{use_yn}
+			, NOW()
+			, #{reg_id}
+		)
+	</insert>
+	
+	<update id="updateDashType" parameterType="dashVO">
+		UPDATE TBL_DASH
+		SET   type_id = #{type_id}
+			, mod_dt = NOW()
+			, mod_id = #{mod_id}
+		WHERE company_id = #{company_id}
+		AND use_yn = 'Y'
+	</update>
+	
+	<select id="selectDashContentServiceMenu" parameterType="dashVO" resultType="dashVO">
+		SELECT distinct B.menu_name, B.menu_name_eng , A.menu_id 
+		FROM TBL_DASH_CTNTS A
+		LEFT JOIN TBL_DASH_MENU B
+		ON A.menu_id = B.menu_id 
+		JOIN TBL_SITE_MENU C
+		ON A.menu_id = C.menu_id
+		WHERE 1=1
+		AND A.size_id = #{size_id}
+		AND A.use_yn = 'Y'
+		AND C.company_id = #{company_id}
+		AND C.menu_type = 'W'
+	</select>
+	
+	<select id="selectDashContentMenu" parameterType="dashVO" resultType="dashVO">
+		SELECT    A.* 
+				, B.menu_name
+		FROM TBL_DASH_CTNTS A
+		LEFT JOIN TBL_DASH_MENU B
+		ON A.menu_id = B.menu_id 
+		WHERE 1=1
+		AND A.size_id = #{size_id}
+		AND A.menu_id = #{menu_id}
+		AND A.use_yn = 'Y'
+	</select>
+	
+	<select id="selectDashSite" parameterType="dashVO" resultType="dashVO">
+		SELECT A.* , B.ctnts_name , B.ctnts_name_eng , B.menu_id, B.ctnts_refrash, B.ctnts_menu_id
+		FROM TBL_DASH_SITE A
+		LEFT JOIN TBL_DASH_CTNTS B
+		ON A.ctnts_id = B.ctnts_id 
+		WHERE 1=1
+		AND A.use_yn = 'Y'
+		AND A.company_id = #{company_id}
+		<if test="frame_id != null and frame_id != ''">
+		AND A.frame_id = #{frame_id}
+		</if>
+	</select>
+	
+	<insert id="insertDashSite" parameterType="dashVO">
+		INSERT INTO TBL_DASH_SITE(
+			  company_id
+			, type_id
+			, frame_id
+			, ctnts_id
+			<if test="ctnts_key != null and ctnts_key != ''">
+			, ctnts_key
+			</if>
+			<if test="ctnts_val != null and ctnts_val != ''">
+			, ctnts_val
+			</if>
+			<if test="building_id != null and building_id != ''">
+			, building_id
+			</if>
+			<if test="zone_id != null and zone_id != ''">
+			, zone_id
+			</if>
+			<if test="cell_id != null and cell_id != ''">
+			, cell_id
+			</if>
+			, set_yn
+			, use_yn
+			, reg_dt
+			, reg_id
+			, ctnts_rolling_type
+			, ctnts_fix_type_1
+			, ctnts_fix_type_2
+			, ctnts_fix_type_3
+			, ctnts_fix_type_4
+			)VALUES(
+			  #{company_id}
+			, #{type_id}
+			, #{frame_id}
+			, #{ctnts_id}
+			<if test="ctnts_key != null and ctnts_key != ''">
+			, #{ctnts_key}
+			</if>
+			<if test="ctnts_val != null and ctnts_val != ''">
+			, #{ctnts_val}
+			</if>
+			<if test="building_id != null and building_id != ''">
+			, #{building_id}
+			</if>
+			<if test="zone_id != null and zone_id != ''">
+			, #{zone_id}
+			</if>
+			<if test="cell_id != null and cell_id != ''">
+			, #{cell_id}
+			</if>
+			, 'Y'
+			, 'Y'
+			, NOW()
+			, #{reg_id}
+			, #{ctnts_rolling_type}
+			, #{ctnts_fix_type_1}
+			, #{ctnts_fix_type_2}
+			, #{ctnts_fix_type_3}
+			, #{ctnts_fix_type_4}
+		)
+	</insert>
+	
+	<update id="updateDashSite" parameterType="dashVO">
+		UPDATE TBL_DASH_SITE
+		SET   ctnts_id = #{ctnts_id}
+			<if test="ctnts_key != null and ctnts_key != ''">
+			, ctnts_key = #{ctnts_key}
+			</if>
+			<if test="ctnts_val != null and ctnts_val != ''">
+			, ctnts_val = #{ctnts_val}
+			</if>
+			, building_id = #{building_id}
+			, zone_id = #{zone_id}
+			, cell_id = #{cell_id}
+			, mod_dt = NOW()
+			, mod_id = #{mod_id}
+			, ctnts_rolling_type = #{ctnts_rolling_type}
+			, ctnts_fix_type_1 = #{ctnts_fix_type_1}
+			, ctnts_fix_type_2 = #{ctnts_fix_type_2}
+			, ctnts_fix_type_3 = #{ctnts_fix_type_3}
+			, ctnts_fix_type_4 = #{ctnts_fix_type_4}
+		WHERE dash_company_id = #{dash_company_id}
+		AND company_id = #{company_id}
+		AND use_yn = 'Y'
+	</update>
+	
+	<update id="updateDashSiteAll" parameterType="dashVO">
+		UPDATE TBL_DASH_SITE
+		SET   use_yn = #{use_yn}
+			, mod_dt = NOW()
+			, mod_id = #{mod_id}
+		WHERE company_id = #{company_id}
+		AND use_yn = 'Y'
+	</update>
+	
+	<select id="selectDashFrame" parameterType="dashVO" resultType="dashVO">
+		SELECT * 
+		FROM TBL_DASH_FRAME
+		WHERE type_id = #{type_id}
+		AND use_yn = 'Y'
+	</select>
+	
+	<delete id="deleteDash" parameterType="dashVO">
+		DELETE FROM TBL_DASH 
+		WHERE company_id = #{company_id}
+	</delete>
+	
+	<delete id="deleteDashId" parameterType="dashVO">
+		DELETE FROM TBL_DASH 
+		WHERE dash_id = #{dash_id}
+	</delete>
+	
+	<delete id="deleteDashSite" parameterType="dashVO">
+		DELETE FROM TBL_DASH_SITE 
+		WHERE company_id = #{company_id}
+	</delete>
+	
+</mapper>

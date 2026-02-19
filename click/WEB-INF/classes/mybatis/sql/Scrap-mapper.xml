@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="scrap" >
+	
+	<insert id="insertScrap" parameterType="ScrapVO">
+		INSERT INTO TB_SCRAP (
+				scrap_type,
+				parent_id,
+				member_email,
+				member_name,
+				company_id,
+				regi_date
+			)
+			VALUES
+			(
+				#{scrap_type},
+				#{parent_id},
+				#{member_email},
+				#{member_name},
+				#{company_id},
+				NOW()
+			 )
+	</insert>
+	
+	<delete id="deleteScrap" parameterType="ScrapVO">
+		 DELETE FROM TB_SCRAP 
+		WHERE parent_id = #{parent_id}
+		  AND scrap_type = #{scrap_type}
+		  AND member_email = #{member_email}
+	</delete>
+</mapper>
+

@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="eventAlarm" >
+	<select id="selectEventAlarmList" parameterType="EventAlarmVO" resultType="EventAlarmVO">
+	
+		SELECT  
+		   (SELECT worker_name FROM TBL_WORKER B WHERE B.worker_id = A.worker_id LIMIT 1) AS worker_name 
+		  ,(SELECT code_name FROM TBL_COMMON_CODE B WHERE B.code = (SELECT job_id FROM TBL_WORKER C where C.worker_id = A.worker_id) AND B.company_id = A.company_id LIMIT 1) AS job_name 
+		  ,(SELECT code_name_eng FROM TBL_COMMON_CODE B WHERE B.code = (SELECT job_id FROM TBL_WORKER C where C.worker_id = A.worker_id) AND B.company_id = A.company_id LIMIT 1) AS job_name_eng 
+		  ,(SELECT code_name FROM TBL_COMMON_CODE B WHERE B.code = (SELECT cooperator_id FROM TBL_WORKER C where C.worker_id = A.worker_id) AND B.company_id = A.company_id LIMIT 1) AS cooperator_name 
+		  ,(SELECT code_name_eng FROM TBL_COMMON_CODE B WHERE B.code = (SELECT cooperator_id FROM TBL_WORKER C where C.worker_id = A.worker_id) AND B.company_id = A.company_id LIMIT 1) AS cooperator_name_eng 
+		  ,(SELECT building_name FROM TBL_BUILDING B WHERE B.building_id = A.building_id AND B.company_id = A.company_id LIMIT 1) as building_name
+		  ,(SELECT building_name_eng FROM TBL_BUILDING B WHERE B.building_id = A.building_id AND B.company_id = A.company_id LIMIT 1) as building_name_eng
+		  ,(SELECT floor FROM TBL_ZONE B WHERE B.zone_id = A.zone_id AND B.company_id = A.company_id LIMIT 1) AS zone_name 
+		  ,(SELECT floor_eng FROM TBL_ZONE B WHERE B.zone_id = A.zone_id AND B.company_id = A.company_id LIMIT 1) AS zone_name_eng 
+		  ,(SELECT cell_name FROM TBL_CELL B WHERE B.cell_id = A.cell_id AND B.company_id = A.company_id LIMIT 1) as cell_name
+		  ,(SELECT cell_name_eng FROM TBL_CELL B WHERE B.cell_id = A.cell_id AND B.company_id = A.company_id LIMIT 1) as cell_name_eng
+		  ,(SELECT device_name FROM TBL_DEVICE_TYPE B WHERE B.device_code = A.device_type LIMIT 1) as device_name
+		  ,(SELECT device_name_eng FROM TBL_DEVICE_TYPE B WHERE B.device_code = A.device_type LIMIT 1) as device_name_eng
+		  ,(SELECT event_name FROM TBL_EVENT_TEMPLATE B WHERE B.event_type = A.event_type) as event_name
+		  ,(SELECT event_name_eng FROM TBL_EVENT_TEMPLATE B WHERE B.event_type = A.event_type) as event_name_eng
+		  ,(SELECT menu_type FROM TBL_EVENT_TEMPLATE B WHERE B.event_type = A.event_type) as menu_type
+		  , A.*
+		FROM TBL_EVENT A 
+		 	WHERE  company_id = #{company_id}
+		 	   AND menu_type NOT IN ('MENU_ENV')
+		   
+			<if test="device_type != null and device_type != ''">
+				AND device_type=#{device_type}
+			</if>
+			<if test="event_type != null and event_type != ''">
+				AND event_type=#{event_type}
+			</if>
+			<if test="status != null and status != ''">
+				AND status=#{status}
+			</if>
+			<if test="menu_type != null and menu_type != ''">
+				AND menu_type=#{menu_type}
+			</if>
+					
+			<if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+				AND reg_dt BETWEEN STR_TO_DATE(CONCAT(#{start_date}, ' 00:00:00'),'%Y-%m-%d %H:%i:%s') AND STR_TO_DATE(CONCAT(#{end_date}, '23:59:59'),'%Y-%m-%d %H:%i:%s')
+			</if>
+			
+			<if test="worker_id != null and worker_id != ''">
+				AND worker_id=#{worker_id}
+			</if>
+			
+			<if test="cooperator_id != null and cooperator_id != ''">
+				AND worker_id in (SELECT worker_id FROM TBL_WORKER where cooperator_id=#{cooperator_id})
+			</if>
+			<if test="job_id != null and job_id != ''">
+				AND worker_id in (SELECT worker_id FROM TBL_WORKER where job_id=#{job_id})
+			</if>
+			<if test="worker_name != null and worker_name != ''">
+				AND worker_id in (SELECT worker_id FROM TBL_WORKER where worker_name LIKE CONCAT('%',#{worker_name},'%'))
+			</if>
+			<if test="sensor_type != null and sensor_type != ''">
+				AND sensor_type=#{sensor_type}
+			</if>
+			
+			 ORDER BY reg_dt DESC
+			 <if test="notUsePage == null or notUsePage == ''">
+				LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+			</if>		 
+		
+	</select>
+	
+	<select id="selectEventAlarmListTotal" parameterType="EventAlarmVO" resultType="Integer">
+			SELECT  count(*) FROM TBL_EVENT  
+		 		WHERE  company_id = #{company_id}
+		 	   AND menu_type NOT IN ('MENU_ENV')
+		   
+			<if test="device_type != null and device_type != ''">
+				AND device_type=#{device_type}
+			</if>
+			<if test="event_type != null and event_type != ''">
+				AND event_type=#{event_type}
+			</if>
+			<if test="status != null and status != ''">
+				AND status=#{status}
+			</if>
+			<if test="menu_type != null and menu_type != ''">
+				AND menu_type=#{menu_type}
+			</if>
+					
+			<if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+				AND reg_dt BETWEEN STR_TO_DATE(CONCAT(#{start_date}, ' 00:00:00'),'%Y-%m-%d %H:%i:%s') AND STR_TO_DATE(CONCAT(#{end_date}, '23:59:59'),'%Y-%m-%d %H:%i:%s')
+			</if>
+			
+			<if test="worker_id != null and worker_id != ''">
+				AND worker_id=#{worker_id}
+			</if>
+			
+			<if test="cooperator_id != null and cooperator_id != ''">
+				AND worker_id in (SELECT worker_id FROM TBL_WORKER where cooperator_id=#{cooperator_id})
+			</if>
+			<if test="job_id != null and job_id != ''">
+				AND worker_id in (SELECT worker_id FROM TBL_WORKER where job_id=#{job_id})
+			</if>
+			<if test="worker_name != null and worker_name != ''">
+				AND worker_id in (SELECT worker_id FROM TBL_WORKER where worker_name LIKE CONCAT('%',#{worker_name},'%'))
+			</if>
+			<if test="sensor_type != null and sensor_type != ''">
+				AND sensor_type=#{sensor_type}
+			</if>
+	</select>
+	
+	
+	<select id="selectEventAlarmDetail" parameterType="EventAlarmVO" resultType="EventAlarmVO">
+	
+		SELECT   B.worker_name, F.floor as zone_name , F.floor_eng as zone_name_eng , A.menu_type as menu_type, C.code_name AS job_name, C.code_name_eng AS job_name_eng, 
+		         D.code_name AS cooperator_name, D.code_name_eng AS cooperator_name_eng,
+		        CASE WHEN E.building_name IS NULL THEN A.building_id ELSE E.building_name END AS building_name,
+		        CASE WHEN E.building_name_eng IS NULL THEN A.building_id ELSE E.building_name_eng END AS building_name_eng,
+		        G.cell_name, G.cell_name_eng, H.device_name, H.device_name_eng, I.event_name, I.event_name_eng, J.account_name as action_id,  DATE_FORMAT(A.reg_dt,'%Y-%m-%d %H:%i:%s') AS reg_dt, A.*
+		FROM TBL_EVENT A
+		 LEFT JOIN TBL_WORKER B ON B.worker_id = A.worker_id
+		 LEFT JOIN TBL_COMMON_CODE C ON C.code = B.job_id AND C.company_id = A.company_id
+		 LEFT JOIN TBL_COMMON_CODE D ON D.code = B.cooperator_id AND D.company_id = A.company_id
+		 LEFT JOIN TBL_BUILDING E ON E.building_id = A.building_id AND E.company_id = A.company_id
+		 LEFT JOIN TBL_ZONE F ON F.zone_id = A.zone_id AND F.company_id = A.company_id
+		 LEFT JOIN TBL_CELL G ON G.cell_id = A.cell_id AND G.company_id = A.company_id		
+		 LEFT JOIN TBL_DEVICE_TYPE H ON H.device_code = A.device_type		
+		 LEFT JOIN TBL_EVENT_TEMPLATE I ON I.event_type = A.event_type		
+		 LEFT JOIN TBL_ACCOUNT J ON J.account_id = A.action_id		
+		 WHERE  1=1  
+		<if test="event_id != null and event_id != ''">
+		 	AND A.event_id = #{event_id}
+		</if>
+		<if test="company_id != null and company_id != ''">
+		 	AND A.company_id = #{company_id}
+		</if>
+		<if test="menu_type != null and menu_type != ''">
+		 	AND A.menu_type = #{menu_type}
+		</if>
+		<if test="worker_id != null and worker_id != ''">
+		 	AND A.worker_id = #{worker_id}
+		</if>
+		<if test="status != null and status != ''">
+		 	AND A.status = #{status}
+		</if>
+		<if test="status2 != null and status2 != ''">
+		 	AND A.status = #{status2}
+		</if>
+		
+		<if test="device_type != null and device_type != ''">
+		 	AND A.device_type = #{device_type}
+		</if>
+		<if test="mac_addr != null and mac_addr != ''">
+		 	AND A.mac_addr = #{mac_addr}
+		</if>
+		<if test="ap_mac_addr != null and ap_mac_addr != ''">
+		 	AND A.ap_mac_addr = #{ap_mac_addr}
+		</if>
+		<if test="device_no != null and device_no != ''">
+		 	AND A.device_no = #{device_no}
+		</if>
+		<if test="event_type != null and event_type != ''">
+		 	AND A.event_type = #{event_type}
+		</if>
+		
+		
+		ORDER BY A.event_id DESC
+		
+		LIMIT 1
+	</select>
+	
+	<select id="selectEventAlarmDetail2" parameterType="EventAlarmVO" resultType="EventAlarmVO">
+		SELECT *
+		FROM TBL_EVENT
+		 WHERE company_id = #{company_id}
+		   AND status = #{status}
+		   AND device_type = #{device_type}
+		ORDER BY event_id DESC
+		LIMIT 1
+	</select>
+		
+	<select id="selectEventAlarmTemplate" parameterType="EventAlarmVO" resultType="EventAlarmVO">
+		SELECT * FROM TBL_EVENT_TEMPLATE
+		WHERE 1=1
+		<if test="menu_type != null and menu_type != ''">
+			AND menu_type=#{menu_type}
+		</if>
+		<if test="arr_menu_type != null and arr_menu_type != ''">
+		AND menu_type NOT IN
+			<foreach collection='arr_menu_type' index='index' item='item' open='(' close=')' separator=','>
+				#{item}
+			</foreach>
+		</if>
+		
+	</select>
+		
+	<update id="updateEventAlarm" parameterType="EventAlarmVO">
+		UPDATE TBL_EVENT
+			SET action_dt = NOW()
+			  , action_id = #{action_id}
+			  , status = #{status}
+			  , action_msg = #{action_msg}
+		WHERE event_id = #{event_id}
+	</update>
+	
+	<delete id="deleteEventAlarm" parameterType="EventAlarmVO">
+	</delete>
+	
+	<insert id="insertEventAlarm" parameterType="EventAlarmVO">
+		INSERT INTO TBL_EVENT
+		(
+			event_type,
+			event_msg,
+			event_msg_pop,
+			company_id,
+			device_type,
+			device_no,
+			mac_addr,
+			building_id,
+			zone_id,
+			cell_id,
+			worker_id,
+			status,
+			menu_type,
+			reg_dt
+		)
+		VALUES
+		(		
+			#{event_type},
+			#{event_msg},
+			#{event_msg_pop},
+			#{company_id},
+			#{device_type},
+			#{device_no},
+			#{mac_addr},
+			#{building_id},
+			#{zone_id},
+			#{cell_id},
+			#{worker_id},
+			#{status},
+			#{menu_type},
+			NOW()
+		)
+	</insert>
+	
+	<select id="selectLastEventAlarm" parameterType="EventAlarmVO" resultType="EventAlarmVO">
+		SELECT A.*
+		  ,(SELECT read_yn FROM TBL_EVENT_READ C WHERE C.event_id = A.event_id AND C.account_id = #{account_id} LIMIT 1) AS read_yn 
+		  ,(SELECT icon_name FROM TBL_EVENT_TEMPLATE C WHERE C.event_type = A.event_type LIMIT 1) AS icon_name 
+		  ,(SELECT event_name FROM TBL_EVENT_TEMPLATE C WHERE C.event_type = A.event_type LIMIT 1) AS event_name 
+		  ,(SELECT event_name_eng FROM TBL_EVENT_TEMPLATE C WHERE C.event_type = A.event_type LIMIT 1) AS event_name_eng 
+		  ,CASE WHEN (SELECT  building_name FROM TBL_BUILDING C WHERE C.building_id = A.building_id LIMIT 1) IS NULL THEN A.building_id ELSE 
+		  (SELECT  building_name FROM TBL_BUILDING C WHERE C.building_id = A.building_id LIMIT 1) END AS building_name 
+		  ,CASE WHEN (SELECT  building_name_eng FROM TBL_BUILDING C WHERE C.building_id = A.building_id LIMIT 1) IS NULL THEN A.building_id ELSE 
+		  (SELECT  building_name_eng FROM TBL_BUILDING C WHERE C.building_id = A.building_id LIMIT 1) END AS building_name_eng 
+		  ,(SELECT floor FROM TBL_ZONE C WHERE C.zone_id = A.zone_id AND C.COMPANY_ID = #{company_id} LIMIT 1) AS zone_name 
+		  ,(SELECT floor_eng FROM TBL_ZONE C WHERE C.zone_id = A.zone_id AND C.COMPANY_ID = #{company_id} LIMIT 1) AS zone_name_eng 
+		  ,(SELECT cell_name FROM TBL_CELL C WHERE C.cell_id = A.cell_id AND C.COMPANY_ID = #{company_id} LIMIT 1) AS cell_name 
+		  ,(SELECT cell_name_eng FROM TBL_CELL C WHERE C.cell_id = A.cell_id AND C.COMPANY_ID = #{company_id} LIMIT 1) AS cell_name_eng 
+		  ,(SELECT noti_yn FROM TBL_EVENT_CONFIG C WHERE C.account_id = #{account_id} AND C.COMPANY_ID = #{company_id} AND C.event_type = A.event_type LIMIT 1) AS noti_yn 
+		  FROM TBL_EVENT A 
+		 WHERE A.event_id = 
+		 ( 
+		     SELECT MAX(B.event_id) FROM TBL_EVENT B
+		       WHERE B.company_id = #{company_id} 
+		 ) AND A.reg_dt > DATE_SUB(NOW(), INTERVAL 30 SECOND)
+		 		 
+	</select>
+	
+	<insert id="insertEventAlarmRead" parameterType="EventAlarmVO">
+		INSERT INTO TBL_EVENT_READ
+		(
+			account_id,
+			event_id,
+			read_yn,
+			reg_dt
+		)
+		VALUES
+		(		
+			#{account_id},
+			#{event_id},
+			#{read_yn},
+			NOW()
+		)
+		ON DUPLICATE KEY  
+		UPDATE event_id = #{event_id}
+			 , reg_dt = NOW()
+	</insert>
+	
+	<select id="selectUnsolvedEventAlarmTotal" parameterType="EventAlarmVO" resultType="Integer">
+		SELECT COUNT(event_id) FROM TBL_EVENT A
+		 WHERE A.company_id = #{company_id}
+		  	   AND menu_type NOT IN ('MENU_ENV')
+		 
+			<if test="status != null and status != ''">
+				AND A.status='0'
+			</if>
+			<if test="status == null">
+				AND (A.status='0' OR A.status='1')
+			</if>
+			<if test="device_type != null and device_type != ''">
+				AND device_type=#{device_type}
+			</if>
+			<if test="event_type != null and event_type != ''">
+				AND event_type=#{event_type}
+			</if>
+			<if test="status != null and status != ''">
+				AND status=#{status}
+			</if>
+			<if test="menu_type != null and menu_type != ''">
+				AND menu_type=#{menu_type}
+			</if>
+					
+			<if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+				AND reg_dt BETWEEN STR_TO_DATE(CONCAT(#{start_date}, ' 00:00:00'),'%Y-%m-%d %H:%i:%s') AND STR_TO_DATE(CONCAT(#{end_date}, '23:59:59'),'%Y-%m-%d %H:%i:%s')
+			</if>
+			
+			<if test="worker_id != null and worker_id != ''">
+				AND worker_id=#{worker_id}
+			</if>
+			
+			<if test="cooperator_id != null and cooperator_id != ''">
+				AND worker_id in (SELECT worker_id FROM TBL_WORKER where cooperator_id=#{cooperator_id})
+			</if>
+			<if test="job_id != null and job_id != ''">
+				AND worker_id in (SELECT worker_id FROM TBL_WORKER where job_id=#{job_id})
+			</if>
+			<if test="worker_name != null and worker_name != ''">
+				AND worker_id in (SELECT worker_id FROM TBL_WORKER where worker_name LIKE CONCAT('%',#{worker_name},'%'))
+			</if>
+			<if test="sensor_type != null and sensor_type != ''">
+				AND sensor_type=#{sensor_type}
+			</if>			
+	</select>
+	
+	<!-- CCTV 당일 이벤트현황 조회 -->
+	<select id="selectCCTVTodayEvent" parameterType="EventAlarmVO" resultType="EventAlarmVO">
+		SELECT event_type , count(event_type) AS event_count
+		FROM TBL_EVENT A
+		WHERE 1=1
+		AND A.device_type = 'DVTP0004'
+		AND DATE_FORMAT(A.reg_dt,'%Y%m%d') = DATE_FORMAT( NOW() , '%Y%m%d')
+		AND A.company_id = #{company_id} 
+		<if test="mac_addr != null and mac_addr != ''">
+		AND mac_addr = #{mac_addr}
+		</if>
+		GROUP BY A.event_type
+	</select>
+	
+	<!-- 마이페이지 경고알람 설정 -->
+	<select id="selectMypageEventConfig" parameterType="EventAlarmVO" resultType="EventAlarmVO">
+		SELECT    A.event_type 
+				, B.event_name 
+				, B.event_name_eng 
+				, B.menu_id 
+				, A.noti_yn
+				, CASE WHEN A.event_type = 'EVT000012' THEN '디바이스 유지보수'
+					   WHEN A.event_type = 'EVT000013' THEN '디바이스 유지보수'
+					   WHEN A.event_type = 'EVT000014' THEN '디바이스 유지보수'
+				  ELSE ( SELECT C.menu_name FROM TBL_MENU C WHERE C.menu_id = B.menu_id  )
+				  END AS menu_name
+				, CASE WHEN A.event_type = 'EVT000012' THEN 'Device Maintenance'
+					   WHEN A.event_type = 'EVT000013' THEN 'Device Maintenance'
+					   WHEN A.event_type = 'EVT000014' THEN 'Device Maintenance'
+				  ELSE ( SELECT C.menu_name_eng FROM TBL_MENU C WHERE C.menu_id = B.menu_id  )
+				  END AS menu_name_eng
+		FROM TBL_EVENT_CONFIG A , TBL_EVENT_TEMPLATE B
+		WHERE A.event_type = B.event_type
+		AND A.account_id = #{account_id}
+		AND A.company_id = #{company_id}
+		ORDER BY B.menu_order , event_type ASC
+	</select>
+	
+	<!-- 마이페이지 경고알람 수정 -->
+	<update id="updateMypageEventAlarm" parameterType="EventAlarmVO">
+		UPDATE TBL_EVENT_CONFIG
+		SET   noti_yn = #{noti_yn}
+			, mod_dt = NOW()
+		WHERE company_id = #{company_id}
+		AND account_id = #{account_id}
+		AND event_type = #{event_type}
+	</update>
+	
+	<!-- 해당 사이트의 경고알람 메뉴 -->
+	<select id="selectMypageAlaramMenuList" parameterType="EventAlarmVO" resultType="EventAlarmVO">
+		SELECT B.menu_id
+		FROM TBL_EVENT_CONFIG A , TBL_EVENT_TEMPLATE B
+		WHERE A.event_type = B.event_type
+		AND A.company_id = #{company_id}
+		GROUP BY B.menu_id
+	</select>
+	
+	<!-- 해당 메뉴의 알람 내역 삭제 -->
+	<delete id="deleteMypageEventAlarm" parameterType="EventAlarmVO">
+		DELETE A FROM TBL_EVENT_CONFIG A
+		WHERE NOT EXISTS(
+			SELECT B.event_type
+			FROM TBL_EVENT_TEMPLATE B , TBL_SITE_MENU C
+			WHERE A.event_type = B.event_type 
+			AND B.menu_id = C.menu_id
+			AND C.company_id = #{company_id}
+			AND A.company_id = #{company_id}
+		)
+		AND A.company_id = #{company_id}
+	</delete>
+	
+	<!-- 해당 사이트의 메뉴별 알람 추가 -->
+	<insert id="insertMypageEventAlarm" parameterType="EventAlarmVO">
+		INSERT IGNORE INTO TBL_EVENT_CONFIG(account_id , event_type , noti_yn , reg_dt , company_id)
+		SELECT   #{account_id}
+				, A.event_type 
+				, #{noti_yn}
+				, NOW() 
+				, #{company_id} 
+		FROM TBL_EVENT_TEMPLATE A , TBL_SITE_MENU B 
+		WHERE A.menu_id = B.menu_id 
+		AND B.company_id = #{company_id}
+		AND B.menu_type = 'W'
+		<if test="menu_id != null and menu_id != ''">
+		AND B.menu_id = #{menu_id}
+		</if>
+	</insert>
+	
+	<select id="selectRetainAlarmCount" parameterType="EventAlarmVO" resultType="EventAlarmVO">
+		SELECT A.sensor_type
+			 , SUM(A.eventType1) AS retain_event_1
+			 , SUM(A.eventType2) AS retain_event_2
+		  FROM (
+				SELECT sensor_type
+					 , CASE WHEN event_type = 'EVT000015' THEN 1 ELSE 0 END AS eventType1
+					 , CASE WHEN event_type = 'EVT000016' THEN 1 ELSE 0 END AS eventType2
+				  FROM TBL_EVENT 
+				 WHERE menu_type = #{menu_type}
+				   AND sensor_type is not null
+				   <if test="status != null and status != ''">
+				   AND status = '0'
+				   </if>
+				   <if test="sensor_type != null and sensor_type != '' and device_no != null and device_no != ''">
+				   AND sensor_type = #{sensor_type}
+				   AND device_no = #{device_no}
+				   </if>
+				   AND company_id = #{company_id}
+				   AND reg_dt BETWEEN STR_TO_DATE(CONCAT(#{start_date}, ' 00:00:00'),'%Y-%m-%d %H:%i:%s') AND STR_TO_DATE(CONCAT(#{start_date}, '23:59:59'),'%Y-%m-%d %H:%i:%s')
+				) A
+		GROUP BY sensor_type
+	</select>
+	
+	<select id="selectEquipAlarmCount" parameterType="EventAlarmVO" resultType="EventAlarmVO">
+		SELECT SUM(A.eventType1) AS equip_event_1
+			 , SUM(A.eventType2) AS equip_event_2
+		  FROM (
+				SELECT CASE WHEN event_type = 'EVT000017' THEN 1 ELSE 0 END AS eventType1
+					 , CASE WHEN event_type = 'EVT000018' THEN 1 ELSE 0 END AS eventType2
+				  FROM TBL_EVENT 
+				 WHERE menu_type = #{menu_type}
+				 	<if test="status != null and status != ''">
+				   AND status = '0'
+				   </if>
+				   AND company_id = #{company_id}
+				   <if test="ap_mac_addr != null and ap_mac_addr != ''">
+				   AND ap_mac_addr = #{ap_mac_addr}
+				   </if>
+				   AND reg_dt BETWEEN STR_TO_DATE(CONCAT(#{start_date}, ' 00:00:00'),'%Y-%m-%d %H:%i:%s') AND STR_TO_DATE(CONCAT(#{start_date}, '23:59:59'),'%Y-%m-%d %H:%i:%s')
+				) A
+	</select>
+	
+	<select id="selectEventAlarmCount" parameterType="EventAlarmVO" resultType="EventAlarmVO">
+		SELECT COUNT(A.status) AS event_total
+			 , SUM(A.event0) AS event0
+			 , SUM(A.event1) AS event1
+			 , SUM(A.event2) AS event2
+		  FROM (
+				SELECT status
+					 , CASE WHEN status = '0' THEN 1 ELSE 0 END AS event0
+					 , CASE WHEN status = '1' THEN 1 ELSE 0 END AS event1
+					 , CASE WHEN status = '2' THEN 1 ELSE 0 END AS event2
+				  FROM TBL_EVENT 
+				 WHERE company_id = #{company_id}
+				   AND reg_dt BETWEEN STR_TO_DATE(CONCAT(#{start_date}, ' 00:00:00'),'%Y-%m-%d %H:%i:%s') AND STR_TO_DATE(CONCAT(#{start_date}, '23:59:59'),'%Y-%m-%d %H:%i:%s')
+				   AND menu_type != 'MENU_ENV'
+				) A
+	</select>
+	
+	<select id="selectEventCount" parameterType="EventAlarmVO" resultType="EventAlarmVO">
+		SELECT COUNT(status) AS event_total
+		  FROM TBL_EVENT 
+		 WHERE company_id = #{company_id}
+		   AND event_type = #{event_type}
+		   AND reg_dt BETWEEN STR_TO_DATE(CONCAT(#{start_date}, ' 00:00:00'),'%Y-%m-%d %H:%i:%s') AND STR_TO_DATE(CONCAT(#{start_date}, '23:59:59'),'%Y-%m-%d %H:%i:%s')
+	</select>
+	
+	<select id="selectCraneEventCount" parameterType="EventAlarmVO" resultType="EventAlarmVO">
+		SELECT COUNT(TC.status) AS event_total
+			 , SUM(TC.event0) AS event0
+			 , SUM(TC.event1) AS event1
+			 , SUM(TC.event2) AS event2
+			 , SUM(TC.event3) AS event3
+		  FROM (
+				SELECT status
+					 , CASE WHEN event_type = 'EVT000005' OR event_type = 'EVT000006' THEN 1 ELSE 0 END AS event0
+					 , CASE WHEN event_type = 'EVT000009' THEN 1 ELSE 0 END AS event1
+					 , CASE WHEN event_type = 'EVT000010' OR event_type = 'EVT000011' THEN 1 ELSE 0 END AS event2
+					 , CASE WHEN event_type = 'EVT000007' OR event_type = 'EVT000008' THEN 1 ELSE 0 END AS event3
+				  FROM TBL_EVENT 
+				 WHERE company_id = #{company_id}
+				   AND menu_type = #{menu_type}
+				   AND reg_dt BETWEEN STR_TO_DATE(CONCAT(#{start_date}, ' 00:00:00'),'%Y-%m-%d %H:%i:%s') AND STR_TO_DATE(CONCAT(#{start_date}, '23:59:59'),'%Y-%m-%d %H:%i:%s')
+				) TC
+	</select>
+</mapper>

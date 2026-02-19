@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="lecture" >
+
+	<insert id="insertLecture" parameterType="LectureVO" useGeneratedKeys="true" keyProperty="lecture_id">
+		INSERT INTO TB_LECTURE (
+		  	lecture_name
+		  , academy_id
+		  , lecture_start_date
+		  , lecture_end_date
+		  , lecture_status
+		  , lecture_target
+		  , lecture_subject
+		  , lecture_open_type
+		  , lecture_image
+		  , lecture_introduce
+		  , lecture_goals
+		  , updt_date
+		  , regi_date
+		) VALUES (
+		   #{lecture_name}
+		  , #{academy_id}
+		  , #{lecture_start_date}
+		  , #{lecture_end_date}
+		  , #{lecture_status}
+		  , #{lecture_target}
+		  , #{lecture_subject}
+		  , #{lecture_open_type}
+		  , #{lecture_image}
+		  , #{lecture_introduce}
+		  , #{lecture_goals}
+		  , NOW()
+		  , NOW()
+		)
+	</insert>
+	
+	<update id="updateLecture" parameterType="LectureVO">
+		<![CDATA[
+		UPDATE TB_LECTURE
+		   SET lecture_name = #{lecture_name}
+		     , lecture_start_date = #{lecture_start_date}
+		     , lecture_end_date = #{lecture_end_date}
+		     , lecture_status = #{lecture_status}
+		     , lecture_subject = #{lecture_subject}
+		     , lecture_target = #{lecture_target}
+		     , lecture_open_type = #{lecture_open_type}
+		     , lecture_image = #{lecture_image}
+		     , lecture_introduce = #{lecture_introduce}
+		     , lecture_goals = #{lecture_goals}
+		     , updt_date = NOW()
+		 WHERE lecture_id = #{lecture_id}
+		]]>
+	</update>
+	
+	<update id="updateLectureChannelKey" parameterType="LectureVO">
+		<![CDATA[
+		UPDATE TB_LECTURE
+		   SET lecture_channel_key = #{lecture_channel_key}
+		 WHERE lecture_id = #{lecture_id}
+		]]>
+	</update>
+	
+	<delete id="deleteLecture" parameterType="LectureVO">
+		<![CDATA[
+		DELETE FROM TB_LECTURE
+		 WHERE lecture_id = #{lecture_id}
+		]]>
+	</delete>
+	
+	<select id="selectLectureList" parameterType="LectureVO" resultType="LectureVO">
+		SELECT *
+			 , (SELECT COUNT(*)
+			 	  FROM TB_CLASS B
+			 	 WHERE L.lecture_id = B.lecture_id) AS lecture_class_count
+			 , (SELECT COUNT(*)
+			 	  FROM TB_LECTURE_STUDENT C
+			 	 WHERE L.lecture_id = C.lecture_id) AS lecture_student_count
+		  FROM TB_LECTURE L
+		 WHERE 1=1
+		 <if test="academy_id != null and academy_id != ''">
+		   AND L.academy_id = #{academy_id}
+		 </if>
+		 <if test="lecture_subject != null and lecture_subject != ''">
+		   AND L.lecture_subject LIKE CONCAT('%', #{lecture_subject}, '%')
+		 </if>
+		 ORDER BY L.regi_date DESC
+		 LIMIT #{record_count} OFFSET #{first_index}
+	</select>
+	
+	<select id="selectLectureListTotalCount" parameterType="LectureVO" resultType="Integer">
+		SELECT COUNT(*) 
+		  FROM TB_LECTURE
+		 WHERE 1=1
+		 <if test="lecture_subject != null and lecture_subject != ''">
+		   AND lecture_subject LIKE CONCAT('%', #{lecture_subject}, '%')
+		 </if>
+		 <if test="academy_id != null and academy_id != ''">
+		   AND academy_id = #{academy_id}
+		 </if>
+	</select>
+	
+	<select id="selectLectureDetail" parameterType="LectureVO" resultType="LectureVO">
+		SELECT * 
+		  FROM TB_LECTURE
+		 WHERE lecture_id = #{lecture_id}
+	</select>
+	
+	<select id="selectLectureStudentList" parameterType="StudentVO" resultType="StudentVO">
+		SELECT a.user_id
+			 , a.user_name
+			 , a.user_grade
+			 , a.academy_id
+			 , a.user_email
+			 , a.user_first_login
+			 , a.updt_date
+			 , a.regi_date
+			 , a.auth_group_id
+			 , a.user_profile
+			 , a.user_status
+			 , a.user_address
+			 , a.user_detail_address
+			 , a.user_introduce
+			 , a.user_record
+			 , a.delete_yn
+			 , a.user_no
+			 , a.user_school
+			 , a.user_school_name
+			 , a.user_school_grade
+		  FROM TB_USER a, TB_LECTURE_STUDENT b
+		 WHERE a.user_id = b.user_id
+		   <if test="delete_yn != null and delete_yn != ''">
+	       AND a.delete_yn = #{delete_yn}
+	      </if>
+		   AND a.user_grade = 'U'
+		   AND a.academy_id = #{academy_id}
+		   AND b.lecture_id = #{lecture_id}
+		 ORDER BY a.regi_date DESC
+	</select>
+	
+	<select id="selectLectureTeacherList" parameterType="TeacherVO" resultType="TeacherVO">
+		SELECT a.user_id
+			 , a.user_name
+			 , a.user_grade
+			 , a.academy_id
+			 , a.user_email
+			 , a.user_first_login
+			 , a.updt_date
+			 , a.regi_date
+			 , a.auth_group_id
+			 , a.user_profile
+			 , a.user_status
+			 , a.user_address
+			 , a.user_detail_address
+			 , a.user_introduce
+			 , a.user_record
+			 , a.delete_yn
+		  FROM TB_USER a, TB_LECTURE_TEACHER b
+		 WHERE a.user_id = b.user_id
+		   <if test="delete_yn != null and delete_yn != ''">
+	       AND a.delete_yn = #{delete_yn}
+	      </if>
+		   AND a.user_grade = 'T'
+		   AND b.lecture_id = #{lecture_id}
+		 ORDER BY a.regi_date DESC
+	</select>
+	
+	
+	<select id="selectRemainStudentList" parameterType="StudentVO" resultType="StudentVO">
+		SELECT A.*
+		  FROM TB_USER A
+		 WHERE A.user_grade = 'U'
+		   AND NOT EXISTS (
+			SELECT DISTINCT B.user_id
+			  FROM TB_LECTURE_STUDENT B
+		 	 WHERE A.user_id = B.user_id
+		 	   AND B.lecture_id = #{lecture_id}
+		)
+		<if test="academy_id != null and academy_id != ''">
+		  AND academy_id = #{academy_id}
+		</if>
+		<if test="delete_yn != null and delete_yn != ''">
+	       AND delete_yn = #{delete_yn}
+	      </if>
+	    ORDER BY A.regi_date DESC
+	</select>
+	
+	<insert id="insertLectureStudent" parameterType="StudentVO">
+		INSERT INTO TB_LECTURE_STUDENT (
+		  	lecture_id
+		  , user_id
+		) VALUES (
+		   #{lecture_id}
+		  , #{user_id}
+		)
+	</insert>
+	
+	<delete id="deleteLectureStudent" parameterType="StudentVO">
+		DELETE FROM TB_LECTURE_STUDENT
+		 WHERE user_id = #{user_id}
+		 <if test="lecture_id != null and lecture_id != ''">
+	       AND lecture_id = #{lecture_id}
+	      </if>
+	</delete>
+	
+	<insert id="insertLectureTeacher" parameterType="TeacherVO">
+		INSERT INTO TB_LECTURE_TEACHER (
+		  	lecture_id
+		  , user_id
+		) VALUES (
+		   #{lecture_id}
+		  , #{user_id}
+		)
+	</insert>
+	
+	<delete id="deleteLectureTeacher" parameterType="TeacherVO">
+		DELETE FROM TB_LECTURE_TEACHER
+		 WHERE lecture_id = #{lecture_id}
+	</delete>
+	
+	<insert id="insertStudentProgress" parameterType="StudentVO">
+		INSERT INTO TB_STUDENT_PROGRESS (
+		  	class_id
+		  , user_id
+		  , user_progress
+		) VALUES (
+		   #{class_id}
+		  , #{user_id}
+		  , #{user_progress}
+		)
+		ON DUPLICATE KEY UPDATE user_progress = #{user_progress}
+	</insert>
+	
+	<select id="selectMyLectureList" parameterType="LectureVO" resultType="LectureVO">
+		SELECT a.*
+			, CASE WHEN (
+			 	SELECT SUM(TS.user_progress)/COUNT(TS.user_progress) AS lecture_progress
+				  FROM TB_CLASS TC, TB_STUDENT_PROGRESS TS, TB_LECTURE TL
+				 WHERE TC.class_id = TS.class_id
+				   AND TC.lecture_id = TL.lecture_id
+				   AND TC.lecture_id = a.lecture_id
+				   AND TS.user_id = b.user_id
+				) IS NULL THEN 0 ELSE (
+			 	SELECT SUM(TS.user_progress)/COUNT(TS.user_progress) AS lecture_progress
+				  FROM TB_CLASS TC, TB_STUDENT_PROGRESS TS, TB_LECTURE TL
+				 WHERE TC.class_id = TS.class_id
+				   AND TC.lecture_id = TL.lecture_id
+				   AND TC.lecture_id = a.lecture_id
+				   AND TS.user_id = b.user_id
+				) END AS lecture_progress
+			, (SELECT COUNT(*)
+			 	  FROM TB_CLASS C
+			 	 WHERE a.lecture_id = C.lecture_id) AS lecture_class_count
+			 , (SELECT COUNT(*)
+			 	  FROM TB_LECTURE_STUDENT D
+			 	 WHERE a.lecture_id = D.lecture_id) AS lecture_student_count
+		  FROM TB_LECTURE a, TB_LECTURE_STUDENT b
+		 WHERE a.lecture_id = b.lecture_id
+		   AND b.user_id = #{user_id}
+		 ORDER BY a.regi_date DESC
+		 LIMIT #{record_count} OFFSET #{first_index}  
+	</select>
+	
+	<select id="selectMyLectureListTotalCount" parameterType="LectureVO" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM TB_LECTURE a, TB_LECTURE_STUDENT b
+		 WHERE a.lecture_id = b.lecture_id
+		   AND b.user_id = #{user_id}
+	</select>
+</mapper>

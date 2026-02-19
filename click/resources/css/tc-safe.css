@@ -1,0 +1,161 @@
+.table-small {
+	opacity: 0.8;
+	max-width: 172px;
+	padding: 10px;
+	background: rgba(255,255,255,0.5);
+	float: left;
+}
+.table-small th{
+	background-color: #000;
+	color: #fff;
+	font-weight: 800;
+	padding: 8px 15px;
+	min-width:95px;
+}
+.table-small td{
+	background-color: #fff;
+	color: #222;
+	border-bottom: 1px solid #ddd;
+	vertical-align: middle;
+	height: 35px; line-height: 35px;
+	font-weight: 800;
+	padding: 0 20px;
+}
+.table-small tr:last-child {
+	border-bottom: 0;
+}
+.table-small .safe-led {
+	width: 15px; height: 15px;
+	background-color: #3ca673;
+	text-indent: -9999px;
+	border-radius: 100px;
+	margin: 0 auto;
+}
+.table-small .caution-led {
+	width: 15px; height: 15px;
+	background-color: #df7e36;
+	text-indent: -9999px;
+	border-radius: 100px;
+	margin: 0 auto;
+}
+.table-small .danger-led {
+	width: 15px; height: 15px;
+	background-color: #c02424;
+	text-indent: -9999px;
+	border-radius: 100px;
+	margin: 0 auto;
+}
+.table-small .error-led {
+	width: 15px; height: 15px;
+	background-color: #636363;
+	text-indent: -9999px;
+	border-radius: 100px;
+	margin: 0 auto;
+}
+
+.tc-flag-area {
+	float: left;
+	padding: 10px;
+    background-color: rgba(0,0,0,0.03);
+    border-radius: 25px;
+    margin: 10px 0 0 10px;
+}
+.tc-flag-area .flag-wrap {
+	line-height: 40px!important;
+    background-color: #fff;
+    display: block;
+    width: 100%;
+    height: 40px;
+    border-radius: 100px;
+	padding-right: 10px;
+	clear: both;
+}
+.tc-flag-area .flag-wrap i , .tc-flag-area .flag-wrap span {
+	float: left;
+	letter-spacing: -0.5px;
+}
+.tc-flag-area .flag-wrap .shame {
+	text-align: right;
+	width: 80px;
+}
+.tc-flag-area .flag-wrap .shame em {
+	font-size: 1.7rem;
+	font-weight: 800;
+	margin-right: 3px;
+	font-family: DS-Digital;
+}
+.flag-wrap span {
+	font-size: 0.95rem; color: #525051;
+	padding: 0 8px;
+}
+.flag-wrap span strong {
+	font-size: 1.1rem;
+	font-weight: 800;
+}
+.tc-flag-area .flag-wrap .flag-icon {
+	width: 40px;
+    height: 40px;
+    display: inline-block;
+	border-radius: 100px;
+	background: url(../img/sub/flag.png) 50% 50% no-repeat;
+	text-indent: -9999px;
+}
+.tc-flag-area .flag-wrap .flag-safe {
+	background-color: #3ca673;
+}
+.tc-flag-area .flag-wrap .flag-danger {
+	background-color: #c02424;
+}
+.tc-flag-area .flag-wrap .flag-caution {
+	background-color: #df7e36;
+}
+.tc-flag-area .flag-wrap .flag-error {
+	background-color: #636363;
+}
+.ds-safe {
+	color: #3ca673!important;
+}
+.ds-danger {
+	color: #c02424!important;
+}
+.ds-caution {
+	color: #df7e36!important;
+}
+.ds-error {
+	color: #636363!important;
+}
+.tc-flag-area .flag-wrap .div-line {
+	width: 1px; height: 19px; background-color: #e9e9e9; float: left;
+	margin: 10px 7px 0 7px;
+}
+.tc-info-pannel {
+	display: block;
+    width: 180px;
+    padding: 20px;
+    color: #fff;
+    position: absolute;
+    top: 132px;
+    left: 181px;
+}
+.tc-info-pannel dt {
+	font-weight: 800;
+	padding-bottom: 10px;
+	font-size: 1.1rem;
+}
+.tc-safe {
+	background-color: rgba(53,146,101,0.8);
+}
+.tc-danger {
+	background-color: rgba(169,31,31,0.8);
+}
+.tc-caution {
+	background-color: rgba(207,113,43,0.8);
+}
+.tc-error {
+	background-color: rgba(99,99,99,0.8);
+}
+.flag-graph-wrap {
+	min-height: 350px;
+	clear: both;
+	padding: 0 20px;
+}

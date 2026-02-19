@@ -1,0 +1,174 @@
+.stickerListItem{
+	width: 100%;margin: 0 auto;background: #fff;border-radius: 4px;line-height: 3rem;box-shadow: rgba(100, 100, 111, 0.2) 0px 4px 12px 0px;position: relative;margin-bottom: 15px;color: #000;padding-left:25px;
+	border-radius : 10px 10px 10px 10px;
+	background : #90A4AE;
+	color:white;
+	cursor:pointer;
+}
+
+.btn-sticker-regi {
+	position:absolute;
+	top:11px;
+	right:40px;
+}
+
+.contentsArrow {
+	position:absolute;
+	top:15px;
+	right:15px;
+}
+
+.contentsListArea{
+	display:flex;
+	width:100%;
+}
+
+.contentsList {
+	position: relative;
+	display:flex;
+	justify_content: center;
+	align-items: flex-start;
+	flex-wrap: wrap;
+	padding:10px 10px;
+	gap: 30px;
+	width:100%;
+}
+
+.contentsList .box{
+	position: relative;
+	width: 46%;
+	background: var(--clr);
+	display:flex;
+	justify-content: center;
+	border: 2px solid var(--clr);
+	border-radius: 0.5rem;
+	box-shadow: 0 3px 20px #0000000b;
+    border-color: transparent;
+}
+
+.contentsList .box .contents{
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+	align-items:center;
+	text-align:center;
+	gap: 10px;
+	padding: 15px 15px;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	z-index: 20;
+}
+
+.contentsList .box .contents .icon{
+	color: var(--clr);
+	width:100px;
+	height: 100px;
+	box-shadow: 0 0 0 3px white, 0 0 0 5px var(--clr);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 2.5em;
+	transition: 0.3s ease-in-out;
+	background: var(--sub-bg-color);
+	border-radius:10px;
+}
+
+.contentsList .box:hover .contents .icon{
+	width:100px;
+	height: 100xp;
+	background: var(--sub-bg-color);
+	color: #2e2e2e;
+	box-shadow: 0 0 0 2px #BDBDBD, 0 0 0 200px var(--clr);
+}
+
+.contentsList .box .contents .icon img{
+	width: 100%;
+	height: 100%;
+}
+
+.contentsList .box .contents .text{
+	font-size:1em;
+	color:#000;
+	font-weight: 500;
+	align-items: center;
+	transition: 0.3s ease-in-out;
+	text-align:left;
+	width:65%;
+	display:flex;
+	gap:10px;
+}
+
+.contentsList .box .contents .text .title{
+	font-size:1em;
+	font-weight: 900;
+}
+
+.contentsList .box .contents .text .text-contents{
+	font-size:0.8em;
+}
+
+.contentsList .box .contents .text .insert{
+	color:#fff;
+}
+
+.contentsList .box .contents .text .text-contents-row{
+	min-width:80px;
+	padding:5px 5px 5px 15px;
+	border-left:2px solid #EAEAEA;
+}
+
+.contentsList .box .contents .text .text-contents-first{
+	min-width:80px;
+	padding:5px 5px 5px 5px;
+}
+
+
+
+.contentsList .box .contents .button{
+	font-size:1em;
+	color: #fff;
+	font-weight: 500;
+	align-items: center;
+	transition: 0.3s ease-in-out;
+	text-align:left;
+	width:100px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.contentsList .box .contents .text h3{
+	font-size: 1.2rem!important;
+	color: white;
+}
+
+.contentsList .box:hover .contents .text h3{
+	color: white;
+}
+
+.contentsList .box .contents .text p{
+	font-size: 0.9rem!important;
+	color: white;
+}
+
+.contentsList .box:hover .contents .text p{
+	color: white;
+}
+
+.contentsList .box .contents .text a{
+	position: relative;
+	background: var(--clr);
+	color: white;
+	padding: 8px 15px;
+	display: inline-block;
+	text-decoration: none;
+	font-weight: 500;
+	transition: 0.5s ease-in-out;
+	border-radius: 5px;
+}
+
+.contentsList .box:hover .contents .text a{
+	background: #2e2e2e;
+	color: white;
+	
+}

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="class" >
+
+	<insert id="insertClass" parameterType="ClassVO" useGeneratedKeys="true" keyProperty="class_id">
+		INSERT INTO TB_CLASS (
+		  	lecture_id
+		  , academy_id
+		  , teacher_id
+		  , class_name
+		  , class_explanation
+		  , class_plan_1
+		  , class_plan_2
+		  , class_plan_3
+		  , class_plan_4
+		  , class_plan_5
+		  , class_homework_1
+		  , class_homework_2
+		  , class_homework_3
+		  , class_homework_4
+		  , class_homework_5
+		  , class_type
+		  , class_date
+		  , class_start_time
+		  , class_end_time
+		  , class_video_link
+		  , class_publish_url
+		  , class_creator_code
+		  , class_stream_key
+		  , class_live_chat_YN
+		  , class_recording_YN
+		  , class_contents_type
+		  , class_contents
+		  , class_vod_chat_YN
+		  , file_name
+		  , file_real_name
+		  , updt_date
+		  , regi_date
+		) VALUES (
+		   #{lecture_id}
+		  , #{academy_id}
+		  , #{teacher_id}
+		  , #{class_name}
+		  , #{class_explanation}
+		  , #{class_plan_1}
+		  , #{class_plan_2}
+		  , #{class_plan_3}
+		  , #{class_plan_4}
+		  , #{class_plan_5}
+		  , #{class_homework_1}
+		  , #{class_homework_2}
+		  , #{class_homework_3}
+		  , #{class_homework_4}
+		  , #{class_homework_5}
+		  , #{class_type}
+		  , #{class_date}
+		  , #{class_start_time}
+		  , #{class_end_time}
+		  , #{class_video_link}
+		  , #{class_publish_url}
+		  , #{class_creator_code}
+		  , #{class_stream_key}
+		  , #{class_live_chat_YN}
+		  , #{class_recording_YN}
+		  , #{class_contents_type}
+		  , #{class_contents}
+		  , #{class_vod_chat_YN}
+		  , #{file_name}
+		  , #{file_real_name}
+		  , NOW()
+		  , NOW()
+		)
+	</insert>
+	
+	<update id="updateClass" parameterType="ClassVO">
+		<![CDATA[
+		UPDATE TB_CLASS
+		   SET teacher_id = #{teacher_id}
+		     , class_name = #{class_name}
+		     , class_explanation = #{class_explanation}
+		     , class_plan_1 = #{class_plan_1}
+		     , class_plan_2 = #{class_plan_2}
+		     , class_plan_3 = #{class_plan_3}
+		     , class_plan_4 = #{class_plan_4}
+		     , class_plan_5 = #{class_plan_5}
+		     , class_homework_1 = #{class_homework_1}
+		     , class_homework_2 = #{class_homework_2}
+		     , class_homework_3 = #{class_homework_3}
+		     , class_homework_4 = #{class_homework_4}
+		     , class_homework_5 = #{class_homework_5}
+		     , class_type = #{class_type}
+		     , class_date = #{class_date}
+		     , class_start_time = #{class_start_time}
+		     , class_end_time = #{class_end_time}
+		     , class_video_link = #{class_video_link}
+		     , class_publish_url = #{class_publish_url}
+		     , class_creator_code = #{class_creator_code}
+		     , class_stream_key = #{class_stream_key}
+		     , class_live_chat_YN = #{class_live_chat_YN}
+		     , class_recording_YN = #{class_recording_YN}
+		     , class_contents_type = #{class_contents_type}
+		     , class_contents = #{class_contents}
+		     , class_vod_chat_YN = #{class_vod_chat_YN}
+		     , file_name = #{file_name}
+		     , file_real_name = #{file_real_name}
+		     , updt_date = NOW()
+		 WHERE class_id = #{class_id}
+		]]>
+	</update>
+	
+	<update id="updateClassPlan" parameterType="ClassVO">
+		<![CDATA[
+		UPDATE TB_CLASS
+		   SET class_plan_1 = #{class_plan_1}
+		     , class_plan_2 = #{class_plan_2}
+		     , class_plan_3 = #{class_plan_3}
+		     , class_plan_4 = #{class_plan_4}
+		     , class_plan_5 = #{class_plan_5}
+		     , updt_date = NOW()
+		 WHERE class_id = #{class_id}
+		]]>
+	</update>
+	
+	<update id="updateClassVideo" parameterType="ClassVO">
+		<![CDATA[
+		UPDATE TB_CLASS
+		   SET class_video_link = #{class_video_link}
+		 WHERE class_id = #{class_id}
+		]]>
+	</update>
+	
+	
+	<update id="updateClassHomework" parameterType="ClassVO">
+		<![CDATA[
+		UPDATE TB_CLASS
+		   SET class_homework_1 = #{class_homework_1}
+		     , class_homework_2 = #{class_homework_2}
+		     , class_homework_3 = #{class_homework_3}
+		     , class_homework_4 = #{class_homework_4}
+		     , class_homework_5 = #{class_homework_5}
+		     , updt_date = NOW()
+		 WHERE class_id = #{class_id}
+		]]>
+	</update>
+	
+	<delete id="deleteClass" parameterType="ClassVO">
+		<![CDATA[
+		DELETE FROM TB_CLASS
+		 WHERE class_id = #{class_id}
+		]]>
+	</delete>
+	
+	<select id="selectClassList" parameterType="ClassVO" resultType="ClassVO">
+		SELECT * 
+		  FROM TB_CLASS
+		 WHERE 1=1
+		   AND lecture_id = #{lecture_id}
+		 ORDER BY class_id DESC
+	</select>
+	
+	<select id="selectClassListTotalCount" parameterType="ClassVO" resultType="Integer">
+		SELECT COUNT(*) 
+		  FROM TB_CLASS
+		 WHERE 1=1
+		   AND lecture_id = #{lecture_id}
+	</select>
+	
+	<select id="selectClassDetail" parameterType="ClassVO" resultType="ClassVO">
+		SELECT * 
+		  FROM TB_CLASS
+		 WHERE class_id = #{class_id}
+	</select>
+	
+	<select id="selectClassDetailByfileName" parameterType="ClassVO" resultType="ClassVO">
+		SELECT * 
+		  FROM TB_CLASS
+		 WHERE file_real_name = #{file_real_name}
+	</select>
+	
+	
+	<delete id="deleteLectureClass" parameterType="ClassVO">
+		<![CDATA[
+		DELETE FROM TB_CLASS
+		 WHERE lecture_id = #{lecture_id}
+		]]>
+	</delete>
+	
+</mapper>

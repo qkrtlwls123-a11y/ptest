@@ -1,0 +1,235 @@
+@CHARSET "UTF-8";
+
+div.popup {width:100%;padding:0 10px 10px 10px;}
+div.popup h2 {
+	display:inline-block;
+	color:#333;
+	font-size:15px;
+	background:url('../images/admin/ico_black.png') no-repeat 0 12px;
+	padding:10px 0px 2px 20px;	
+	}
+		
+.popup_table table {width:100% !important;border-spacing:0;border-collapse:collapse;border:1px solid #d2d2d2;font-size:12px;}
+.popup_table caption {display:none;}
+.popup_table th {padding:2px 1px;text-align:center;vertical-align:middle;border:1px solid #d2d2d2;background-color:#e9f1fa;}
+.popup_table td {padding:8px 5px;padding-left:10px;text-align:left;border:1px solid #d2d2d2;height:25px;vertical-align:middle;}
+.popup_table th:first-child {border-left:0;}
+.popup_table th{color:#000;}		
+.popup_table input[type="text"] {
+	height:23px;
+	border:1px solid #e5e5e5;
+	font-size:12px;
+}
+
+/*팝업 테이블 버튼*/
+
+.popup_table table input[type="button"] {
+	border:1px solid #aeaeae;
+	color:#565656;
+	background-color:#f1f1f1;
+	font-family: "돋움", dotum, sans-serif;
+	font-size:11px;
+	padding:3px 5px 2px 5px;
+	border-radius: 3px;
+	cursor:pointer;
+	text-align:center;
+	}
+	
+.btn_close {border:1px solid #aeaeae;
+	color:#565656;
+	background-color:#f1f1f1;
+	font-family: "돋움", dotum, sans-serif;
+	font-size:11px;
+	padding:3px 5px 2px 5px;
+	border-radius: 3px;
+	cursor:pointer;
+	text-align:center;}
+
+
+/*팝업 업로드*/
+
+.popup_upload table {width:500px;border-spacing:0;border-collapse:collapse;border:1px solid #d2d2d2;font-size:12px;}
+.popup_upload caption {display:none;}
+.popup_upload th {padding:1px;text-align:center;vertical-align:middle;border:1px solid #d2d2d2;background-color:#e9f1fa;}
+.popup_upload td {padding:1px;padding-left:10px;text-align:left;border:1px solid #d2d2d2;height:25px;vertical-align:middle;}
+.popup_upload th:first-child {border-left:0;}
+.popup_upload th{color:#000;}		
+.popup_upload input[type="text"] {
+	height:23px;
+	border:1px solid #e5e5e5;
+	font-size:12px;
+}
+
+
+/*팝업 조회박스 */
+
+div.pop_search {	
+	position:relative;
+	font-size:12px; 
+	background-color:#e9f1fa;
+	padding:5px;
+	margin-bottom:10px;
+	vertical-align: top;
+	border:1px solid #d8e8f1;
+	color:#333;
+	line-height:18px;	
+	width:900px;
+	}
+
+.pop_search table {width:100% !important;border-spacing:0;border-collapse:collapse;}
+.pop_search table caption {display:none;}
+.pop_search thead tr:first-child th{border-top:0;}
+.pop_search th {padding:5px 0;text-align:left;vertical-align:middle;}
+.pop_search td {padding:5px 0;text-align:left;}
+
+.pop_search th:first-child {border-left:0;}
+.pop_search th{color:#000;background:url('../images/admin/ico_c.png') no-repeat 10px center ;padding-left:20px;}			
+
+.pop_search input[type="text"] {
+	width: 150px;
+	height:23px;
+	border:1px solid #e5e5e5;
+	font-size:12px;
+}
+
+.pop_search .check_label {color:#666;display:inline-block;margin-top:4px;font-size:11px;}
+.pop_search select {width:145px;height:23px;border:0;font-size:12px;border:1px solid #e5e5e5;}			
+.pop_search label {color:#fff;vertical-align:-1px;padding-left:3px;}
+.pop_search [id$="_fromDt"], 
+.pop_search [id$="_toDt"] {display:inline-block;} 
+.pop_search input[type="checkbox"] {margin-top:7px;border:1px solid #e5e5e5;}
+
+.pop_search div:last-child {text-align:right;}
+
+.pop_search div:last-child input[type="button"] {		
+	font-family: "돋움", dotum, sans-serif;
+	font-size:13px;
+	padding:3px 9px;
+	border-radius: 2px;
+	cursor:pointer;
+	color: #fef4e9;
+	border: solid 1px #da7c0c;
+	background: #f78d1d;
+	background: -webkit-gradient(linear, left top, left bottom, from(#faa51a), to(#f47a20));
+	background: -moz-linear-gradient(top,  #faa51a,  #f47a20);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#faa51a', endColorstr='#f47a20');
+	text-shadow: 0 1px 1px rgba(0,0,0,.3);
+	}
+
+.popup_table input[type="file"] {background:#ffffd2;width:400px;height:23px;} 
+
+
+/*팝업*/
+#prog {text-align:center;display:none; width:100%;position:absolute;opacity:1;filter:alpha(opacity=100);background:#ffffff;}
+#prog span {display:inline-block;height:50px;}
+
+.popbtn a{
+	border:1px solid #aeaeae;
+	color:#565656;
+	font-family: "돋움", dotum, sans-serif;
+	font-size:12px;
+	padding:3px 7px;
+	border-radius: 2px;
+	cursor:pointer;
+	background-color:#dddddd;
+	text-shadow: 0 1px 1px rgba(255,255,255,.9);
+	text-align:center;
+	margin-bottom:5px;
+	}
+	
+.poploading {position:relative;margin-top:10px;border:1px solid white;}
+.loading {position:relative;margin-top:10px;border:1px solid white;}
+
+
+
+/*어드민만 빨강*/
+p.join_point {
+	float:right;display:inline;text-align:right;font-size:12px;padding:15px 0 0 10px;
+	background:url(../images/admin/point_red.png) no-repeat 0px 20px;
+}
+
+div.popup_table th.point {
+	background-image:url(../images/admin/point_red.png);
+    background-repeat: no-repeat;
+    background-position: 18px 12px;
+	}
+
+
+
+div.popupbtn input[type="button"] {		
+	border:1px solid #aeaeae;
+	color:#565656;
+	font-family: "돋움", dotum, sans-serif;
+	font-size:12px;
+	padding:3px 7px;
+	border-radius: 2px;
+	cursor:pointer;
+	background-color:#dddddd;
+	text-shadow: 0 1px 1px rgba(255,255,255,.9);
+	text-align:center;
+	margin-bottom:5px;
+	}
+	
+	
+	
+#pop div.popmsg {text-align:center;margin-top:30px;}
+#pop input[type="button"] {		
+	border:1px solid #aeaeae;
+	color:#565656;
+	font-family: "돋움", dotum, sans-serif;
+	font-size:12px;
+	padding:5px 20px;
+	border-radius: 0px;
+	cursor:pointer;
+	border-radius: 2px;
+	background-color:#FFF;
+	text-align:center;
+	margin-top:30px;
+	}
+	
+#pop input[type="button"]:last-child {	
+	background-color:#dddddd;
+	}
+	
+
+
+/*부서추가*/
+
+div.pop_insert {	
+	position:relative;
+	font-size:12px; 
+	background-color:#f1f1f1;
+	padding:5px;
+	margin-bottom:10px;
+	vertical-align: top;
+	border:1px solid #dddddd;
+	color:#333;
+	line-height:18px;	
+	width:920px;
+	}
+
+.pop_insert table {width:100% !important;border-spacing:0;border-collapse:collapse;}
+.pop_insert th {padding:5px 0;text-align:left;vertical-align:middle;}
+.pop_insert td {padding:5px 0;text-align:left;}
+	
+.pop_insert th:first-child {padding-left:20px;}
+
+.pop_insert input[type="text"] {
+	width: 150px;
+	height:23px;
+	border:1px solid #e5e5e5;
+	font-size:12px;
+}
+
+.pop_insert input[type="button"] {		
+	border:1px solid #333;
+	color:#FFF;
+	background-color:#5d5d5d;
+	font-family: "돋움", dotum, sans-serif;
+	font-size:11px;
+	padding:3px 5px 2px 5px;
+	border-radius: 3px;
+	cursor:pointer;
+	text-align:center;
+	}
+

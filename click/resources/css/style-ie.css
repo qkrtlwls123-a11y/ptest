@@ -1,0 +1,9 @@
+/*익스플로어 핵 css*/
+@media all and (-ms-high-contrast:none){
+	.left-menu-open dl {
+		margin-top: 40px;
+	} /* IE10 */
+     *::-ms-backdrop, .left-menu-open dl {
+		margin-top: 40px;
+	} /* IE11 */
+}

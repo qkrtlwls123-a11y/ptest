@@ -1,0 +1,185 @@
+/*========================占쎌맄燁살꼵占쏙옙�젫==================*/
+/*占쎌뵥占쎌뜚 揶쏉옙占쎈뮞 占쎌삢�뜮占� 筌롫뗀�뤀 占쎈툡占쎌뵠�굜占�*/
+.controll-kind-wrap {
+	padding: 10px 0 0 10px;
+}
+.controll-kind-wrap li a {
+	display: block; width: 100px; height: 40px;
+	color: #fff;
+	font-size: 1.15rem; font-weight: 800;
+	text-align: center; line-height: 40px;
+	border-radius: 3px;
+	margin-right: 10px;
+	cursor: pointer;
+}
+.controll-kind-wrap li {float: left;}
+
+.controll-kind-wrap > .co-human a {
+	background-color: #3ca673;
+}
+.controll-kind-wrap > .co-human a:hover {
+	background-color: #379467;
+}
+.controll-kind-wrap > .co-human2 a {
+	background-color: #333;
+}
+.controll-kind-wrap > .co-human2 a:hover {
+	background-color: #333;
+}
+.controll-kind-wrap > .co-gas a {
+	background-color: #004282;
+}
+.controll-kind-wrap > .co-gas a:hover {
+	background-color: #00366b;
+}
+.controll-kind-wrap > .co-gas2 a {
+	background-color: #333;
+}
+.controll-kind-wrap > .co-gas2 a:hover {
+	background-color: #333;
+}
+.controll-kind-wrap > .co-equip a {
+	background-color: #dba91d;
+}
+.controll-kind-wrap > .co-equip a:hover {
+	background-color: #be9219;
+}
+.controll-kind-wrap > .co-equip2 a {
+	background-color: #333;
+}
+.controll-kind-wrap > .co-equip2 a:hover {
+	background-color: #333;
+}
+
+/*占쎈뼄占쎈뻻揶쏉옙 占쎌겱占쎌삢 占쎌겱占쎌넺 (占쎈툡�굜遺얜탵占쎈섧 筌롫뗀�뤀)*/
+.location-board-wrap {
+	position: absolute;
+	top: 144px;
+	margin-left: 10px;
+	opacity: 0.8;
+	height: calc( 100% - 190px );
+	overflow-y: auto;
+	width: 320px;
+	overflow-x: hidden;
+}
+.location-board-toggle-wrap {
+	position: absolute;
+	top: 60px;
+}
+.location-board-toggle-close {
+	position: absolute; margin-left: 330px;
+	width: 42px; height: 42px;
+	background: url(../img/location-board-toggle-close.png) 0 0 no-repeat;
+	text-indent: -9999px;
+}
+.location-board-toggle-open {
+	width: 42px; height: 42px;
+	background: url(../img/location-board-toggle-open.png) 0 0 no-repeat;
+	text-indent: -9999px;
+}
+.location-board-header {
+	position: absolute;
+	top: 60px;
+	margin-left: 10px;
+}
+.location-board-header span {
+	background-color: #000;	
+	width: 320px; height: 42px; line-height: 42px;
+	color: #fff;
+	font-size: 1rem;
+	font-weight: 800;
+	text-align: center;
+	display: block;
+}
+.location-board-header p {
+	background-color: #333;	
+	width: 320px; height: 42px; line-height: 42px;
+	color: #fff;
+	font-size: 1rem;
+	font-weight: 800;
+	text-align: center;
+	display: block;
+}
+.location-board-wrap dl dt {
+	width: 320px; height: 50px; line-height: 50px; color: #222;
+	background-color: #add7ff;
+	border-bottom: 1px solid #ddd;
+}
+.location-board-wrap dl dt .first-dept {
+	width: 160px;
+    display: inline-block;
+    margin-left: 15px;
+}
+.location-board-wrap dl dt em {
+	display: inline-block;
+	width: 11px; height: 6px;
+	background: url(../img/select-arrow.png) 0 0 no-repeat;
+}
+.location-board-wrap dl dt .close {
+	display: inline-block;
+	width: 11px; height: 6px;
+	background: url(../img/select-close-arrow.png) 0 0 no-repeat;
+}
+.location-board-wrap dl dd .second-dept {
+	height: 50px; line-height: 50px;
+	color: #222; padding-left: 15px;
+	background-color: #ffeec1;
+	display: block;
+	border-bottom: 1px solid #ddd;
+}
+.location-board-wrap dl dd .second-dept-more {
+	width: 56px; height: 24px; 
+	letter-spacing: -1px;
+	border: 1px solid #abb1b6;
+	color: #525051;
+	background-color: #fff;
+	display: block;
+	float: right;
+	margin: 13px 10px 0 0;
+	cursor: pointer;
+}
+.location-board-wrap dl dd .third-dept li {
+	height: 43px; line-height: 43px;
+	color: #222; 
+	padding: 0 15px;
+	background-color: #fff9e9;
+	display: block;
+	border-bottom: 1px solid #eee;
+	font-size: 0.95rem;
+	letter-spacing: -1px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 303px;
+}
+.location-board-wrap dl dd .third-dept li span:first-child {
+	display: inline-block; width: 100px;
+}
+.location-board-wrap dl dd .third-dept li .gas-base-button {
+	background-color: #820909;
+	width: 100px; height: 26px; 
+	color: #fff;
+	text-align: center;
+	cursor: pointer;
+	margin-left: 30%;
+	border-radius: 100px;
+}
+.location-board-wrap dl dd .third-dept li .gas-base-button:hover {
+	background-color: #660808;
+}
+
+/*占쎌겱占쎌삢 占쎌맄燁삼옙 占쏙옙占쎌젂占쎈뱜獄쏅벡�뮞 域밸챶竊�*/
+.rocation-selectBox {
+	position: absolute;
+	top: 10px; right: 10px;
+}
+.rocation-selectBox select {
+	float: left;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    width: 190px;
+    height: 38px;
+    border: 1px solid #abb1b6;
+    border-radius: 5px;
+    padding-left: 10px;
+}

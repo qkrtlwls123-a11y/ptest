@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace= "tabmenu" >
+
+	<select id="selectTabMenuList" parameterType="MenuInfoVO" resultType="MenuInfoVO">
+		SELECT TAB.*
+			 , (SELECT file_real_name FROM "GAMS"."TB_FILE2" WHERE file_id = TAB.selected_image) AS selected_real_name
+			 , (SELECT file_path FROM "GAMS"."TB_FILE2" WHERE file_id = TAB.selected_image) AS selected_file_path
+			 , (SELECT file_real_name FROM "GAMS"."TB_FILE2" WHERE file_id = TAB.unselected_image) AS unselected_real_name
+			 , (SELECT file_path FROM "GAMS"."TB_FILE2" WHERE file_id = TAB.unselected_image) AS unselected_file_path
+		  FROM (SELECT * FROM "GAMS"."TBL_TABINFO" a
+    		 JOIN "GAMS"."TBL_TAB_IMAGE"  b ON a.tabinfo_id = b.tabinfo_id
+			 WHERE 1=1 
+	       	<if test="os_type != null and os_type != ''">
+	        	AND os_type = #{os_type}
+	        </if>
+	        
+	      	<if test="visible != null and visible != ''">
+	        	AND visible = #{visible}
+	        </if>
+	        
+			 ORDER BY menu_order ASC) TAB
+			 
+	</select>
+		
+</mapper>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="site" >
+	
+	<insert id="insertSite" parameterType="SiteVO">
+		INSERT INTO TB_SITE (
+				company_name,
+				site_name,
+				site_logo,
+				site_back,
+				site_color,
+				site_color2,
+				site_color3,
+				site_color4,
+				homepage_url,
+				business_no,
+				start_date,
+				end_date,
+				user_count,
+				manager_name,
+				manager_email,
+				manager_phone,
+				updt_date,
+				reg_date
+			)
+			VALUES
+			(
+				#{company_name},
+				#{site_name},
+				#{site_logo},
+				#{site_back},
+				'rgba(64, 78, 103, 1)',
+				'rgba(241, 245, 249, 1)',
+				'rgba(241, 245, 249, 0.3)',
+				'rgba(56, 68, 90, 1)',
+				#{homepage_url},
+				#{business_no},
+				#{start_date},
+				#{end_date},
+				#{user_count},
+				#{manager_name},
+				#{manager_email},
+				#{manager_phone},
+				NOW(),
+				NOW()
+			 )
+	</insert>
+	
+	<select id="selectSiteList" parameterType="SiteVO" resultType="SiteVO">
+		SELECT *
+		  FROM TB_SITE
+		 WHERE company_id != 0
+	</select>
+	
+	<select id="selectSiteNameList" parameterType="SiteVO" resultType="SiteVO">
+		SELECT *
+		  FROM TB_SITE
+		 WHERE site_name like CONCAT('%',#{searchValue},'%')
+	</select>
+	
+	<update id="blockSite" parameterType="SiteVO">
+		UPDATE TB_SITE
+		   SET delete_yn = #{delete_yn},
+				updt_date = NOW()
+		 WHERE company_id = #{company_id}
+	</update>
+	
+	<update id="unBlockSite" parameterType="SiteVO">
+		UPDATE TB_SITE
+		   SET delete_yn = #{delete_yn},
+				updt_date = NOW()
+		 WHERE company_id = #{company_id}
+	</update>
+	
+	<update id="deleteSite" parameterType="SiteVO">
+		DELETE FROM TB_SITE
+		 WHERE company_id = #{company_id}
+	</update>
+	
+	
+	<select id="selectSiteDetail" parameterType="SiteVO" resultType="SiteVO">
+		SELECT *
+		  FROM TB_SITE
+		 WHERE company_id = #{company_id}
+	</select>
+	
+	<select id="selectSiteNameDetail" parameterType="SiteVO" resultType="SiteVO">
+		SELECT *
+		  FROM TB_SITE
+		 WHERE site_name = #{site_name}
+	</select>
+	
+	<update id="updateSite" parameterType="SiteVO">
+		UPDATE TB_SITE
+		   SET company_name = #{company_name},
+				site_name = #{site_name},
+				<if test="site_logo != null and site_logo != ''">
+				site_logo = #{site_logo},
+				</if>
+				<if test="site_back != null and site_back != ''">
+				site_back = #{site_back},
+				</if>
+				<if test="site_color != null and site_color != ''">
+				site_color = #{site_color},
+				</if>
+				homepage_url = #{homepage_url},
+				business_no = #{business_no},
+				start_date = #{start_date},
+				end_date = #{end_date},
+				user_count = #{user_count},
+				manager_name = #{manager_name},
+				manager_email = #{manager_email},
+				manager_phone = #{manager_phone},
+				updt_date = NOW(),
+				reg_date = NOW()
+		 WHERE company_id = #{company_id}
+	</update>
+	
+	<update id="updateSiteInfo" parameterType="SiteVO">
+		UPDATE TB_SITE
+		   SET homepage_url = #{homepage_url},
+				business_no = #{business_no},
+				<if test="site_logo != null and site_logo != ''">
+				site_logo = #{site_logo},
+				</if>
+				<if test="site_back != null and site_back != ''">
+				site_back = #{site_back},
+				</if>
+				site_color = #{site_color},
+				site_color2 = #{site_color2},
+				site_color3 = #{site_color3},
+				site_color4 = #{site_color4},
+				updt_date = NOW(),
+				reg_date = NOW()
+		 WHERE company_id = #{company_id}
+	</update>
+	
+</mapper>

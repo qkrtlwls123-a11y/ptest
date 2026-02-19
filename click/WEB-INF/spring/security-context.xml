@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+ http://www.springframework.org/schema/security
+ http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
+
+	<http auto-config="true" use-expressions="true">
+
+		<intercept-url pattern="/welcome*" access="ROLE_USER" /> <!-- ROLE_MASTER, ROLE_ADMIN, ROLE_USER, ROLE_OTHER -->
+		<form-login login-page="/login" default-target-url="/welcome"
+			authentication-failure-url="/loginfailed" />
+		<logout logout-success-url="/logout" />
+
+		<session-management>
+			<!-- 30 분간 Session 유지함 -->
+			<concurrency-control max-sessions="90"
+				error-if-maximum-exceeded="true" />
+		</session-management>
+	</http>
+
+	<authentication-manager>
+		<authentication-provider>
+			<jdbc-user-service data-source-ref="dataSource"
+
+				users-by-username-query="
+     select username,password, enabled 
+     from tb_users where USERNAME=?"
+
+				authorities-by-username-query="
+     select u.username, ur.authority from tb_users u, tb_user_roles ur 
+     where u.user_id = ur.user_id and u.username =?  " />
+		</authentication-provider>
+	</authentication-manager>
+ 
+</beans:beans>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="question" >
+
+	<insert id="insertQuestion" parameterType="QuestionVO" useGeneratedKeys="true" keyProperty="question_id">
+		INSERT INTO TB_QUESTION (
+		  	class_id
+		  , question_contents
+		  , question_type
+		  , question_time
+		  , question_option_1
+		  , question_option_2
+		  , question_option_3
+		  , question_option_4
+		  , question_option_5
+		  , question_correct_answer
+		  , updt_date
+		  , regi_date
+		) VALUES (
+		   #{class_id}
+		  , #{question_contents}
+		  , #{question_type}
+		  , #{question_time}
+		  , #{question_option_1}
+		  , #{question_option_2}
+		  , #{question_option_3}
+		  , #{question_option_4}
+		  , #{question_option_5}
+		  , #{question_correct_answer}
+		  , NOW()
+		  , NOW()
+		)
+	</insert>
+	
+	<delete id="deleteQuestion" parameterType="QuestionVO">
+		<![CDATA[
+		DELETE FROM TB_QUESTION
+		 WHERE class_id = #{class_id}
+		]]>
+	</delete>
+	
+	<select id="selectQuestionList" parameterType="QuestionVO" resultType="QuestionVO">
+		SELECT A.*
+			 , CASE WHEN B.question_option_1_answer IS NULL THEN 0 ELSE B.question_option_1_answer END AS question_option_1_answer
+			 , CASE WHEN B.question_option_2_answer IS NULL THEN 0 ELSE B.question_option_2_answer END AS question_option_2_answer
+			 , CASE WHEN B.question_option_3_answer IS NULL THEN 0 ELSE B.question_option_3_answer END AS question_option_3_answer
+			 , CASE WHEN B.question_option_4_answer IS NULL THEN 0 ELSE B.question_option_4_answer END AS question_option_4_answer
+			 , CASE WHEN B.question_option_5_answer IS NULL THEN 0 ELSE B.question_option_5_answer END AS question_option_5_answer
+		  FROM TB_QUESTION A LEFT JOIN 
+		  	(
+			  	SELECT question_id
+					 , SUM(CASE WHEN question_answer = '1' THEN 1 ELSE 0 END) AS question_option_1_answer
+					 , SUM(CASE WHEN question_answer = '2' THEN 1 ELSE 0 END) AS question_option_2_answer
+					 , SUM(CASE WHEN question_answer = '3' THEN 1 ELSE 0 END) AS question_option_3_answer
+					 , SUM(CASE WHEN question_answer = '4' THEN 1 ELSE 0 END) AS question_option_4_answer
+					 , SUM(CASE WHEN question_answer = '5' THEN 1 ELSE 0 END) AS question_option_5_answer
+				  FROM TB_QUESTION_ANSWER
+				 WHERE class_id = #{class_id}
+				 GROUP BY question_id
+			 ) B ON A.question_id = B.question_id
+		 WHERE A.class_id = #{class_id}
+		 ORDER BY question_id
+	</select>
+	
+	<select id="selectQuestionAnswerDetail" parameterType="QuestionVO" resultType="StudentVO">
+		SELECT B.user_no
+			 , B.user_name
+			 , B.user_id
+			 , B.user_status
+		  FROM TB_QUESTION_ANSWER A, TB_USER B
+		 WHERE A.user_id = B.user_id
+		   AND A.question_id = #{question_id}
+		   AND A.question_answer = #{question_answer}
+	</select>
+	
+	<insert id="insertQuestionAnswer" parameterType="QuestionVO">
+		INSERT INTO TB_QUESTION_ANSWER (
+		  	question_id
+		  , class_id
+		  , academy_id
+		  , user_id
+		  , question_answer
+		  , regi_date
+		) VALUES (
+		   #{question_id}
+		  , #{class_id}
+		  , #{academy_id}
+		  , #{user_id}
+		  , #{question_answer}
+		  , NOW()
+		)
+	</insert>
+	
+</mapper>

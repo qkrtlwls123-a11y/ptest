@@ -1,0 +1,944 @@
+/*========================�뜝�떢�냲�삕 �뜝�룞�삕�뜝�룞�삕==================*/
+
+.pop-tunnel-graph {
+	background-color: #ddd;
+	text-indent: -9999px;
+	height: 25px; width: 100%;
+	margin: 5px 0;
+}
+
+/*�뜝�떢�꼸怨ㅼ삕�뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕 �뜝�떎�냲�삕 �뜝�떢�먯삕*/
+.con-area .tunnel-wrap {
+	height: 100%;
+}
+.con-area .tunnel-wrap ul li dl dt {
+	font-size: 1.2em; font-weight: 800;
+	padding: 10px 0 10px 0;
+	margin: 0 20px;
+	border-bottom: 1px solid #eee;
+	margin-bottom: 10px;
+}
+.con-area .tunnel-wrap ul li dl dt button {
+	background-color: #333;
+    border-radius: 100px;
+    font-size: 0.95rem;
+    color: #fff;
+    cursor: pointer;
+	padding: 3px 15px;
+	float: right;
+}
+.con-area .tunnel-wrap ul li dl {
+	background-color: #fff;
+	width:100%;
+	height: 100%;
+    border-radius: 5px;
+    padding-bottom: 10px;
+    box-shadow: 5px 2px 15px rgba( 0 , 0 , 0 , 0.05);
+}
+.con-area .tunnel-wrap .left-section {
+	width: calc(35% - 15px);
+	margin-right: 15px;
+	height: 100%;
+	float: left;
+}
+.con-area .tunnel-wrap .left-section .section01 {
+	width: 100%;
+	height: 222px;
+	margin-bottom: 15px;
+}
+.con-area .tunnel-wrap .left-section .section02 {
+	width: 100%;
+	height: 460px;
+}
+.con-area .tunnel-wrap .right-section {
+	width: 65%;
+	height: 100%;
+	float: left;
+}
+.con-area .tunnel-wrap .right-section .section03 {
+	width: 100%;
+	height: 222px;
+	margin-bottom: 15px;
+}
+
+.con-area .tunnel-wrap .right-section .section04 {
+	width: 100%;
+	height: 460px;
+}
+.con-area .tunnel-wrap .right-section .section04 dd {
+	height: 44%;
+	background: url(../img/sub/tunnel-bg01.png) 0 0 no-repeat;
+    position: relative;
+}
+.con-area .tunnel-wrap .right-section .section04 .tunnel-bg {
+	background-size: calc(100% - 150px);
+    background-position-x: 110px;
+    background-position-y: bottom;
+}
+/*�뜝�떢�꼸怨ㅼ삕�뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕 �뜝�떎�냲�삕 �뜝�떢�먯삕*/
+/*�뜝�떢�꼸怨ㅼ삕�뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕 �뜝�떎�냲�삕 - �뜝�룞�삕�뜝�룞�삕�뜝�룞�삕 �뜝�룞�삕�솴*/
+.con-area .tunnel-wrap .left-section .section01 dd {
+	display: block;
+	width: max-content;
+	margin: 0 auto;
+}
+.con-area .tunnel-wrap .left-section .section01 .work-plan-div{
+	border-radius: 200px;
+	box-shadow: 2px 3px 15px rgba( 0 , 0 , 0 , 0.12);
+	width: 130px;
+	height: 130px;
+	text-align: center;
+	padding-top: 30px;
+	float: left;
+	margin-top: 4%;
+}
+.con-area .tunnel-wrap .left-section .section01 .work-plan-div strong {
+	font-size: 1.3rem;
+	color: #999999;
+	font-weight: bolder;
+}
+.con-area .tunnel-wrap .left-section .section01 .work-plan-div p {
+	clear: both;
+	font-size: 3rem;
+	font-weight: bolder;
+	text-shadow: 2px 2px 5px rgba( 0 , 0 , 0 , 0.1);
+	color: #14abfa;
+	padding-top: 5px;
+} 
+.con-area .tunnel-wrap .left-section .section01 .work-gap-div {
+	background: url(../img/sub/work-gap-div-bg.png) 0 0 no-repeat;
+	width: 126px; height: 73px;
+	float: left;
+	margin-top: 10%;
+	color: #fff;
+	font-size: 1.3rem;
+	font-weight: bolder;
+	text-align: center;
+	line-height: 73px;
+	margin-left: 20px;
+}
+.con-area .tunnel-wrap .left-section .section01 .work-finish-div{
+	border-radius: 200px;
+	box-shadow: 2px 3px 15px rgba( 0 , 0 , 0 , 0.12);
+	width: 130px;
+	height: 130px;
+	text-align: center;
+	padding-top: 30px;
+	float: left;
+	margin-top: 4%;
+	margin-left: 20px;
+	background-color: #31b7fe;
+}
+.con-area .tunnel-wrap .left-section .section01 .work-finish-div strong {
+	font-size: 1.3rem;
+	color: #fff;
+	font-weight: bolder;
+}
+.con-area .tunnel-wrap .left-section .section01 .work-finish-div p {
+	clear: both;
+	font-size: 3rem;
+	font-weight: bolder;
+	text-shadow: 2px 2px 5px rgba( 0 , 0 , 0 , 0.1);
+	color: #fdff20;
+	padding-top: 5px;
+} 
+
+/*�뜝�떢�꼸怨ㅼ삕�뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕 �뜝�떎�냲�삕 - �뜝�룞�삕�뜝�룞�삕�뜝�룞�삕 �뜝�룞�삕�솴*/
+.con-area .tunnel-wrap .left-section .section02 .tunnel-progress-wrap span{
+	font-size: 1.2rem;
+	font-weight: bolder;
+	color: #999;
+	margin: 20px 50px 10px 50px;
+	display: block;
+}
+
+.con-area .tunnel-wrap .left-section .section02 .tunnel-progress-wrap span em {
+	font-size: 1.2rem;
+	font-weight: bolder;
+	color: #14abfa;
+}
+.con-area .tunnel-wrap .left-section .section02 .tunnel-progress-wrap .tunnel-progress-bar {
+	width: 92%;
+	margin: 0 auto;
+	background-color: #e8f7ff;
+	height: 45px;
+	border-radius: 100px;
+	clear: both;
+}
+.con-area .tunnel-wrap .left-section .section02 .tunnel-progress-wrap .tunnel-progress-bar .main-progress-bar {
+	position: relative;
+	content: '';
+	display: block;
+	background: linear-gradient(90deg, rgba(2,0,36,1) -22%, rgba(18,150,218,1) 0%, rgba(102,203,255,1) 100%);
+	border-radius: 100px;
+	height: 45px;
+}
+.con-area .tunnel-wrap .left-section .section02 .tunnel-status-wrap{
+	margin: 30px 15% 12% 15%;
+}
+.con-area .tunnel-wrap .left-section .section02 .tunnel-status-wrap li span {
+	color: #222;
+	font-size: 2rem;
+	font-weight: bolder;
+}
+.con-area .tunnel-wrap .left-section .section02 .tunnel-status-wrap li em {
+	color: #14abfa;
+	font-size: 2rem;
+	font-weight: bolder;
+}
+
+/*�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕�솴 - �뜝�뙐琉꾩삕�뜝�룞�삕�뜝�룞�삕�솴*/
+.con-area .tunnel-wrap .left-section .section02 .worker-status {
+	width: 42.5%;
+	margin: 0 0 0 5%;
+	border-radius: 5px;
+	box-shadow: 2px 3px 15px rgba( 0 , 0 , 0 , 0.12);
+	text-align: center;
+	float: left;
+	padding: 15px 0;
+}
+.con-area .tunnel-wrap .left-section .section02 .worker-status strong {
+	font-size: 1.3rem;
+	color: #999;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 10px;
+	width: 80%;
+	margin: 0 auto;
+	display: block;
+}
+.con-area .tunnel-wrap .left-section .section02 .worker-status p {
+	color: #05a951;
+	font-size: 3rem;
+	font-weight: bolder;
+	text-shadow: 2px 2px 5px rgba( 0 , 0 , 0 , 0.1);
+	padding-top: 20px;
+	padding-bottom: 10px;
+	font-family: 'HDharmonyB';
+}
+.con-area .tunnel-wrap .left-section .section02 .worker-status p em {
+	color: #999;
+	font-size: 1.2rem;
+}
+/*�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕�솴 - �뜝�룞�삕�뜝�룞�삕�뜝�떕占�*/
+.con-area .tunnel-wrap .left-section .section02 .equip-status {
+	width: 42.5%;
+	margin: 0 5% 0 5%;
+	border-radius: 5px;
+	box-shadow: 2px 3px 15px rgba( 0 , 0 , 0 , 0.12);
+	text-align: center;
+	float: left;
+	padding: 15px 0;
+}
+.con-area .tunnel-wrap .left-section .section02 .equip-status strong {
+	font-size: 1.3rem;
+	color: #999;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 10px;
+	width: 80%;
+	margin: 0 auto;
+	display: block;
+}
+.con-area .tunnel-wrap .left-section .section02 .equip-status p {
+	color: #05a951;
+	font-size: 3rem;
+	font-weight: bolder;
+	text-shadow: 2px 2px 5px rgba( 0 , 0 , 0 , 0.1);
+	padding-top: 20px;
+	padding-bottom: 10px;
+	font-family: 'HDharmonyB';
+}
+.con-area .tunnel-wrap .left-section .section02 .equip-status p em {
+	color: #999;
+	font-size: 1.2rem;
+}
+/*�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕�솴*/
+.gas-sen-title {text-align: center; color: #999; margin-left: 25%;}
+.gas-sen-title li {float: left; margin: 0 30px;}
+.section-play-rolling {float: right;}
+.section-play-rolling li {float: left;}
+.section-play-rolling .status-danger {
+	border-radius: 3px;
+    font-size: 1rem;
+    padding: 2px 15px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #c02424;
+}
+.section-play-rolling .status-caution {
+	border-radius: 3px;
+    font-size: 1rem;
+    padding: 2px 15px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #df7e36;
+}
+.section-play-rolling .status-safe {
+	border-radius: 3px;
+    font-size: 1rem;
+    padding: 2px 15px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #3ca673;
+}
+.section-play-rolling .status-error {
+	border-radius: 3px;
+    font-size: 1rem;
+    padding: 2px 15px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #636363;
+}
+.section-play-rolling .play-btn {
+	margin-left: 20px; 
+}
+.section-play-rolling .play-btn a {
+	background: url(../img/sub/play-off.png) 0 0 no-repeat;
+	display: block;
+	width: 19px; height: 20px;
+	margin-left: 10px;
+}
+.section-play-rolling .play-btn a:hover {
+	background: url(../img/sub/play-on.png) 0 0 no-repeat;
+}
+
+.section-play-rolling .play-btn a.on {
+	background: url(../img/sub/play-on.png) 0 0 no-repeat;
+}
+
+.section-play-rolling .pause-btn a {
+	background: url(../img/sub/pause-off.png) 0 0 no-repeat;
+	display: block;
+	width: 19px; height: 20px;
+	margin-left: 15px;
+}
+.section-play-rolling .pause-btn a:hover {
+	background: url(../img/sub/pause-on.png) 0 0 no-repeat;
+}
+
+.section-play-rolling .pause-btn a.on {
+	background: url(../img/sub/pause-on.png) 0 0 no-repeat;
+}
+
+.con-area .tunnel-wrap .right-section .section03 dl dt {display: flow-root;}
+.con-area .tunnel-wrap .right-section .section03 dl dd {padding-top: 15px;}
+
+/*�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕�솴 - O2*/
+.con-area .tunnel-wrap .right-section .section03 .dangerBg {
+	background: linear-gradient( to right, #ea5e38 , #c02424);
+}
+.con-area .tunnel-wrap .right-section .section03 .cautionBg {
+	background: linear-gradient( to right, #df9d36 , #df7e36);
+}
+.con-area .tunnel-wrap .right-section .section03 .safeBg {
+	background: linear-gradient( to right, #57c791 , #3ca673);
+}
+.con-area .tunnel-wrap .right-section .section03 .errorBg {
+	background: linear-gradient( to right, #878787 , #636363);
+}
+.con-area .tunnel-wrap .right-section .section03 .dangerBg strong , 
+.con-area .tunnel-wrap .right-section .section03 .dangerBg p , 
+.con-area .tunnel-wrap .right-section .section03 .dangerBg p em ,
+.con-area .tunnel-wrap .right-section .section03 .cautionBg strong , 
+.con-area .tunnel-wrap .right-section .section03 .cautionBg p , 
+.con-area .tunnel-wrap .right-section .section03 .cautionBg p em ,
+.con-area .tunnel-wrap .right-section .section03 .safeBg strong , 
+.con-area .tunnel-wrap .right-section .section03 .safeBg p , 
+.con-area .tunnel-wrap .right-section .section03 .safeBg p em , 
+.con-area .tunnel-wrap .right-section .section03 .errorBg strong , 
+.con-area .tunnel-wrap .right-section .section03 .errorBg p , 
+.con-area .tunnel-wrap .right-section .section03 .errorBg p em {
+	color : #fff!important;
+}
+.con-area .tunnel-wrap .right-section .section03 .gas-status01 {
+	width: 22.5%;
+	margin: 0 0 0 2%;
+	border-radius: 5px;
+	box-shadow: 2px 3px 15px rgba( 0 , 0 , 0 , 0.12);
+	text-align: center;
+	float: left;
+	padding: 10px 0;
+}
+.con-area .tunnel-wrap .right-section .section03 .gas-status01 strong {
+	font-size: 1.5rem;
+	color: #999;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 10px;
+	width: 80%;
+	margin: 0 auto;
+	display: block;
+}
+.con-area .tunnel-wrap .right-section .section03 .gas-status01 p {
+	color: #05a951;
+	font-size: 3rem;
+	font-weight: bolder;
+	text-shadow: 2px 2px 5px rgba( 0 , 0 , 0 , 0.1);
+	padding-top: 20px;
+	padding-bottom: 10px;
+	font-family: 'HDharmonyB';
+}
+.con-area .tunnel-wrap .right-section .section03 .gas-status01 p em {
+	color: #999;
+	font-size: 1.2rem;
+}
+/*�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕�솴 - CO2*/
+.con-area .tunnel-wrap .right-section .section03 .gas-status02 {
+	width: 22.5%;
+	margin: 0 0 0 2%;
+	border-radius: 5px;
+	box-shadow: 2px 3px 15px rgba( 0 , 0 , 0 , 0.12);
+	text-align: center;
+	float: left;
+	padding: 10px 0;
+}
+.con-area .tunnel-wrap .right-section .section03 .gas-status02 strong {
+	font-size: 1.5rem;
+	color: #999;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 10px;
+	width: 80%;
+	margin: 0 auto;
+	display: block;
+}
+.con-area .tunnel-wrap .right-section .section03 .gas-status02 p {
+	color: #05a951;
+	font-size: 3rem;
+	font-weight: bolder;
+	text-shadow: 2px 2px 5px rgba( 0 , 0 , 0 , 0.1);
+	padding-top: 20px;
+	padding-bottom: 10px;
+	font-family: 'HDharmonyB';
+}
+.con-area .tunnel-wrap .right-section .section03 .gas-status02 p em {
+	color: #999;
+	font-size: 1.2rem;
+}
+/*�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕�솴 - H2S*/
+.con-area .tunnel-wrap .right-section .section03 .gas-status03 {
+	width: 22.5%;
+	margin: 0 0 0 2%;
+	border-radius: 5px;
+	box-shadow: 2px 3px 15px rgba( 0 , 0 , 0 , 0.12);
+	text-align: center;
+	float: left;
+	padding: 10px 0;
+}
+.con-area .tunnel-wrap .right-section .section03 .gas-status03 strong {
+	font-size: 1.5rem;
+	color: #999;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 10px;
+	width: 80%;
+	margin: 0 auto;
+	display: block;
+}
+.con-area .tunnel-wrap .right-section .section03 .gas-status03 p {
+	color: #05a951;
+	font-size: 3rem;
+	font-weight: bolder;
+	text-shadow: 2px 2px 5px rgba( 0 , 0 , 0 , 0.1);
+	padding-top: 20px;
+	padding-bottom: 10px;
+	font-family: 'HDharmonyB';
+}
+.con-area .tunnel-wrap .right-section .section03 .gas-status03 p em {
+	color: #999;
+	font-size: 1.2rem;
+}
+/*�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕�솴 - CH4*/
+.con-area .tunnel-wrap .right-section .section03 .gas-status04 {
+	width: 22.5%;
+	margin: 0 0 0 2%;
+	border-radius: 5px;
+	box-shadow: 2px 3px 15px rgba( 0 , 0 , 0 , 0.12);
+	text-align: center;
+	float: left;
+	padding: 10px 0;
+}
+.con-area .tunnel-wrap .right-section .section03 .gas-status04 strong {
+	font-size: 1.5rem;
+	color: #999;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 10px;
+	width: 80%;
+	margin: 0 auto;
+	display: block;
+}
+.con-area .tunnel-wrap .right-section .section03 .gas-status04 p {
+	color: #05a951;
+	font-size: 3rem;
+	font-weight: bolder;
+	text-shadow: 2px 2px 5px rgba( 0 , 0 , 0 , 0.1);
+	padding-top: 20px;
+	padding-bottom: 10px;
+	font-family: 'HDharmonyB';
+}
+.con-area .tunnel-wrap .right-section .section03 .gas-status04 p em {
+	color: #999;
+	font-size: 1.2rem;
+}
+/*�뜝�떢�꼸怨ㅼ삕�뜝�룞�삕 - �뜝�떢�냲�삕 �뜝�룞�삕�뜝�룞�삕�뜝�룞�삕 �뜝�뙎琉꾩삕�뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕*/
+.tunnel-progress-area {
+	height: 180px;
+	margin: 0 auto;
+	background-color: #fff;
+	border-radius: 3px;
+	box-shadow: 5px 2px 15px rgba( 0 , 0 , 0 , 0.05);
+	position: relative;
+	top: 200px;
+	margin-left: 20px;
+	margin-right: 20px;
+	overflow-y: auto;
+	padding-bottom: 15px;
+}
+.tunnel-progress-area ul li:first-child {
+	margin: 35px 10px 0 15px;
+	width: 65px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	color: #999;
+	font-weight: 600;
+}
+.tunnel-progress-area ul li , .tunnel-progress-area ul li > span , .tunnel-progress-area ul li > div {float: left;}
+.tunnel-progress-area ul li > span {
+	float: none; text-align: center;
+	display: block;
+	height: 20px;
+	font-size: 1.2rem;
+	font-weight: 800;
+	color: #222;
+}
+.tunnel-progress-area ul li > span em {
+	color: #999;
+	font-size: 0.7rem;
+}
+.distance-label {
+	display: block;
+    position: relative;
+    top: 210px;
+	left: 70px;
+	color: #999;
+}
+.distance-label span:first-child {
+}
+.distance-label span{
+	float: left;
+}
+/*�뜝�뙎琉꾩삕�뜝�룞�삕 - �뜝�룞�삕�뜝�룞�삕 1�뜝�룞�삕�뜝�룞�삕*/
+.tunnel-progress-area .tunnel-progress-wrap1 {
+	text-align: center;
+	float:left;
+}
+.tunnel-progress-area .tunnel-graphA-1 {
+	width: 100%;
+	margin: 0 auto;
+	background-color: #e8f7ff;
+	height: 25px;
+	float: left;
+}
+
+.progress-start {
+	position: relative;
+	content: '';
+	display: block;
+	background: linear-gradient(90deg, rgba(2,0,36,1) -22%, rgba(18,150,218,1) 0%, rgba(102,203,255,1) 100%);
+	border-radius: 0 100px 100px 0;
+	height: 25px;
+	float:left;
+}
+
+.progress-backward {
+	position: relative;
+	content: '';
+	display: block;
+	background: linear-gradient(90deg, rgba(2,0,36,1) -22%, rgba(18,150,218,1) 0%, rgba(102,203,255,1) 100%);
+	border-radius: 100px 0 0 100px;
+	height: 25px;
+	float:right;
+}
+
+.progress-forward {
+	position: relative;
+	content: '';
+	display: block;
+	background: linear-gradient(90deg, rgba(2,0,36,1) -22%, rgba(18,150,218,1) 0%, rgba(102,203,255,1) 100%);
+	border-radius: 0 100px 100px 0;
+	height: 25px;
+	float:left;
+}
+
+.progress-end {
+	position: relative;
+	content: '';
+	display: block;
+	background: linear-gradient(90deg, rgba(2,0,36,1) -22%, rgba(18,150,218,1) 0%, rgba(102,203,255,1) 100%);
+	border-radius: 100px 0 0 100px;
+	height: 25px;
+	float: right;
+}
+/*�뜝�뙎琉꾩삕�뜝�룞�삕 - �뜝�룞�삕�뜝�룞�삕 2�뜝�룞�삕�뜝�룞�삕*/
+.tunnel-progress-area .tunnel-progress-wrap2 {
+	text-align: center;
+	margin-top: 10px;
+	float:left;
+}
+.tunnel-progress-area .tunnel-graphA-2 {
+	width: 100%;
+	margin: 0 auto;
+	background-color: #e8f7ff;
+	height: 25px;
+	float: left;
+}
+/*�뜝�뙎琉꾩삕�뜝�룞�삕 - �뜝�룞�삕�뜝�룞�삕 3�뜝�룞�삕�뜝�룞�삕*/
+.tunnel-progress-area .tunnel-progress-wrap3 {
+	width: 20%;
+	text-align: center;
+	margin-top: 10px;
+}
+.tunnel-progress-area .tunnel-graphA-3 {
+	width: 100%;
+	margin: 0 auto;
+	background-color: #e8f7ff;
+	height: 25px;
+	float: left;
+}
+/*�뜝�뙎琉꾩삕�뜝�룞�삕 - �뜝�룞�삕�뜝�룞�삕 4�뜝�룞�삕�뜝�룞�삕*/
+.tunnel-progress-area .tunnel-progress-wrap4 {
+	width: 20%;
+	text-align: center;
+	margin-top: 10px;
+}
+.tunnel-progress-area .tunnel-graphA-4 {
+	width: 100%;
+	margin: 0 auto;
+	background-color: #e8f7ff;
+	height: 25px;
+	float: left;
+}
+
+/*�뜝�뙎琉꾩삕�뜝�룞�삕 - �뜝�룞�삕�뜝�룞�삕 5�뜝�룞�삕�뜝�룞�삕*/
+.tunnel-progress-area .tunnel-progress-wrap5 {
+	width: 20%;
+	text-align: center;
+	margin-top: 10px;
+}
+.tunnel-progress-area .tunnel-graphA-5 {
+	width: 100%;
+	margin: 0 auto;
+	background-color: #e8f7ff;
+	height: 25px;
+	border-radius: 0 100px 100px 0;
+	float: left;
+}
+
+/*�뜝�떢�냲�삕 �뜝�룞�삕�뜝�룞�삕 �뜝�룞�삕移� area*/
+/*�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕�뜝�룞�삕*/
+.tunnel-position-wrap1 {
+	margin-left: 0%;
+    padding-left: 69px;
+}
+.tunnel-position-wrap1 .pos01 {
+    display: block;
+    position: absolute;
+    z-index: 500;
+    top: 90px;
+}
+.tunnel-position-wrap1 .pos01 li:first-child {
+	background-color: #222;
+	color: #fff;
+	border-radius: 3px;
+	padding: 5px 15px;
+	font-size: 0.9rem;
+	width:80px;
+}
+.tunnel-position-wrap1 .pos01 .line {
+	width: 1px;
+	height: 263px;
+	background-color: #e7e7e7;
+	display: block;
+	position: absolute;
+	left: 50%;
+}
+/*AA�뜝�뙥�뼲�삕�뜝�룞�삕�뜝占� �뜝�룞�삕�뜝�룞�삕�뜝�룞�삕*/
+.tunnel-position-wrap2 {
+	margin-left: 19.3%;
+}
+.tunnel-position-wrap2 .pos02 {
+    display: block;
+    position: absolute;
+    z-index: 500;
+    top: 60px;
+}
+.tunnel-position-wrap2 .pos02 li:first-child {
+	background-color: #0b8bee;
+	color: #fff;
+	border-radius: 3px;
+	padding: 5px 15px;
+	font-size: 0.9rem;
+}
+.tunnel-position-wrap1 .pos02 .line {
+	width: 1px;
+	height: 263px;
+	background-color: #e7e7e7;
+	display: block;
+	position: absolute;
+	left: 50%;
+	top:14px;
+}
+/*BB�뜝�뙥�뼲�삕�뜝�룞�삕�뜝占� �뜝�룞�삕�뜝�룞�삕�뜝�룞�삕*/
+.tunnel-position-wrap3 {
+	margin-left: 40%;
+}
+.tunnel-position-wrap3 .pos03 {
+    display: block;
+    position: absolute;
+    z-index: 500;
+    top: 30px;
+}
+.tunnel-position-wrap3 .pos03 li:first-child {
+	background-color: #0b8bee;
+	color: #fff;
+	border-radius: 3px;
+	padding: 5px 15px;
+	font-size: 0.9rem;
+}
+.tunnel-position-wrap3 .pos03 .line {
+	width: 1px;
+	height: 323px;
+	background-color: #e7e7e7;
+	display: block;
+	position: absolute;
+	left: 50%;
+}
+/*CC�뜝�뙥�뼲�삕�뜝�룞�삕�뜝占� �뜝�룞�삕�뜝�룞�삕�뜝�룞�삕*/
+.tunnel-position-wrap4 {
+	margin-left: 70%;
+}
+.tunnel-position-wrap4 .pos04 {
+    display: block;
+    position: absolute;
+    z-index: 500;
+    top: 60px;
+}
+.tunnel-position-wrap4 .pos04 li:first-child {
+	background-color: #0b8bee;
+	color: #fff;
+	border-radius: 3px;
+	padding: 5px 15px;
+	font-size: 0.9rem;
+}
+.tunnel-position-wrap4 .pos04 .line {
+	width: 1px;
+	height: 263px;
+	background-color: #e7e7e7;
+	display: block;
+	position: absolute;
+	left: 50%;
+	top:14px;
+}
+/*�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕�뜝�룞�삕*/
+.tunnel-position-wrap5 {
+	margin-right:85px;
+	float:right;
+}
+.tunnel-position-wrap5 .pos05 {
+    display: block;
+    position: absolute;
+    z-index: 500;
+    top: 90px;
+}
+
+.tunnel-position-wrap5 .pos05 li:first-child {
+	background-color: #222;
+	color: #fff;
+	border-radius: 3px;
+	padding: 5px 15px;
+	font-size: 0.9rem;
+	width:80px;
+}
+.tunnel-position-wrap5 .pos05 .line {
+	width: 1px;
+	height: 263px;
+	background-color: #e7e7e7;
+	display: block;
+	position: absolute;
+	left: 50%;
+}
+.tunnel-position-wrap6 {
+	margin-right:51px;
+	float:right;
+}
+.tunnel-position-wrap6 .pos05 {
+    display: block;
+    position: absolute;
+    z-index: 500;
+    top: 90px;
+}
+
+.tunnel-position-wrap6 .pos05 li:first-child {
+	background-color: #222;
+	color: #fff;
+	border-radius: 3px;
+	padding: 5px 15px;
+	font-size: 0.9rem;
+	width:80px;
+}
+.tunnel-position-wrap6 .pos05 .line {
+	width: 1px;
+	height: 263px;
+	background-color: #e7e7e7;
+	display: block;
+	position: absolute;
+	left: 50%;
+}
+/*�뜝�떢�꼸怨ㅼ삕�뜝�룞�삕 �뜝�룞�삕�솴�뜝�떎紐뚯삕�뜝占� fullMode css*/
+.fullMode .section01 , .fullMode .section03 {
+	height: 300px!important;
+}
+.fullMode .section01 .work-plan-div , .fullMode .section01 .work-finish-div {
+	margin-top: 12%!important;
+}
+.fullMode .section01 .work-gap-div {
+	margin-top: 18%!important;
+}
+.fullMode .section02 , .fullMode .section04 {
+	height: 568px!important;
+}
+.fullMode .section02 .equip-status , .fullMode .section02 .worker-status {
+	padding: 50px 0!important;
+}
+.fullMode .section02 .equip-status p , .fullMode .section02 .worker-status p {
+	font-size: 4rem!important;
+}
+
+.fullMode .section03 .gas-status01 , .fullMode .section03 .gas-status02 , .fullMode .section03 .gas-status03 , .fullMode .section03 .gas-status04 {
+	padding: 40px 0!important;
+}
+.fullMode .section03 .gas-status01 p , .fullMode .section03 .gas-status02 p , .fullMode .section03 .gas-status03 p , .fullMode .section03 .gas-status04 p {
+	font-size: 4rem!important;
+}
+.fullMode .section04 dl {
+	padding-top: 90px!important;
+}
+/*�뜝�떢�꼸怨ㅼ삕�뜝�룞�삕 �뜝�룞�삕�솴�뜝�떎紐뚯삕�뜝占� fullMode css �뜝�룞�삕*/
+
+/*�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕�뜝�룞�삕 css*/
+.no-notice .con-area .tunnel-wrap .left-section .section01 , .no-notice .con-area .tunnel-wrap .right-section .section03 {
+	margin-top: 20px;
+}
+.no-notice .section02, .no-notice .section04 {
+	height: 615px!important;
+}
+.no-notice .section04 dl {
+	padding-top: 136px!important;
+}
+.no-notice .section-paging-rolling {
+	bottom: -90px;
+}
+/*�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕�뜝�룞�삕 css �뜝�룞�삕*/
+/*占쎄숲占쎄섯 獄쏉옙 �뤃�덉퍢 占쎄퐬占쎌젟 �겫占썽겫占�*/
+.select-tunnel {padding: 20px;}
+.select-tunnel li{
+	float: left;
+	line-height: 27px;
+	margin-right: 15px;
+}
+.select-tunnel li select {
+	height: 27px;
+    border-radius: 5px;
+    padding-right: 25px;
+}
+
+.last-td-hidden {
+	border-top: 0!important;
+}
+.last-td-hidden .topBorder {
+	border-top: 3px solid #DEE2E6!important;
+}
+.last-td-hidden tbody tr td:last-child{
+	border: 0;
+	background: none;
+}
+.last-td-hidden .tunnel-dir img {
+	width: 12px;
+	margin-left: 10px;
+	margin-right: 20px;
+}
+.last-td-hidden .add-tunnel {
+	background: url('../img/sub/plus.png') 0 0 no-repeat;
+	width: 15px; height: 15px;
+	display: block;
+	float: left;
+	cursor: pointer;
+	margin-right: 10px;
+}
+.last-td-hidden .delete-tunnel {
+	background: url('../img/sub/delete.png') 0 0 no-repeat;
+	width: 15px; height: 15px;
+	display: block;
+	float: left;
+	cursor: pointer;
+}
+.last-td-hidden .tunnel-name {
+	display: block;
+	float: left;
+	font-size: 1rem;
+	font-weight: 800;
+	color: #222;
+	margin-right: 10px;
+	margin-left: 10px;
+}
+
+.tunnel-progress-title {
+	width:90px;padding:35px 5px 0 5px;text-overflow: ellipsis;overflow:hidden;white-space: nowrap;color:#999;font-weight: 600;float:left;text-align:center;
+}
+
+.tunnel-progress-title2 {
+	width:90px;padding:27px 5px 0 5px;text-overflow: ellipsis;white-space: nowrap;color:#999;font-weight: 600;float:left;font-size:14px;text-align:center;
+} 
+
+.tunnel-progress-graph-area {
+	width:calc(100% - 90px);float:left;padding:4px 25px 0 0;
+}
+
+.tunnel-progress-graph-area2{
+	width:100%;float:left;	
+}
+
+.marking {
+	float:left;border-left:1px solid black;
+}
+
+.marking-end {
+	float:left;border-left:1px solid black;border-right:1px solid black;
+}
+
+.graphUnit {
+	float:left;text-align:right;
+}
+
+.markingArea{
+	top:200px;margin:-5px auto; padding-left:110px; padding-right:45px;width:100%;height:5px;line-height:5px;position:relative;
+}
+
+.markingArea2{
+	top:180px;margin:-5px auto; padding-left:110px; padding-right:45px;width:100%;height:5px;line-height:5px;position:relative;
+}
+
+.markingValueArea{
+	top:205px;margin:0 auto; padding-left:110px; padding-right:40px;width:100%;height:15px;line-height:15px;position:relative;
+}
+
+.markingValueArea2{
+	top:185px;margin:0 auto; padding-left:110px; padding-right:45px;width:100%;height:15px;line-height:15px;position:relative;
+}
+
+.none-graph {
+	color: #05a951;
+	font-size: 3rem;
+	font-weight: bolder;
+	text-shadow: 2px 2px 5px rgba( 0 , 0 , 0 , 0.1);
+	padding-top: 20px;
+	padding-bottom: 10px;
+	font-family: 'HDharmonyB';
+}

@@ -1,0 +1,24 @@
+@font-face {
+      font-family: 'DS-Digital';
+      font-weight: 300;
+      src: url(DS-Digital.eot);
+      src: url(DS-Digital.eot?#iefix) format('embedded-opentype'),
+            url(DS-Digital.woff) format('woff'),
+            url(DS-Digital.ttf) format('truetype');
+}
+@font-face {
+      font-family: 'DS-Digital';
+      font-weight: 500;
+      src: url(DS-Digital-Bold.eot);
+      src: url(DS-Digital-Bold.eot?#iefix) format('embedded-opentype'),
+            url(DS-Digital-Bold.woff) format('woff'),
+            url(DS-Digital-Bold.ttf) format('truetype');
+}
+@font-face {
+      font-family: 'DS-Digital';
+      font-weight: 700;
+      src: url(DS-Digital-Bold.eot);
+      src: url(DS-Digital-Bold.eot?#iefix) format('embedded-opentype'),
+            url(DS-Digital-Bold.woff) format('woff'),
+            url(DS-Digital-Bold.ttf) format('truetype');
+}

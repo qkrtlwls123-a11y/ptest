@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="member" >
+	<select id="actionMemberLogin" parameterType="MemberVO" resultType="MemberVO">
+		SELECT *
+		  FROM TB_MEMBER A
+		 WHERE A.member_email = #{member_email}
+		   AND A.member_password = #{member_password}
+	</select>
+	
+	<select id="checkMemberId" parameterType="MemberVO" resultType="MemberVO">
+	SELECT  *
+		  FROM TB_MEMBER A
+		 WHERE A.member_email = #{member_email}
+	</select>
+	
+	<select id="actionSiteMemberLogin" parameterType="MemberVO" resultType="MemberVO">
+		SELECT *
+		  FROM TB_MEMBER A
+		 WHERE A.member_email = #{member_email}
+		   AND A.company_id = #{company_id}
+		   AND A.member_password = #{member_password}
+	</select>
+	
+	<select id="checkSiteMemberId" parameterType="MemberVO" resultType="MemberVO">
+	SELECT  *
+		  FROM TB_MEMBER A
+		 WHERE A.member_email = #{member_email}
+		   AND A.company_id = #{company_id}
+	</select>
+	
+	<insert id="insertMember" parameterType="MemberVO">
+		INSERT INTO TB_MEMBER (
+				member_email,
+				member_password,
+				company_id,
+				member_name,
+				member_progress,
+				updt_date,
+				regi_date
+			)
+			VALUES
+			(
+				#{member_email},
+				#{member_password},
+				#{company_id},
+				#{member_name},
+				#{member_progress},
+				NOW(),
+				NOW()
+			 )
+	</insert>
+	
+	<update id="updateMember" parameterType="MemberVO">
+		 UPDATE TB_MEMBER
+		    SET use_yn = 'Y'
+		 WHERE member_email = #{member_email}
+	</update>
+	
+	<update id="updateMemberDetail" parameterType="MemberVO">
+		 UPDATE TB_MEMBER
+		    SET member_name = #{member_name}
+		 WHERE member_email = #{member_email}
+	</update>
+	
+	<update id="changePassword" parameterType="MemberVO">
+		 UPDATE TB_MEMBER
+		    SET member_password = #{member_password}
+		   	   , updt_date = NOW()
+		 WHERE member_email = #{member_email}
+	</update>
+	
+	<insert id="insertMemberSetting" parameterType="MemberVO">
+		INSERT INTO TB_MEMBER_SETTING (
+				member_email,
+				updt_date,
+				regi_date
+			)
+			VALUES
+			(
+				#{member_email},
+				NOW(),
+				NOW()
+			 )
+	</insert>
+	
+	<select id="selectMemberSetting" parameterType="MemberVO" resultType="MemberVO">
+	SELECT  *
+		  FROM TB_MEMBER_SETTING A
+		 WHERE A.member_email = #{member_email}
+	</select>
+	
+	<select id="selectMemberList" parameterType="MemberVO" resultType="MemberVO">
+		SELECT *
+		  FROM TB_MEMBER A, TB_SITE B
+		 WHERE A.company_id = B.company_id
+		 
+	</select>
+	
+	<select id="selectSiteMemberList" parameterType="MemberVO" resultType="MemberVO">
+		SELECT *
+		  FROM TB_MEMBER A, TB_SITE B
+		 WHERE A.company_id = B.company_id
+		   AND A.company_id = #{company_id}
+		   <if test="use_yn != null and use_yn != ''">
+			   AND A.use_yn = #{use_yn}
+			</if>
+	</select>
+	
+	<select id="selectMemberTimeList" parameterType="MemberVO" resultType="MemberVO">
+		SELECT *
+		  FROM TB_MEMBER_HISTORY
+		 WHERE member_email = #{member_email}
+		   AND course_id = #{course_id}
+		   AND contents_id = #{contents_id}
+		 ORDER BY regi_date DESC
+	</select>
+	
+	<insert id="insertMemberTime" parameterType="MemberVO">
+		INSERT INTO TB_MEMBER_HISTORY (
+				member_email,
+				course_id,
+				contents_id,
+				contents_detail_id,
+				history_time,
+				regi_date
+			)
+			VALUES
+			(
+				#{member_email},
+				#{course_id},
+				#{contents_id},
+				#{contents_detail_id},
+				'0',
+				NOW()
+			 )
+	</insert>
+	
+	<update id="updateMemberTime" parameterType="MemberVO">
+		 UPDATE TB_MEMBER_HISTORY
+		    SET history_time = #{history_time}
+		     , regi_date = NOW()
+		 WHERE member_email = #{member_email}
+		   AND course_id = #{course_id}
+		   AND contents_id = #{contents_id}
+		   AND contents_detail_id = #{contents_detail_id}
+	</update>
+	
+	<select id="selectMemberTimeDetail" parameterType="MemberVO" resultType="MemberVO">
+		SELECT *
+		  FROM TB_MEMBER_HISTORY
+		 WHERE member_email = #{member_email}
+		   AND course_id = #{course_id}
+		   AND contents_id = #{contents_id}
+		   AND contents_detail_id = #{contents_detail_id}
+	</select>
+	
+	<select id="selectLastMemberTime" parameterType="MemberVO" resultType="MemberVO">
+		SELECT *
+		  FROM TB_MEMBER_HISTORY
+		 WHERE member_email = #{member_email}
+		   AND course_id = #{course_id}
+		 ORDER BY regi_date desc
+		 LIMIT 1
+	</select>
+	
+	<update id="updateMemberComment" parameterType="MemberVO">
+		 UPDATE TB_MEMBER
+		    SET member_comment = #{member_comment}
+		 WHERE member_email = #{member_email}
+	</update>
+	
+	
+</mapper>
+

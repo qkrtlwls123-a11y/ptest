@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="emoticon" >
+	
+	<insert id="insertEmoticon" parameterType="EmoticonVO">
+		INSERT INTO TB_EMOTICON (
+				emoticon_name,
+				emoticon_text,
+				emoticon_image,
+				updt_date,
+				reg_date
+			)
+			VALUES
+			(
+				#{emoticon_name},
+				#{emoticon_text},
+				#{emoticon_image},
+				NOW(),
+				NOW()
+			 )
+	</insert>
+	
+	<insert id="insertEmoticonDetail" parameterType="EmoticonVO">
+		INSERT INTO TB_EMOTICON_DETAIL (
+				emoticon_id,
+				emoticon_detail_id,
+				emoticon_detail_image,
+				updt_date,
+				reg_date
+			)
+			VALUES
+			(
+				#{emoticon_id},
+				#{emoticon_detail_id},
+				#{emoticon_detail_image},
+				NOW(),
+				NOW()
+			 )
+	</insert>
+	
+	<delete id="deleteEmoticonDetail" parameterType="EmoticonVO">
+		DELETE FROM TB_EMOTICON_DETAIL 
+		WHERE emoticon_detail_id = #{emoticon_detail_id}
+		  AND emoticon_id = #{emoticon_id}
+	</delete>
+	
+	<delete id="deleteEmoticonDetailList" parameterType="EmoticonVO">
+		DELETE FROM TB_EMOTICON_DETAIL 
+		WHERE emoticon_id = #{emoticon_id}
+	</delete>
+	
+	<update id="updateEmoticon" parameterType="EmoticonVO">
+		 UPDATE TB_EMOTICON
+		    SET emoticon_name = #{emoticon_name}
+		       , emoticon_text = #{emoticon_text}
+		       , emoticon_image = #{emoticon_image}
+		   	   , updt_date = NOW()
+		 WHERE emoticon_id = #{emoticon_id}
+	</update>
+	
+	<select id="selectEmoticonList" parameterType="EmoticonVO" resultType="EmoticonVO">
+		SELECT *
+		  FROM TB_EMOTICON
+	</select>
+	
+	<select id="selectEmoticonDetailList" parameterType="EmoticonVO" resultType="EmoticonVO">
+		SELECT *
+		  FROM TB_EMOTICON_DETAIL
+		 WHERE emoticon_id = #{emoticon_id}
+		 ORDER BY emoticon_detail_id ASC
+	</select>
+	
+	<select id="selectEmoticonDetailListTotal" parameterType="EmoticonVO" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM TB_EMOTICON_DETAIL
+		 WHERE emoticon_id = #{emoticon_id}
+	</select>
+	
+	
+	<select id="selectEmoticonDetail" parameterType="EmoticonVO" resultType="EmoticonVO">
+		SELECT *
+		  FROM TB_EMOTICON
+		 WHERE emoticon_id = #{emoticon_id}
+	</select>
+</mapper>
+

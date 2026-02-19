@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="game" >
+	
+	<insert id="insertGame" parameterType="GameVO">
+		INSERT INTO TB_GAME (
+				game_name,
+				company_id,
+				game_type_1,
+				game_type_2,
+				game_type_3,
+				game_type_4,
+				game_type_5,
+				game_type_6,
+				game_type_7,
+				game_type_8,
+				game_text_1,
+				game_text_2,
+				game_text_3,
+				game_text_4,
+				game_text_5,
+				game_text_6,
+				game_text_7,
+				game_text_8,
+				game_percent_1,
+				game_percent_2,
+				game_percent_3,
+				game_percent_4,
+				game_percent_5,
+				game_percent_6,
+				game_percent_7,
+				game_percent_8,
+				game_count,
+				updt_date,
+				reg_date
+			)
+			VALUES
+			(
+				#{game_name},
+				#{company_id},
+				#{game_type_1},
+				#{game_type_2},
+				#{game_type_3},
+				#{game_type_4},
+				#{game_type_5},
+				#{game_type_6},
+				#{game_type_7},
+				#{game_type_8},
+				#{game_text_1},
+				#{game_text_2},
+				#{game_text_3},
+				#{game_text_4},
+				#{game_text_5},
+				#{game_text_6},
+				#{game_text_7},
+				#{game_text_8},
+				#{game_percent_1},
+				#{game_percent_2},
+				#{game_percent_3},
+				#{game_percent_4},
+				#{game_percent_5},
+				#{game_percent_6},
+				#{game_percent_7},
+				#{game_percent_8},
+				#{game_count},
+				NOW(),
+				NOW()
+			 )
+	</insert>
+	
+	<update id="updateGame" parameterType="GameVO">
+		 UPDATE TB_GAME
+		    SET game_name = #{game_name},
+				game_type_1 = #{game_type_1},
+				game_type_2 = #{game_type_2},
+				game_type_3 = #{game_type_3},
+				game_type_4 = #{game_type_4},
+				game_type_5 = #{game_type_5},
+				game_type_6 = #{game_type_6},
+				game_type_7 = #{game_type_7},
+				game_type_8 = #{game_type_8},
+				game_text_1 = #{game_text_1},
+				game_text_2 = #{game_text_2},
+				game_text_3 = #{game_text_3},
+				game_text_4 = #{game_text_4},
+				game_text_5 = #{game_text_5},
+				game_text_6 = #{game_text_6},
+				game_text_7 = #{game_text_7},
+				game_text_8 = #{game_text_8},
+				game_percent_1 = #{game_percent_1},
+				game_percent_2 = #{game_percent_2},
+				game_percent_3 = #{game_percent_3},
+				game_percent_4 = #{game_percent_4},
+				game_percent_5 = #{game_percent_5},
+				game_percent_6 = #{game_percent_6},
+				game_percent_7 = #{game_percent_7},
+				game_percent_8 = #{game_percent_8},
+				game_count = #{game_count},
+		   	    updt_date = NOW()
+		 WHERE game_id = #{game_id}
+	</update>
+	
+	<delete id="deleteGame" parameterType="GameVO">
+		 DELETE FROM TB_GAME 
+			WHERE game_id = #{game_id}
+	</delete>
+	
+	<select id="selectGameList" parameterType="GameVO" resultType="GameVO">
+		SELECT *
+		  FROM TB_GAME
+		WHERE company_id = #{company_id}
+	</select>
+	
+	<select id="selectGameDetail" parameterType="GameVO" resultType="GameVO">
+		SELECT *
+		  FROM TB_GAME
+		 WHERE game_id = #{game_id}
+	</select>
+</mapper>
+
