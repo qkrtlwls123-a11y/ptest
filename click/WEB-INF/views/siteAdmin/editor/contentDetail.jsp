@@ -1,1 +1,0 @@
-${contentsVO.contents_detail_html}
